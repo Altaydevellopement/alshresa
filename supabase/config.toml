@@ -13,5 +13,7 @@ additional_redirect_urls = ["https://VOTRE-PROJET.vercel.app/**", "http://localh
 [functions.send-reservation-email]
 verify_jwt = true
 
+# Appelée par la tâche planifiée (Cron) ; elle ne fait que traiter la file
+# des emails en attente, sans paramètre ni donnée renvoyée sensible.
 [functions.send-notifications]
-verify_jwt = true
+verify_jwt = false
