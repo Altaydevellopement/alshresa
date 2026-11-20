@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { offerWaitlist, type WaitlistOfferItem } from "@/components/waitlist/waitlistOffer";
 
 interface DateOption {
   date: Date;
@@ -21,6 +22,8 @@ export interface ReservationResult {
   childData?: any;
   successfulReservations?: any[];
   reservationNumber?: string;
+  /** des dates étaient complètes : la liste d'attente a été proposée */
+  waitlistOffered?: boolean;
 }
 
 export const createHolidayReservations = async (
@@ -30,9 +33,6 @@ export const createHolidayReservations = async (
   submissionTimestamp: number
 ): Promise<ReservationResult> => {
   try {
-    console.log(`🔄 createHolidayReservations - Début avec ${selectedDates.length} dates (timestamp: ${submissionTimestamp})`);
-    console.log("📅 createHolidayReservations - Dates à réserver:", selectedDates.map(d => d.date.toISOString()));
-    
     const { data: childData, error: childError } = await supabase
       .from("children")
       .select("first_name, last_name, school_class")
@@ -59,144 +59,74 @@ export const createHolidayReservations = async (
       }
     }
 
-    // Generate a unique reservation number for this batch
+    // Un numéro commun à toutes les dates de cette demande
     const reservationNumber = `HOL-${Date.now().toString().substring(5)}`;
-    console.log(`🔢 createHolidayReservations - Numéro de réservation: ${reservationNumber} (timestamp: ${submissionTimestamp})`);
 
-    // Store successful reservations
-    const successfulReservations = [];
+    const successfulReservations: { id: string; reservation_date: string }[] = [];
+    const fullDates: WaitlistOfferItem[] = [];
+    let failures = 0;
 
-    // Fetch closed periods to reject excluded dates server-side
-    const { data: closedPeriods } = await supabase
-      .from("closed_periods")
-      .select("start_date, end_date");
-
-    const isDateInClosedPeriod = (dateStr: string): boolean => {
-      if (!closedPeriods) return false;
-      return closedPeriods.some(cp => dateStr >= cp.start_date && dateStr <= cp.end_date);
-    };
-
-    // Check available spots for each date and create reservations
+    // Chaque date est vérifiée ET réservée côté serveur en une seule opération :
+    // impossible de dépasser la capacité, même si plusieurs familles réservent en même temps.
     for (const dateOption of selectedDates) {
-      // S'assurer que la date est une instance valide de Date
       if (!(dateOption.date instanceof Date) || isNaN(dateOption.date.getTime())) {
-        console.error(`❌ Date invalide détectée: ${dateOption.date}, ignorée`);
+        failures++;
         continue;
       }
-      
       const dateStr = format(dateOption.date, "yyyy-MM-dd");
-      console.log(`📅 createHolidayReservations - Traitement de la date ${dateStr} (timestamp: ${submissionTimestamp})`);
-      
-      // Reject dates that fall within a closed period
-      if (isDateInClosedPeriod(dateStr)) {
-        console.log(`🚫 createHolidayReservations - Date ${dateStr} est dans une période de fermeture, ignorée`);
-        continue;
-      }
-
-      // Find the period for this date
-      const period = holidayPeriods?.find(period => {
-        const startDate = new Date(period.start_date);
-        const endDate = new Date(period.end_date);
-        const currentDate = new Date(dateStr);
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setHours(0, 0, 0, 0);
-        currentDate.setHours(0, 0, 0, 0);
-        return currentDate >= startDate && currentDate <= endDate;
-      });
-
-      if (!period) {
-        console.error(`❌ Période non trouvée pour la date ${dateStr}`);
-        continue;
-      }
-
-      // Utiliser la fonction SQL corrigée pour vérifier les places disponibles
-      console.log(`🔍 createHolidayReservations - Vérification des places avec les mappings spécifiques pour ${dateStr}`);
-      const { data: spotsAvailable, error: spotsError } = await supabase.rpc(
-        "check_holiday_spots_available",
-        {
-          p_period_id: period.id,
-          p_reservation_date: dateStr,
-          p_child_school_class: childData.school_class,
-        }
+      const period = holidayPeriods?.find(
+        (p) => dateStr >= p.start_date && dateStr <= p.end_date
       );
-
-      if (spotsError) {
-        console.error(`❌ Erreur lors de la vérification des places: ${spotsError.message}`);
+      if (!period) {
+        failures++;
         continue;
       }
 
-      console.log(`📊 createHolidayReservations - Places restantes pour ${dateStr}, classe ${childData.school_class}: ${spotsAvailable}`);
+      const { data, error } = await supabase.rpc("book_holiday_day", {
+        p_child_id: selectedChild,
+        p_period_id: period.id,
+        p_date: dateStr,
+        p_without_meal: dateOption.withoutMeal,
+        p_early_dropoff: dateOption.earlyDropoff,
+        p_reservation_number: reservationNumber,
+      });
+      if (error) throw error;
 
-      if (spotsAvailable <= 0) {
-        return {
-          success: false,
-          noSpots: {
-            schoolClass: childData.school_class,
-            date: dateOption.date
-          }
-        };
-      }
-
-      // Check if reservation already exists
-      const { data: existingReservation, error: checkError } = await supabase
-        .from("holiday_reservations")
-        .select()
-        .eq("child_id", selectedChild)
-        .eq("period_id", period.id)
-        .eq("reservation_date", dateStr)
-        .maybeSingle();
-
-      if (checkError) {
-        console.error(`❌ Erreur lors de la vérification des réservations existantes: ${checkError.message}`);
-        continue;
-      }
-
-      if (existingReservation) {
-        console.log(`⚠️ Réservation existante pour la date ${dateStr}, ignorée`);
-        continue;
-      }
-
-      // Create the reservation in the database
-      console.log(`💾 createHolidayReservations - Création de la réservation pour la date ${dateStr} (timestamp: ${submissionTimestamp})`);
-      const { data: insertedReservation, error: insertError } = await supabase
-        .from("holiday_reservations")
-        .insert({
-          child_id: selectedChild,
-          period_id: period.id,
-          reservation_date: dateStr,
-          reservation_number: reservationNumber,
-          without_meal: dateOption.withoutMeal,
-          early_dropoff: dateOption.earlyDropoff,
-          status: "confirmed"
-        })
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error(`❌ Erreur lors de l'insertion de la réservation: ${insertError.message}`);
-        continue;
-      }
-      
-      console.log(`✅ createHolidayReservations - Réservation créée avec succès pour la date ${dateStr}, ID: ${insertedReservation?.id} (timestamp: ${submissionTimestamp})`);
-      
-      if (insertedReservation) {
-        successfulReservations.push(insertedReservation);
+      const result = data as unknown as { status: string; reservation_id?: string };
+      if (result.status === "booked" && result.reservation_id) {
+        successfulReservations.push({ id: result.reservation_id, reservation_date: dateStr });
+      } else if (result.status === "full") {
+        fullDates.push({
+          kind: "holiday",
+          targetId: period.id,
+          date: dateOption.date,
+          withoutMeal: dateOption.withoutMeal,
+          earlyDropoff: dateOption.earlyDropoff,
+        });
+      } else if (result.status !== "already_booked") {
+        failures++;
       }
     }
 
-    console.log(`🎯 createHolidayReservations - ${successfulReservations.length} réservations créées avec succès sur ${selectedDates.length} demandées`);
+    // Jours complets : proposer la liste d'attente
+    offerWaitlist({
+      childId: selectedChild,
+      childName: childData.first_name,
+      items: fullDates,
+      partial: successfulReservations.length > 0,
+    });
 
-    // Even if some dates failed, return success if at least one reservation was created
     return {
       success: successfulReservations.length > 0,
+      waitlistOffered: fullDates.length > 0,
       childData,
       periodId,
       periodName,
       successfulReservations,
       reservationNumber,
-      error: successfulReservations.length < selectedDates.length 
-        ? `${selectedDates.length - successfulReservations.length} date(s) n'ont pas pu être réservées.` 
-        : undefined
+      error: failures > 0
+        ? `${failures} date(s) n'ont pas pu être réservées.`
+        : undefined,
     };
   } catch (error: any) {
     console.error(`❌ createHolidayReservations - Erreur générale: ${error.message} (timestamp: ${submissionTimestamp})`);

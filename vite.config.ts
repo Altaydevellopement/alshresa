@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === "development",
   },
 
+  // En production, les console.log/info/debug sont retirés : ils affichaient
+  // des données personnelles dans la console du navigateur.
+  esbuild: mode === "production" ? { pure: ["console.log", "console.info", "console.debug"] } : undefined,
+
   plugins: [react()],
 
   resolve: {

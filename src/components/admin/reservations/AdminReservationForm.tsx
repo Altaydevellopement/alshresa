@@ -81,7 +81,7 @@ export const AdminReservationForm = ({
           id,
           wednesday_id,
           child_id,
-          available_wednesdays!fk_wednesday_id (
+          available_wednesdays!wednesday_reservations_wednesday_id_fkey (
             date
           )
         `)

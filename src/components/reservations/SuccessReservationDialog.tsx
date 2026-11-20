@@ -22,9 +22,6 @@ export const SuccessReservationDialog = ({
   onOpenChange,
   excludedFullDates = [],
 }: SuccessReservationDialogProps) => {
-  console.log("SuccessReservationDialog - excludedFullDates reçues:", excludedFullDates);
-  console.log("SuccessReservationDialog - excludedFullDates formatées:", excludedFullDates.map(d => format(d, "dd/MM/yyyy")));
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -48,7 +45,7 @@ export const SuccessReservationDialog = ({
                   ))}
                 </ul>
                 <p className="text-orange-800 text-sm mt-2">
-                  Ces mercredis étaient complets. Vous pouvez contacter l'accueil pour être mis en liste d'attente.
+                  Ces mercredis étaient complets. Si vous avez inscrit votre enfant sur liste d'attente, il sera réservé automatiquement dès qu'une place se libère et vous recevrez un email.
                 </p>
               </div>
             )}

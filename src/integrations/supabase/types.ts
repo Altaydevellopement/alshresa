@@ -14,27 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      admin_users: {
-        Row: {
-          created_at: string
-          id: string
-          password: string
-          username: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          password: string
-          username: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          password?: string
-          username?: string
-        }
-        Relationships: []
-      }
       authorized_emails: {
         Row: {
           created_at: string
@@ -198,6 +177,8 @@ export type Database = {
           hide_wednesday_reservations: boolean
           id: string
           updated_at: string
+          waitlist_cutoff_hours: number
+          waitlist_enabled: boolean
         }
         Insert: {
           created_at?: string
@@ -205,6 +186,8 @@ export type Database = {
           hide_wednesday_reservations?: boolean
           id?: string
           updated_at?: string
+          waitlist_cutoff_hours?: number
+          waitlist_enabled?: boolean
         }
         Update: {
           created_at?: string
@@ -212,6 +195,8 @@ export type Database = {
           hide_wednesday_reservations?: boolean
           id?: string
           updated_at?: string
+          waitlist_cutoff_hours?: number
+          waitlist_enabled?: boolean
         }
         Relationships: []
       }
@@ -353,6 +338,54 @@ export type Database = {
             referencedColumns: ["period_id"]
           },
         ]
+      }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          data: Json
+          email_attempts: number
+          email_error: string | null
+          email_sent_at: string | null
+          email_status: string
+          id: string
+          link: string | null
+          read_at: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_sent_at?: string | null
+          email_status?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          data?: Json
+          email_attempts?: number
+          email_error?: string | null
+          email_sent_at?: string | null
+          email_status?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -513,94 +546,64 @@ export type Database = {
         }
         Relationships: []
       }
-      waitlist: {
+      waitlist_entries: {
         Row: {
+          booked_at: string | null
+          cancelled_at: string | null
           child_id: string
+          class_group: Database["public"]["Enums"]["school_class_group"]
           created_at: string
+          created_by: string | null
           date: string
-          deleted_at: string | null
           early_dropoff: boolean
           id: string
-          notified_at: string | null
-          school_class_category_id: string
-          status: Database["public"]["Enums"]["waitlist_status"]
+          kind: string
+          period_id: string | null
+          reservation_id: string | null
+          status: string
+          wednesday_id: string | null
           without_meal: boolean
         }
         Insert: {
+          booked_at?: string | null
+          cancelled_at?: string | null
           child_id: string
+          class_group: Database["public"]["Enums"]["school_class_group"]
           created_at?: string
+          created_by?: string | null
           date: string
-          deleted_at?: string | null
           early_dropoff?: boolean
           id?: string
-          notified_at?: string | null
-          school_class_category_id: string
-          status?: Database["public"]["Enums"]["waitlist_status"]
+          kind: string
+          period_id?: string | null
+          reservation_id?: string | null
+          status?: string
+          wednesday_id?: string | null
           without_meal?: boolean
         }
         Update: {
+          booked_at?: string | null
+          cancelled_at?: string | null
           child_id?: string
+          class_group?: Database["public"]["Enums"]["school_class_group"]
           created_at?: string
+          created_by?: string | null
           date?: string
-          deleted_at?: string | null
           early_dropoff?: boolean
           id?: string
-          notified_at?: string | null
-          school_class_category_id?: string
-          status?: Database["public"]["Enums"]["waitlist_status"]
+          kind?: string
+          period_id?: string | null
+          reservation_id?: string | null
+          status?: string
+          wednesday_id?: string | null
           without_meal?: boolean
         }
         Relationships: [
           {
-            foreignKeyName: "waitlist_child_id_fkey"
+            foreignKeyName: "waitlist_entries_child_id_fkey"
             columns: ["child_id"]
             isOneToOne: false
             referencedRelation: "children"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "waitlist_school_class_category_id_fkey"
-            columns: ["school_class_category_id"]
-            isOneToOne: false
-            referencedRelation: "school_class_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      waitlist_notifications: {
-        Row: {
-          child_id: string | null
-          created_at: string
-          date: string | null
-          id: string
-          processed_at: string | null
-          school_class_category_id: string | null
-          waitlist_id: string | null
-        }
-        Insert: {
-          child_id?: string | null
-          created_at?: string
-          date?: string | null
-          id?: string
-          processed_at?: string | null
-          school_class_category_id?: string | null
-          waitlist_id?: string | null
-        }
-        Update: {
-          child_id?: string | null
-          created_at?: string
-          date?: string | null
-          id?: string
-          processed_at?: string | null
-          school_class_category_id?: string | null
-          waitlist_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "waitlist_notifications_waitlist_id_fkey"
-            columns: ["waitlist_id"]
-            isOneToOne: false
-            referencedRelation: "waitlist"
             referencedColumns: ["id"]
           },
         ]
@@ -669,13 +672,6 @@ export type Database = {
           without_meal?: boolean | null
         }
         Relationships: [
-          {
-            foreignKeyName: "fk_wednesday_id"
-            columns: ["wednesday_id"]
-            isOneToOne: false
-            referencedRelation: "available_wednesdays"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "wednesday_reservations_child_id_fkey"
             columns: ["child_id"]
@@ -819,13 +815,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_wednesday_id"
-            columns: ["wednesday_id"]
-            isOneToOne: false
-            referencedRelation: "available_wednesdays"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "wednesday_reservations_child_id_fkey"
             columns: ["child_id"]
             isOneToOne: false
@@ -859,14 +848,6 @@ export type Database = {
         Args: { child_school_class: string; wednesday_id: string }
         Returns: number
       }
-      debug_holiday_spots_available: {
-        Args: {
-          p_child_school_class: string
-          p_period_id: string
-          p_reservation_date: string
-        }
-        Returns: Json
-      }
       get_profiles_with_reservations: {
         Args: { has_reservations: boolean }
         Returns: string[]
@@ -887,12 +868,76 @@ export type Database = {
         }[]
       }
       is_admin: { Args: { user_id: string }; Returns: boolean }
-      set_admin_username: { Args: { username: string }; Returns: undefined }
+      book_wednesday: {
+        Args: {
+          p_child_id: string
+          p_wednesday_id: string
+          p_without_meal?: boolean
+          p_early_dropoff?: boolean
+          p_reservation_number?: string
+        }
+        Returns: Json
+      }
+      book_holiday_day: {
+        Args: {
+          p_child_id: string
+          p_period_id: string
+          p_date: string
+          p_without_meal?: boolean
+          p_early_dropoff?: boolean
+          p_reservation_number?: string
+        }
+        Returns: Json
+      }
+      join_waitlist: {
+        Args: {
+          p_child_id: string
+          p_kind: string
+          p_target_id: string
+          p_date?: string
+          p_without_meal?: boolean
+          p_early_dropoff?: boolean
+        }
+        Returns: Json
+      }
+      leave_waitlist: { Args: { p_entry_id: string }; Returns: boolean }
+      get_waitlist: {
+        Args: { p_include_past?: boolean }
+        Returns: {
+          id: string
+          kind: string
+          child_id: string
+          child_first_name: string
+          child_last_name: string
+          school_class: string
+          parent_id: string | null
+          parent_first_name: string | null
+          parent_last_name: string | null
+          wednesday_id: string | null
+          period_id: string | null
+          period_name: string | null
+          date: string
+          class_group: Database["public"]["Enums"]["school_class_group"]
+          without_meal: boolean
+          early_dropoff: boolean
+          status: string
+          position: number | null
+          created_at: string
+          booked_at: string | null
+          reservation_id: string | null
+        }[]
+      }
+      admin_process_waitlist: {
+        Args: { p_kind: string; p_target_id: string; p_date: string }
+        Returns: number
+      }
+      mark_notifications_read: { Args: { p_ids?: string[] }; Returns: number }
+      is_email_authorized: { Args: { p_email: string }; Returns: boolean }
+      waitlist_is_open: { Args: { p_date: string }; Returns: boolean }
     }
     Enums: {
       school_class_group: "kindergarten" | "primary" | "teen"
       user_role: "admin" | "user"
-      waitlist_status: "waiting" | "notified"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1022,7 +1067,6 @@ export const Constants = {
     Enums: {
       school_class_group: ["kindergarten", "primary", "teen"],
       user_role: ["admin", "user"],
-      waitlist_status: ["waiting", "notified"],
     },
   },
 } as const

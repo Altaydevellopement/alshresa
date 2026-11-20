@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useState, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -111,9 +112,10 @@ export const useHolidayReservation = () => {
         // Envoi de l'email
         try {
           const childFullName = `${result.childData?.first_name} ${result.childData?.last_name}`;
+          const bookedDays = new Set((result.successfulReservations ?? []).map((r) => r.reservation_date));
           await sendHolidayReservationEmail(
             childFullName,
-            selectedDates,
+            selectedDates.filter((d) => bookedDays.has(format(d.date, "yyyy-MM-dd"))),
             result.periodName || "",
             result.reservationNumber || "",
             result.periodId || "",
@@ -147,6 +149,8 @@ export const useHolidayReservation = () => {
         
         setShowSuccessDialog(true);
 
+      } else if (result.waitlistOffered) {
+        // Toutes les dates étaient complètes : la fenêtre de liste d'attente est affichée
       } else if (result.noSpots) {
         setNoSpotsDialog({
           isOpen: true,

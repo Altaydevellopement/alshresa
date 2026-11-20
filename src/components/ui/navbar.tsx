@@ -4,6 +4,7 @@ import { MobileNav } from "./nav/MobileNav";
 import { ProfileDropdown } from "./nav/ProfileDropdown";
 import { useNavbarData } from "./nav/hooks/useNavbarData";
 import { NavProps } from "./nav/types";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 const Navbar = () => {
   const { user, isAuthenticated, menuItems, handleLogout } = useNavbarData();
@@ -18,6 +19,7 @@ const Navbar = () => {
     <div className="sticky top-0 z-50 px-3 pt-3">
       <div className="glass shadow-soft rounded-2xl flex h-14 items-center px-4">
         <div className="ml-auto flex items-center space-x-3">
+          {isAuthenticated && <NotificationBell />}
           <DesktopNav {...navProps} />
           <MobileNav {...navProps} />
           {isAuthenticated && (

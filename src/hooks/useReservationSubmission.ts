@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -199,9 +200,10 @@ export const useReservationSubmission = (
       if (result.successfulReservations && result.successfulReservations.length > 0) {
         const childFullName = `${result.childData.first_name} ${result.childData.last_name}`;
         
+        const bookedDays = new Set(result.successfulReservations.map((r) => r.reservation_date));
         await sendHolidayReservationEmail(
           childFullName,
-          validatedDates,
+          validatedDates.filter((d) => bookedDays.has(format(d.date, "yyyy-MM-dd"))),
           result.periodName || "",
           result.reservationNumber || "",
           result.periodId || "",

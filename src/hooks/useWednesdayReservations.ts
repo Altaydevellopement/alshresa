@@ -33,7 +33,7 @@ export const useWednesdayReservations = () => {
           updated_at,
           reservation_number,
           children,
-          available_wednesdays!fk_wednesday_id (
+          available_wednesdays!wednesday_reservations_wednesday_id_fkey (
             id,
             date,
             max_participants_kindergarten,

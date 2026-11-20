@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Home, User, Baby, Calendar, Palmtree, Users, FileText, Euro, CalendarDays } from "lucide-react";
+import { Home, User, Baby, Calendar, Palmtree, Users, FileText, Euro, CalendarDays, Clock } from "lucide-react";
 import { NavItem } from "../types";
 
 export const useNavbarData = () => {
@@ -52,6 +52,12 @@ export const useNavbarData = () => {
       label: "Club Ado",
       href: "/teenholiday-reservations",
       icon: Users,
+      requiresAuth: true
+    },
+    {
+      label: "Liste d'attente",
+      href: "/waitlist",
+      icon: Clock,
       requiresAuth: true
     },
     {

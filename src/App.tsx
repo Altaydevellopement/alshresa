@@ -4,45 +4,49 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { WaitlistOfferDialog } from "@/components/waitlist/WaitlistOfferDialog";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Profile from "./pages/Profile";
-import Children from "./pages/Children";
-import WednesdayReservations from "./pages/WednesdayReservations";
-import HolidayReservations from "./pages/HolidayReservations";
-import TeenHolidayReservations from "./pages/TeenHolidayReservations";
-import Rdv from "./pages/Rdv";
-import TermsOfService from "./pages/TermsOfService";
-import TermsOfOperation from "./pages/TermsOfOperation";
-import HolidayProgram from "./pages/HolidayProgram";
-import FestivalProgram from "./pages/FestivalProgram";
-import Prices from "./pages/Prices";
+const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Children = lazy(() => import("./pages/Children"));
+const WednesdayReservations = lazy(() => import("./pages/WednesdayReservations"));
+const HolidayReservations = lazy(() => import("./pages/HolidayReservations"));
+const TeenHolidayReservations = lazy(() => import("./pages/TeenHolidayReservations"));
+const Rdv = lazy(() => import("./pages/Rdv"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const TermsOfOperation = lazy(() => import("./pages/TermsOfOperation"));
+const HolidayProgram = lazy(() => import("./pages/HolidayProgram"));
+const FestivalProgram = lazy(() => import("./pages/FestivalProgram"));
+const Prices = lazy(() => import("./pages/Prices"));
+const MyWaitlist = lazy(() => import("./pages/MyWaitlist"));
+const Notifications = lazy(() => import("./pages/Notifications"));
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
-// Import admin pages
-import { AdminPage } from "./pages/admin/AdminPage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminReservations from "./pages/admin/AdminReservations";
-import AdminNewReservation from "./pages/admin/AdminNewReservation";
-import AdminNewHolidayReservation from "./pages/admin/AdminNewHolidayReservation";
-import AdminNewTeenHolidayReservation from "./pages/admin/AdminNewTeenHolidayReservation";
-import AdminWednesdays from "./pages/admin/AdminWednesdays";
-import AdminHolidays from "./pages/admin/AdminHolidays";
-import AdminChildren from "./pages/admin/AdminChildren";
-import AdminProfiles from "./pages/admin/AdminProfiles";
-import AdminAuthorizedEmails from "./pages/admin/AdminAuthorizedEmails";
-import AdminRdv from "./pages/admin/AdminRdv";
-import AdminAvailableSpots from "./pages/admin/AdminAvailableSpots";
-import AdminWednesdaySpots from "./pages/admin/AdminWednesdaySpots";
-import AdminHolidaySpots from "./pages/admin/AdminHolidaySpots";
-import AdminLoginPage from "./pages/admin/AdminLoginPage";
-import AdminWednesdayReservations from "./pages/admin/AdminWednesdayReservations";
-import AdminHolidayReservations from "./pages/admin/AdminHolidayReservations";
-import AdminWaitlist from "./pages/admin/AdminWaitlist";
+// Pages admin : chargées uniquement à la demande (allège le site pour les familles)
+const AdminPage = lazy(() => import("./pages/admin/AdminPage").then((m) => ({ default: m.AdminPage })));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminReservations = lazy(() => import("./pages/admin/AdminReservations"));
+const AdminNewReservation = lazy(() => import("./pages/admin/AdminNewReservation"));
+const AdminNewHolidayReservation = lazy(() => import("./pages/admin/AdminNewHolidayReservation"));
+const AdminNewTeenHolidayReservation = lazy(() => import("./pages/admin/AdminNewTeenHolidayReservation"));
+const AdminWednesdays = lazy(() => import("./pages/admin/AdminWednesdays"));
+const AdminHolidays = lazy(() => import("./pages/admin/AdminHolidays"));
+const AdminChildren = lazy(() => import("./pages/admin/AdminChildren"));
+const AdminProfiles = lazy(() => import("./pages/admin/AdminProfiles"));
+const AdminAuthorizedEmails = lazy(() => import("./pages/admin/AdminAuthorizedEmails"));
+const AdminRdv = lazy(() => import("./pages/admin/AdminRdv"));
+const AdminAvailableSpots = lazy(() => import("./pages/admin/AdminAvailableSpots"));
+const AdminWednesdaySpots = lazy(() => import("./pages/admin/AdminWednesdaySpots"));
+const AdminHolidaySpots = lazy(() => import("./pages/admin/AdminHolidaySpots"));
+const AdminLoginPage = lazy(() => import("./pages/admin/AdminLoginPage"));
+const AdminWednesdayReservations = lazy(() => import("./pages/admin/AdminWednesdayReservations"));
+const AdminHolidayReservations = lazy(() => import("./pages/admin/AdminHolidayReservations"));
+const AdminWaitlist = lazy(() => import("./pages/admin/AdminWaitlist"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,6 +57,10 @@ const queryClient = new QueryClient({
   },
 });
 
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center text-muted-foreground">Chargement…</div>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -60,6 +68,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ErrorBoundary>
+          <WaitlistOfferDialog />
+          <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
@@ -114,6 +124,22 @@ const App = () => (
               }
             />
             <Route
+              path="/waitlist"
+              element={
+                <ProtectedRoute>
+                  <MyWaitlist />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <Notifications />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/rdv"
               element={
                 <ProtectedRoute>
@@ -151,6 +177,7 @@ const App = () => (
               <Route path="listeattente" element={<AdminWaitlist />} />
             </Route>
           </Routes>
+          </Suspense>
         </ErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>

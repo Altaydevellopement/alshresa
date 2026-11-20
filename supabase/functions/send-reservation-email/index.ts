@@ -2,7 +2,7 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { ReservationEmailRequest } from "./types.ts";
-import { corsHeaders, isRequestProcessed, markRequestAsProcessed, setupCacheCleanup } from "./utils.ts";
+import { corsHeaders, initSupabase, isRequestProcessed, markRequestAsProcessed, setupCacheCleanup } from "./utils.ts";
 import { processHolidayReservation } from "./holiday.ts";
 import { processRdvReservation } from "./rdv.ts";
 
@@ -20,6 +20,16 @@ const handler = async (req: Request): Promise<Response> => {
   // Gérer les requêtes CORS OPTIONS
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Seuls les utilisateurs connectés peuvent déclencher l'envoi d'un email
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "") ?? "";
+  const { data: authData } = await initSupabase().auth.getUser(token);
+  if (!authData?.user) {
+    return new Response(JSON.stringify({ error: "Non autorisé" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
   }
 
   try {

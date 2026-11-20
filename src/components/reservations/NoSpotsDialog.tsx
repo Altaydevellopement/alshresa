@@ -43,7 +43,7 @@ export const NoSpotsDialog = ({
               Le groupe {getGroupName(schoolClass || '')} est complet pour {formattedDateText}.
             </p>
             <p>
-              Vous pouvez contacter l'accueil si vous souhaitez être en liste d'attente.
+              Vous pouvez inscrire votre enfant sur la liste d'attente : il sera réservé automatiquement dès qu'une place se libère.
             </p>
           </AlertDialogDescription>
         </AlertDialogHeader>
