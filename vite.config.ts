@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -10,16 +9,12 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
 
-  // 👉 Active la génération de sourcemaps (.js.map)
   build: {
-    sourcemap: true,
+    // Sourcemaps non publiées en production (évite d'exposer le code source)
+    sourcemap: mode === "development",
   },
 
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  plugins: [react()],
 
   resolve: {
     alias: {

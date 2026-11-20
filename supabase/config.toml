@@ -1,11 +1,12 @@
-
-project_id = "dddtybmradplydzymrly"
+# Remplacez par l'identifiant du NOUVEAU projet Supabase
+# (Project Settings > General > Reference ID)
+project_id = "VOTRE_NOUVEAU_PROJECT_ID"
 
 [auth]
-# Configuration explicite de l'authentification
-site_url = "https://e2r-reservation.netlify.app"
-additional_redirect_urls = ["https://e2r-reservation.netlify.app/*", "http://localhost:5173/*"]
-logout_redirect_path = "/login"
+# À adapter avec votre domaine Vercel (et à reporter dans
+# Supabase > Authentication > URL Configuration)
+site_url = "https://VOTRE-PROJET.vercel.app"
+additional_redirect_urls = ["https://VOTRE-PROJET.vercel.app/**", "http://localhost:8080/**", "http://localhost:5173/**"]
 
 [functions.send-reservation-email]
 verify_jwt = false

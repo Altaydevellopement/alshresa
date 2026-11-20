@@ -9,14 +9,14 @@ const Index = () => {
       
       {/* Hero Section */}
  <div className="relative bg-cover text-white py-12 overflow-hidden" style={{
-      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('https://dddtybmradplydzymrly.supabase.co/storage/v1/object/public/images//Newfront.jpg')`,
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('/images/Newfront.jpg')`,
       backgroundPosition: "15% top",
       height: "580px" // hauteur à ajuster précisément
     }}>
 
         <div className="container mx-auto px-4 text-center">
           <div className="mt-0">
-            <img src="https://dddtybmradplydzymrly.supabase.co/storage/v1/object/public/images/Logolong.png" alt="L'espace des deux rives" className="h-24 mx-auto" />
+            <img src="/images/Logolong.png" alt="L'espace des deux rives" className="h-24 mx-auto" />
           </div>
           <h1 className="text-5xl font-bold mb-6"></h1>
           <p className="text-xl mb-12 max-w-3xl mx-auto text-red-300">

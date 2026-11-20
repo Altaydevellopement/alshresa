@@ -126,8 +126,8 @@ export async function processRdvReservation(
   );
 
   const emailResponse = await resend.emails.send({
-    from: "Réservation <onboarding@resend.dev>",
-    to: ["accueil@e2rives.fr"],
+    from: Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>",
+    to: [Deno.env.get("EMAIL_TO") ?? "accueil@e2rives.fr"],
     subject: `Nouvelle réservation de rendez-vous - ${userFullName}`,
     html: `
       <h1>Nouvelle réservation de rendez-vous</h1>

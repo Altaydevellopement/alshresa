@@ -14,7 +14,7 @@ export const AuthLayout = ({ children, title, description, subDescription }: Aut
       <div 
         className="w-full h-48 md:h-screen bg-cover bg-center mb-8 md:mb-0 md:fixed md:inset-0 md:z-0"
         style={{
-          backgroundImage: `url('https://dddtybmradplydzymrly.supabase.co/storage/v1/object/public/images/Back.jpg')`,
+          backgroundImage: `url('/images/Back.jpg')`,
           objectPosition: '0 -300px'
         }}
       />

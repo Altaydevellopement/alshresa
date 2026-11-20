@@ -92,8 +92,8 @@ export async function processHolidayReservation(
     console.log(`[${Date.now()}] Attempting to send email to accueil@e2rives.fr with subject: ${emailSubject}`);
     
     const emailResponse = await resend.emails.send({
-      from: "Réservation <onboarding@resend.dev>",
-      to: ["accueil@e2rives.fr"],
+      from: Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>",
+      to: [Deno.env.get("EMAIL_TO") ?? "accueil@e2rives.fr"],
       subject: emailSubject,
       html: emailHtml,
     });

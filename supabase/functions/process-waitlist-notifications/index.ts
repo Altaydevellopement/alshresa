@@ -51,8 +51,8 @@ serve(async (req) => {
 
       try {
         await resend.emails.send({
-          from: "Réservation <onboarding@resend.dev>",
-          to: ["accueil@e2rives.fr"],
+          from: Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>",
+          to: [Deno.env.get("EMAIL_TO") ?? "accueil@e2rives.fr"],
           subject: `Place disponible — ${childName} — ${dateStr}`,
           html,
         });

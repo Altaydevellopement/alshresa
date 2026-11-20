@@ -1,69 +1,48 @@
-# Welcome to your Lovable project
+# Réservations – Espace des 2 Rives
 
-## Project info
+Application de réservation (mercredis, vacances, club ado, rendez-vous) :
+React + Vite + Tailwind/shadcn, base de données **Supabase**, hébergement **Vercel**.
 
-**URL**: https://lovable.dev/projects/b6b2f3db-8033-4843-85f5-f21d54027c83
+## Lancer en local
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/b6b2f3db-8033-4843-85f5-f21d54027c83) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+npm install
+cp .env.example .env   # puis renseigner l'URL et la clé du projet Supabase
+npm run dev            # http://localhost:8080
 ```
 
-**Edit a file directly in GitHub**
+## Déploiement sur Vercel
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Sur vercel.com : *Add New → Project* → importer ce dépôt GitHub.
+2. Framework : **Vite** (détecté automatiquement, `vercel.json` fait le reste).
+3. *Environment Variables* : ajouter `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY`.
+4. *Deploy*.
 
-**Use GitHub Codespaces**
+`vercel.json` redirige toutes les routes vers `index.html` (sinon un rechargement
+de `/profile` ou `/admin` renverrait une 404).
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Nouveau projet Supabase
 
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/b6b2f3db-8033-4843-85f5-f21d54027c83) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+1. Créer le projet sur supabase.com.
+2. Appliquer le schéma : SQL Editor → coller/exécuter le contenu de `supabase/migrations`
+   (ou `supabase db push` avec la CLI).
+3. *Authentication → URL Configuration* :
+   - Site URL : `https://VOTRE-PROJET.vercel.app`
+   - Redirect URLs : `https://VOTRE-PROJET.vercel.app/**` et `http://localhost:8080/**`
+4. Fonctions Edge (emails via Resend) :
+   ```bash
+   npx supabase login
+   npx supabase link --project-ref VOTRE_NOUVEAU_PROJECT_ID
+   npx supabase secrets set RESEND_API_KEY=... EMAIL_TO=accueil@e2rives.fr EMAIL_FROM="Réservation <reservation@votre-domaine.fr>"
+   npx supabase functions deploy send-reservation-email
+   npx supabase functions deploy process-waitlist-notifications
+   ```
+   `EMAIL_FROM` doit utiliser un domaine vérifié dans Resend (sinon seul
+   `onboarding@resend.dev` fonctionne, et uniquement vers l'adresse du compte Resend).
+5. Images : déposer `Logolong.png`, `Back.jpg`, `Newfront.jpg`, `flavicone2r.png`
+   dans `public/images/`.
+6. Créer le premier administrateur : s'inscrire sur le site, puis dans le SQL Editor :
+   ```sql
+   insert into public.user_roles (user_id, email, role)
+   select id, email, 'admin' from auth.users where email = 'votre@email.fr';
+   ```

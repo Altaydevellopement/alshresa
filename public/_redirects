@@ -1,5 +1,0 @@
-
-/*    /index.html   200
-
-# Éviter les erreurs 404 sur les routes d'API
-/api/*  /api/index.html 200
