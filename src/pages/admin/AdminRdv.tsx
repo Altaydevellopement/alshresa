@@ -1,0 +1,51 @@
+
+import React from "react";
+import RdvForm from "@/components/admin/rdv/RdvForm";
+import RdvList from "@/components/admin/rdv/RdvList";
+import { useRdvAdmin } from "@/hooks/useRdvAdmin";
+
+const AdminRdv = () => {
+  const { rdvList, loading, isAdmin, handleDeleteRdv, handleAddNewRdv } = useRdvAdmin();
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="flex items-center justify-center py-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-gray-600">Chargement des rendez-vous...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Accès non autorisé</h1>
+        <p>Vous devez être administrateur pour accéder à cette page.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Gestion des rendez-vous</h1>
+
+      <div className="grid grid-cols-1 gap-4">
+        {/* Add RDV Form */}
+        <RdvForm onRdvAdded={handleAddNewRdv} />
+
+        {/* RDV List */}
+        <RdvList 
+          rdvList={rdvList} 
+          loading={loading} 
+          onDeleteRdv={handleDeleteRdv} 
+        />
+      </div>
+    </div>
+  );
+};
+
+export default AdminRdv;
