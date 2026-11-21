@@ -3,12 +3,12 @@
 //
 // À appeler toutes les minutes via Supabase Cron (voir README).
 // Variables (Supabase > Edge Functions > Secrets) :
-//   RESEND_API_KEY  clé API Resend
-//   EMAIL_FROM      expéditeur, ex. "Espace des 2 Rives <reservation@e2rives.fr>"
+//   BREVO_API_KEY   clé API Brevo
+//   EMAIL_FROM      expéditeur validé dans Brevo, ex. "Espace des 2 Rives <reservation@e2rives.fr>"
 //   EMAIL_TO        secrétariat, reçoit une copie cachée de chaque email
 //   SITE_URL        adresse du site, ex. https://reservation.e2rives.fr
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.47.0";
-import { Resend } from "npm:resend@4.0.0";
+import { sendEmail } from "../_shared/email.ts";
 
 const MAX_ATTEMPTS = 5;
 const BATCH_SIZE = 50;
@@ -28,16 +28,13 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
-  const resendKey = Deno.env.get("RESEND_API_KEY");
-  const from = Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>";
   const secretariat = Deno.env.get("EMAIL_TO");
   const siteUrl = (Deno.env.get("SITE_URL") ?? "").replace(/\/$/, "");
 
   try {
     const { data: expired } = await supabase.rpc("expire_waitlist_entries");
 
-    if (!resendKey) return json({ error: "RESEND_API_KEY manquante", expired }, 500);
-    const resend = new Resend(resendKey);
+    if (!Deno.env.get("BREVO_API_KEY")) return json({ error: "BREVO_API_KEY manquante", expired }, 500);
 
     const { data: notifications, error } = await supabase
       .from("notifications")
@@ -71,13 +68,17 @@ Deno.serve(async (req) => {
           </p>
         </div>`;
 
-      const { error: sendError } = await resend.emails.send({
-        from,
-        to: [email],
-        ...(secretariat ? { bcc: [secretariat], reply_to: secretariat } : {}),
-        subject: n.title,
-        html,
-      });
+      let sendError: Error | null = null;
+      try {
+        await sendEmail({
+          to: [email],
+          ...(secretariat ? { bcc: [secretariat], replyTo: secretariat } : {}),
+          subject: n.title,
+          html,
+        });
+      } catch (e) {
+        sendError = e instanceof Error ? e : new Error(String(e));
+      }
 
       if (sendError) {
         const attempts = (n.email_attempts ?? 0) + 1;

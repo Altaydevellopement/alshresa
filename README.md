@@ -52,7 +52,7 @@ npm run dev            # http://localhost:8080
 3. *Authentication → URL Configuration* :
    - Site URL : `https://VOTRE-DOMAINE`
    - Redirect URLs : `https://VOTRE-DOMAINE/**`, `https://*-VOTRE-EQUIPE.vercel.app/**`, `http://localhost:8080/**`
-4. *Authentication → Emails* : configurer un SMTP (ex. Resend) pour les emails
+4. *Authentication → Emails* : configurer le SMTP de Brevo (smtp-relay.brevo.com, port 587) pour les emails
    d'inscription et de mot de passe oublié (le SMTP par défaut de Supabase est très limité).
 
 ### 2. Reprise des données de l'ancien site
@@ -75,7 +75,7 @@ passe habituel.
 ```bash
 npx supabase login
 npx supabase link --project-ref VOTRE_NOUVEAU_PROJECT_ID
-npx supabase secrets set RESEND_API_KEY=re_xxx \
+npx supabase secrets set BREVO_API_KEY=xkeysib-xxx \
   EMAIL_FROM="Espace des 2 Rives <reservation@e2rives.fr>" \
   EMAIL_TO=accueil@e2rives.fr \
   SITE_URL=https://VOTRE-DOMAINE
@@ -83,7 +83,8 @@ npx supabase functions deploy send-reservation-email
 npx supabase functions deploy send-notifications
 ```
 
-`EMAIL_FROM` doit utiliser un domaine vérifié dans Resend.
+Les emails sont envoyés via l'API Brevo (`supabase/functions/_shared/email.ts`).
+`EMAIL_FROM` doit être un expéditeur (ou un domaine) validé dans Brevo.
 
 Puis *Integrations → Cron → Create job* :
 - nom `send-notifications`, planification `* * * * *` (chaque minute)

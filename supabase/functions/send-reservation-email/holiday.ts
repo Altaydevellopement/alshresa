@@ -1,11 +1,10 @@
 
-import { Resend } from "npm:resend@2.0.0";
+import { sendEmail, secretariatEmail } from "../_shared/email.ts";
 import { ReservationEmailRequest } from "./types.ts";
 import { corsHeaders } from "./utils.ts";
 
 export async function processHolidayReservation(
   requestData: ReservationEmailRequest,
-  resend: Resend,
   requestId: string
 ): Promise<Response> {
   console.log(`[${Date.now()}] Processing a ${requestData.reservationType} reservation with ${requestData.dates?.length || 0} dates`);
@@ -91,9 +90,8 @@ export async function processHolidayReservation(
   try {
     console.log(`[${Date.now()}] Attempting to send email to accueil@e2rives.fr with subject: ${emailSubject}`);
     
-    const emailResponse = await resend.emails.send({
-      from: Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>",
-      to: [Deno.env.get("EMAIL_TO") ?? "accueil@e2rives.fr"],
+    const emailResponse = await sendEmail({
+      to: [secretariatEmail()],
       subject: emailSubject,
       html: emailHtml,
     });

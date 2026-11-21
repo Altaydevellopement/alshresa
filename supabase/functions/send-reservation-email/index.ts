@@ -1,15 +1,10 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
 import { ReservationEmailRequest } from "./types.ts";
 import { corsHeaders, initSupabase, isRequestProcessed, markRequestAsProcessed, setupCacheCleanup } from "./utils.ts";
 import { processHolidayReservation } from "./holiday.ts";
 import { processRdvReservation } from "./rdv.ts";
 
-// Récupérer la clé API Resend
-const resendApiKey = Deno.env.get("RESEND_API_KEY");
-// Initialiser Resend
-const resend = new Resend(resendApiKey || "");
 
 // Setup cache cleanup interval
 setupCacheCleanup();
@@ -62,15 +57,11 @@ const handler = async (req: Request): Promise<Response> => {
     markRequestAsProcessed(requestId);
     console.log(`[${Date.now()}] Request marked as processed:`, requestId);
 
-    // Vérifier la présence de la clé API Resend
-    if (!resendApiKey) {
-      console.error(`[${Date.now()}] CRITICAL ERROR: Resend API key is missing`);
+    // Vérifier la configuration Brevo
+    if (!Deno.env.get("BREVO_API_KEY")) {
       return new Response(
-        JSON.stringify({ error: "Resend API key is missing. Please add RESEND_API_KEY to your environment variables." }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
+        JSON.stringify({ error: "BREVO_API_KEY manquante dans les secrets des fonctions Supabase." }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -80,10 +71,10 @@ const handler = async (req: Request): Promise<Response> => {
     if (requestData.reservationType === "holiday" || 
         requestData.reservationType === "wednesday" || 
         requestData.reservationType === "teen-holiday") {
-      return await processHolidayReservation(requestData, resend, requestId);
+      return await processHolidayReservation(requestData, requestId);
     } 
     else if (requestData.rdvId) {
-      return await processRdvReservation(requestData, resend, requestId);
+      return await processRdvReservation(requestData, requestId);
     } 
     else {
       console.error(`[${Date.now()}] Invalid request data, missing or invalid reservationType or rdvId:`, requestData);

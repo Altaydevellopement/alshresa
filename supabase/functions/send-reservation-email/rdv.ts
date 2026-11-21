@@ -1,11 +1,10 @@
 
-import { Resend } from "npm:resend@2.0.0";
+import { sendEmail, secretariatEmail } from "../_shared/email.ts";
 import { ReservationEmailRequest } from "./types.ts";
 import { corsHeaders, generateICalendarString, generateCalendarButtons, initSupabase } from "./utils.ts";
 
 export async function processRdvReservation(
   requestData: ReservationEmailRequest,
-  resend: Resend,
   requestId: string
 ): Promise<Response> {
   console.log("Processing an RDV reservation");
@@ -125,9 +124,9 @@ export async function processRdvReservation(
     eventDescription
   );
 
-  const emailResponse = await resend.emails.send({
-    from: Deno.env.get("EMAIL_FROM") ?? "Réservation <onboarding@resend.dev>",
-    to: [Deno.env.get("EMAIL_TO") ?? "accueil@e2rives.fr"],
+  const emailResponse = await sendEmail({
+    to: [secretariatEmail()],
+    replyTo: userEmail || undefined,
     subject: `Nouvelle réservation de rendez-vous - ${userFullName}`,
     html: `
       <h1>Nouvelle réservation de rendez-vous</h1>
