@@ -15,7 +15,7 @@ export const WednesdaySpotCard = ({ spot }: WednesdaySpotCardProps) => {
   return (
     <div className="bg-white p-2 rounded border shadow-sm">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-        <div className="font-medium text-gray-800 text-xs">
+        <div className="font-medium text-foreground text-xs">
           {format(new Date(spot.date), "EEEE dd MMMM yyyy", { locale: fr })}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-1">

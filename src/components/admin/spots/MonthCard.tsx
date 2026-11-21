@@ -15,10 +15,10 @@ export const MonthCard = ({ monthData, colorClass }: MonthCardProps) => {
   return (
     <Card className={`${colorClass} border`}>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-bold text-gray-800 capitalize">
+        <CardTitle className="text-base font-bold text-foreground capitalize">
           {monthData.monthName}
         </CardTitle>
-        <p className="text-xs text-gray-600">{monthData.wednesdays.length} mercredis disponibles</p>
+        <p className="text-xs text-muted-foreground">{monthData.wednesdays.length} mercredis disponibles</p>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-2">

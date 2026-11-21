@@ -107,10 +107,10 @@ export const WednesdaysList = ({ wednesdays, onDelete, onEdit }: WednesdaysListP
           <div key={monthKey} className={`${monthColors[index % monthColors.length]} border rounded-lg`}>
             <div className="p-4">
               <div className="pb-2">
-                <h3 className="text-base font-bold text-gray-800 capitalize mb-1">
+                <h3 className="text-base font-bold text-foreground capitalize mb-1">
                   {monthData.monthName}
                 </h3>
-                <p className="text-xs text-gray-600">{monthData.wednesdays.length} mercredis disponibles</p>
+                <p className="text-xs text-muted-foreground">{monthData.wednesdays.length} mercredis disponibles</p>
               </div>
               <div className="pt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">

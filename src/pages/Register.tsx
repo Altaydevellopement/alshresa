@@ -22,12 +22,21 @@ const Register = () => {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isExistingUserError, setIsExistingUserError] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (values: RegisterFormData) => {
     setIsLoading(true);
     try {
-      await registerUser(values);
+      const { session } = await registerUser(values);
+      if (session) {
+        // Compte actif tout de suite : direction le tableau de bord
+        toast.success("Compte créé, bienvenue !");
+        navigate("/dashboard", { replace: true });
+        return;
+      }
+      // La confirmation d'email est encore activée dans Supabase
+      setNeedsEmailConfirmation(true);
       setShowSuccessDialog(true);
     } catch (error: any) {
       console.error("Registration error:", error);
@@ -95,7 +104,9 @@ const Register = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Inscription réussie !</AlertDialogTitle>
             <AlertDialogDescription className="text-base">
-              Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter pour réserver les vacances pour vos enfants.
+              {needsEmailConfirmation
+                ? "Votre compte a été créé. Cliquez sur le lien reçu par email pour l'activer, puis connectez-vous."
+                : "Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter pour réserver les vacances pour vos enfants."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

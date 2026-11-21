@@ -48,7 +48,7 @@ export const HolidayReservationCalendar = ({
     return (
       <div className="bg-white p-4 rounded-lg shadow">
         <h2 className="text-xl font-semibold mb-4">Périodes de vacances disponibles</h2>
-        <p className="text-gray-500">Aucune période de vacances n'est disponible pour le moment.</p>
+        <p className="text-muted-foreground">Aucune période de vacances n'est disponible pour le moment.</p>
       </div>
     );
   }
@@ -56,7 +56,7 @@ export const HolidayReservationCalendar = ({
   return (
     <div className="bg-white p-4 rounded-lg shadow">
       <h2 className="text-xl font-semibold mb-4">Périodes de vacances disponibles</h2>
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-sm text-muted-foreground mb-4">
         Vous devez réserver au moins 3 jours ouvrables par semaine pendant les vacances.
       </p>
       <div className="space-y-6">
@@ -83,10 +83,10 @@ export const HolidayReservationCalendar = ({
           return (
             <div 
               key={holiday.id} 
-              className="border-2 border-blue-100 rounded-lg p-4 bg-blue-50/30 shadow-sm"
+              className="border-2 border-info/20 rounded-lg p-4 bg-info-soft/30 shadow-sm"
             >
               <div>
-                <Label className="font-medium block mb-4 text-sm text-gray-600">
+                <Label className="font-medium block mb-4 text-sm text-muted-foreground">
                   Du {format(startDate, "d MMMM yyyy", { locale: fr })} au{" "}
                   {format(endDate, "d MMMM yyyy", { locale: fr })}
                 </Label>
@@ -117,7 +117,7 @@ export const HolidayReservationCalendar = ({
                               />
                               <Label 
                                 htmlFor={`without-meal-${date.toISOString()}`}
-                                className="text-sm text-gray-600"
+                                className="text-sm text-muted-foreground"
                               >
                                 Sans repas
                               </Label>
@@ -132,7 +132,7 @@ export const HolidayReservationCalendar = ({
                               />
                               <Label 
                                 htmlFor={`early-dropoff-${date.toISOString()}`}
-                                className="text-sm text-gray-600"
+                                className="text-sm text-muted-foreground"
                               >
                                 Accueil avant 8h30
                               </Label>
@@ -144,10 +144,10 @@ export const HolidayReservationCalendar = ({
                   })}
                 </div>
                 {weekGroups.map((weekDates, index) => (
-                  <p key={index} className="text-sm text-gray-600 mt-2">
+                  <p key={index} className="text-sm text-muted-foreground mt-2">
                     Semaine {index + 1}: {weekDates.length} jour{weekDates.length > 1 ? 's' : ''} sélectionné{weekDates.length > 1 ? 's' : ''}
                     {weekDates.length < 3 && (
-                      <span className="text-red-500 ml-2">
+                      <span className="text-destructive ml-2">
                         (minimum 3 jours requis)
                       </span>
                     )}

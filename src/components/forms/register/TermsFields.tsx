@@ -47,7 +47,7 @@ export const TermsFields = ({ form }: TermsFieldsProps) => {
                 <Link 
                   to="/terms-of-service"
                   state={{ from: "/register" }}
-                  className="text-[#8B5CF6] hover:underline font-medium"
+                  className="text-primary hover:underline font-semibold"
                 >
                   conditions générales d'utilisation
                 </Link>
@@ -55,7 +55,7 @@ export const TermsFields = ({ form }: TermsFieldsProps) => {
                 <Link 
                   to="/terms-of-operation"
                   state={{ from: "/register" }}
-                  className="text-[#8B5CF6] hover:underline font-medium"
+                  className="text-primary hover:underline font-semibold"
                 >
                   règlement de fonctionnement
                 </Link>

@@ -15,7 +15,7 @@ export const AgeGroup: React.FC<AgeGroupProps> = ({ type, activities }) => {
   const getIcon = () => {
     switch (type) {
       case 'maternelle':
-        return <Baby className="h-5 w-5 text-blue-500" />;
+        return <Baby className="h-5 w-5 text-primary" />;
       case 'primaire':
         return <User className="h-5 w-5 text-green-500" />;
       case 'adolescents':

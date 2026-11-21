@@ -10,11 +10,11 @@ interface HolidaySpotsBadgeProps {
 }
 
 const getSpotsBadgeColor = (spots: number | null, loading: boolean) => {
-  if (loading) return "bg-blue-100 text-blue-800";
-  if (spots === null || spots === undefined) return "bg-gray-100 text-gray-600";
-  if (spots <= 0) return "bg-red-100 text-red-800";
-  if (spots <= 5) return "bg-orange-100 text-orange-800";
-  return "bg-green-100 text-green-800";
+  if (loading) return "bg-info-soft text-info";
+  if (spots === null || spots === undefined) return "bg-muted text-muted-foreground";
+  if (spots <= 0) return "bg-destructive-soft text-destructive";
+  if (spots <= 5) return "bg-warning-soft text-warning";
+  return "bg-success-soft text-success";
 };
 
 const getSpotsBadgeText = (spots: number | null, loading: boolean = false) => {

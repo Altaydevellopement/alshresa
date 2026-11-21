@@ -107,11 +107,11 @@ export const RdvCalendar = ({
             hasSlots: (date) => isDayWithSlots(date)
           }}
           modifiersClassNames={{
-            hasSlots: "bg-green-50 font-medium"
+            hasSlots: "bg-success-soft font-medium"
           }}
         />
         
-        <div className="mt-2 text-center text-xs text-gray-500">
+        <div className="mt-2 text-center text-xs text-muted-foreground">
           Les dates avec des créneaux disponibles sont en surbrillance
         </div>
       </CardContent>

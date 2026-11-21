@@ -18,8 +18,8 @@ const AdminHolidayReservations = () => {
 
   if (!isAdmin) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Accès non autorisé</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Accès non autorisé</h1>
         <div>Vous devez être administrateur pour accéder à cette page.</div>
       </div>
     );
@@ -27,9 +27,9 @@ const AdminHolidayReservations = () => {
 
   if (queryError) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Gestion des réservations - Vacances</h1>
-        <div className="text-red-500">
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des réservations - Vacances</h1>
+        <div className="text-destructive">
           Erreur lors du chargement des réservations: {queryError.message}
         </div>
       </div>
@@ -37,9 +37,9 @@ const AdminHolidayReservations = () => {
   }
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="space-y-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Gestion des réservations - Vacances</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des réservations - Vacances</h1>
         <div className="flex gap-4">
           <Button 
             variant="secondary" 

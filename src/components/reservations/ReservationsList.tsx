@@ -133,7 +133,7 @@ export const ReservationsList = ({ reservations }: ReservationsListProps) => {
   if (validReservations.length === 0) {
     return (
       <div className="p-6 text-center">
-        <p className="text-gray-600">Aucune réservation valide trouvée.</p>
+        <p className="text-muted-foreground">Aucune réservation valide trouvée.</p>
       </div>
     );
   }
@@ -154,7 +154,7 @@ export const ReservationsList = ({ reservations }: ReservationsListProps) => {
 
   return (
     <div ref={containerRef}>
-      <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4">
+      <h2 className="text-lg md:text-xl font-semibold text-foreground mb-4">
         Vos {isTeenHolidayReservation ? "activités Club Ado" : "mercredis"} réservés (sous réserve de règlement)
       </h2>
       <ScrollArea className="h-[450px]">

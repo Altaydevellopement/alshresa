@@ -32,7 +32,7 @@ export const ReservationItem = ({
   );
 
   return (
-    <div className="flex items-center justify-between p-3 bg-white rounded-lg border hover:bg-gray-50 transition-colors">
+    <div className="flex items-center justify-between p-3 bg-white rounded-lg border hover:bg-surface-muted transition-colors">
       <div className="flex items-center gap-3 overflow-hidden">
         <Checkbox 
           checked={isSelected}

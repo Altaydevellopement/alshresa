@@ -12,12 +12,13 @@ interface SpotsBadgeProps {
   date?: Date;
 }
 
-const getSpotsBadgeColor = (spots: number | null, loading: boolean) => {
-  if (loading) return "bg-blue-100 text-blue-800";
-  if (spots === null || spots === undefined) return "bg-gray-100 text-gray-600";
-  if (spots <= 0) return "bg-red-100 text-red-800";
-  if (spots <= 5) return "bg-orange-100 text-orange-800";
-  return "bg-green-100 text-green-800";
+type SpotsVariant = "info" | "neutral" | "destructive" | "warning" | "success";
+const getSpotsBadgeColor = (spots: number | null, loading: boolean): SpotsVariant => {
+  if (loading) return "info";
+  if (spots === null || spots === undefined) return "neutral";
+  if (spots <= 0) return "destructive";
+  if (spots <= 5) return "warning";
+  return "success";
 };
 
 const getSpotsBadgeText = (spots: number | null, schoolClass: string = "", loading: boolean = false) => {
@@ -45,7 +46,7 @@ export const SpotsBadge = ({
   date
 }: SpotsBadgeProps) => {
   const [displayText, setDisplayText] = useState<string>("");
-  const [badgeColor, setBadgeColor] = useState<string>("");
+  const [badgeColor, setBadgeColor] = useState<SpotsVariant>("neutral");
   
   // Si periodId et date sont fournis, utiliser le hook pour obtenir les données actualisées
   const { availableSpots: hookAvailableSpots, isLoading: hookIsLoading } = useHolidaySpots(
@@ -59,25 +60,12 @@ export const SpotsBadge = ({
   const isLoading = periodId && date ? hookIsLoading : propIsLoading;
   
   useEffect(() => {
-    console.log("SpotsBadge rendering with:", { 
-      availableSpots, 
-      isFull: propIsFull, 
-      schoolClass, 
-      isLoading,
-      periodId,
-      date: date?.toISOString().split('T')[0],
-      valueType: availableSpots === null ? 'null' : typeof availableSpots 
-    });
-    
     setDisplayText(getSpotsBadgeText(availableSpots, schoolClass, isLoading));
     setBadgeColor(getSpotsBadgeColor(availableSpots, isLoading));
   }, [availableSpots, propIsFull, schoolClass, isLoading, periodId, date]);
 
   return (
-    <Badge 
-      variant="secondary" 
-      className={`${badgeColor} border-none text-[10px] md:text-xs font-medium`}
-    >
+    <Badge variant={badgeColor} className="shrink-0 text-[11px] md:text-xs">
       {displayText}
     </Badge>
   );

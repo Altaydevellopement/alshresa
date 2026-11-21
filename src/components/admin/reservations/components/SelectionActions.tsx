@@ -20,8 +20,8 @@ export const SelectionActions = ({
   activeReservations,
 }: SelectionActionsProps) => {
   return (
-    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 flex flex-wrap justify-between items-center gap-3">
-      <p className="text-blue-800 font-medium">
+    <div className="bg-info-soft p-4 rounded-lg border border-info/20 flex flex-wrap justify-between items-center gap-3">
+      <p className="text-info font-medium">
         {reservationCount} réservation{reservationCount > 1 ? 's' : ''} affichée{reservationCount > 1 ? 's' : ''}
         {selectedCount > 0 && ` (${selectedCount} sélectionnée${selectedCount > 1 ? 's' : ''})`}
       </p>

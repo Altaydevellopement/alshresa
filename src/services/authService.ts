@@ -42,7 +42,8 @@ export const registerUser = async (formData: RegisterFormData) => {
     
     if (!authData.user) throw new Error("No user data returned");
 
-    return authData.user;
+    // Sans confirmation d'email (réglage Supabase), une session est ouverte immédiatement
+    return { user: authData.user, session: authData.session };
   } catch (error) {
     console.error("Registration error:", error);
     throw error;

@@ -32,7 +32,7 @@ export function QFInput({
             e.preventDefault();
             scrollToObtenirQFSection();
           }}
-          className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 underline"
+          className="text-xs sm:text-sm font-semibold text-primary hover:text-primary-hover underline"
         >
           Quotient Familial (QF)
         </a>
@@ -42,7 +42,7 @@ export function QFInput({
             e.preventDefault();
             scrollToPlafondSection();
           }}
-          className="text-xs sm:text-sm font-semibold text-blue-600 mt-1 sm:mt-0 underline hover:text-blue-800"
+          className="text-xs sm:text-sm font-semibold text-primary mt-1 sm:mt-0 underline hover:text-primary-hover"
         >
           Plancher {MIN_QF}€ Plafond {MAX_QF}€
         </a>

@@ -36,7 +36,7 @@ const TermsOfOperation = () => {
 
         <TermsContent />
 
-        <p className="mt-12 text-right text-sm font-semibold text-gray-600">
+        <p className="mt-12 text-right text-sm font-semibold text-muted-foreground">
           Validé Bureau 17-09-2026
         </p>
       </div>

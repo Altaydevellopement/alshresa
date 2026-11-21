@@ -48,7 +48,7 @@ export const useLoginForm = () => {
         // Gardons uniquement cette redirection de login vers profile
         // avec un délai suffisant pour que la session soit bien établie
         setTimeout(() => {
-          navigate("/profile", { replace: true });
+          navigate("/dashboard", { replace: true });
         }, 1500);
       } else {
         setError("Session non établie. Veuillez réessayer.");

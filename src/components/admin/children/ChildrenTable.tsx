@@ -50,7 +50,7 @@ const ChildRow = ({
             disabled={hasReservations || checkingReservations}
             title={hasReservations ? "Impossible de modifier : l'enfant a des réservations actives" : "Modifier"}
           >
-            <Pencil className={`w-4 h-4 ${hasReservations ? 'text-gray-400' : 'text-blue-600'}`} />
+            <Pencil className={`w-4 h-4 ${hasReservations ? 'text-muted-foreground' : 'text-primary'}`} />
           </Button>
           <Button
             variant="ghost"
@@ -59,7 +59,7 @@ const ChildRow = ({
             disabled={hasReservations || checkingReservations}
             title={hasReservations ? "Impossible de supprimer : l'enfant a des réservations actives" : "Supprimer"}
           >
-            <Trash2 className={`w-4 h-4 ${hasReservations ? 'text-gray-400' : 'text-red-600'}`} />
+            <Trash2 className={`w-4 h-4 ${hasReservations ? 'text-muted-foreground' : 'text-destructive'}`} />
           </Button>
         </div>
       </TableCell>

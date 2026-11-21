@@ -6,19 +6,24 @@ import { Tables } from "@/integrations/supabase/types";
 import { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Palmtree } from "lucide-react";
+import { EmptyState, SelectableCard } from "@/components/design";
 
 interface PeriodSelectorProps {
   selectedPeriod: string;
   setSelectedPeriod: (periodId: string) => void;
   holidayPeriods?: Tables<"available_holiday_periods">[] | null;
   filterTeenOnly?: boolean;
+  /** "cards" : cartes sélectionnables (assistant de réservation) */
+  variant?: "select" | "cards";
 }
 
 export const PeriodSelector = ({
   selectedPeriod,
   setSelectedPeriod,
   holidayPeriods,
-  filterTeenOnly = false
+  filterTeenOnly = false,
+  variant = "select",
 }: PeriodSelectorProps) => {
   const [filteredPeriods, setFilteredPeriods] = useState<Tables<"available_holiday_periods">[] | null | undefined>(holidayPeriods);
   const valueChangeBlocked = useRef(false);
@@ -113,14 +118,12 @@ export const PeriodSelector = ({
   const handlePeriodChange = (value: string) => {
     if (valueChangeBlocked.current) return;
     
-    console.log("[PeriodSelector] Changement de période sélectionné:", value);
     valueChangeBlocked.current = true;
     
     // Utiliser setTimeout pour éviter les boucles React de mise à jour d'état
     setTimeout(() => {
       try {
         setSelectedPeriod(value);
-        console.log("[PeriodSelector] Période mise à jour:", value);
       } catch (error) {
         console.error("[PeriodSelector] Erreur lors du changement de période:", error);
       } finally {
@@ -131,6 +134,36 @@ export const PeriodSelector = ({
       }
     }, 0);
   };
+
+  if (variant === "cards") {
+    if (!filteredPeriods || filteredPeriods.length === 0) {
+      return (
+        <EmptyState
+          icon={Palmtree}
+          title="Aucune période ouverte"
+          description="Aucune période de vacances n'est ouverte à la réservation pour le moment."
+        />
+      );
+    }
+    return (
+      <div role="group" aria-label="Période de vacances" className="grid gap-3 sm:grid-cols-2">
+        {filteredPeriods.map((period) => (
+          <SelectableCard
+            key={period.id}
+            selected={selectedPeriod === period.id}
+            onSelect={() => handlePeriodChange(period.id)}
+            icon={
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-sage-soft text-sage-foreground" aria-hidden="true">
+                <Palmtree className="h-5 w-5" />
+              </span>
+            }
+            title={period.name}
+            subtitle={`Du ${format(new Date(period.start_date), "d MMMM", { locale: fr })} au ${format(new Date(period.end_date), "d MMMM yyyy", { locale: fr })}`}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-2" onClick={e => e.stopPropagation()}>

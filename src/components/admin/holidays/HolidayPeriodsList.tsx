@@ -14,13 +14,13 @@ interface HolidayPeriodsListProps {
 }
 
 const periodColors = [
-  "bg-green-50 border-green-200",
+  "bg-success-soft border-success/25",
   "bg-purple-50 border-purple-200",
-  "bg-orange-50 border-orange-200",
+  "bg-warning-soft border-warning/25",
   "bg-pink-50 border-pink-200",
-  "bg-yellow-50 border-yellow-200",
+  "bg-warning-soft border-warning/25",
   "bg-indigo-50 border-indigo-200",
-  "bg-red-50 border-red-200",
+  "bg-destructive-soft border-destructive/30",
   "bg-teal-50 border-teal-200"
 ];
 
@@ -150,7 +150,7 @@ export const HolidayPeriodsList = ({ holidays, onDelete }: HolidayPeriodsListPro
     return (
       <div className="p-6 bg-white rounded-lg shadow">
         <h2 className="text-lg font-semibold mb-4">Périodes de vacances</h2>
-        <p className="text-gray-500">Aucune période de vacances n'est disponible actuellement.</p>
+        <p className="text-muted-foreground">Aucune période de vacances n'est disponible actuellement.</p>
       </div>
     );
   }

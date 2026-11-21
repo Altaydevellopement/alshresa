@@ -1,9 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { toast } from "sonner";
-import { FileText, Play, X } from "lucide-react";
+import { FileText, ListOrdered, Play, X } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { PageHeader } from "@/components/design";
+import { WaitlistSettingsCard } from "@/components/admin/settings/WaitlistSettingsCard";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,13 +17,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminChildSelector } from "@/components/admin/reservations/AdminChildSelector";
 import { useAdminChildrenData } from "@/hooks/useAdminChildrenData";
-import { statusBadge, type WaitlistRow } from "@/pages/MyWaitlist";
+import { WaitlistStatus, type WaitlistRow } from "@/components/waitlist/WaitlistStatus";
 
 const GROUP_LABELS: Record<string, string> = {
   kindergarten: "Maternelle",
@@ -39,35 +44,6 @@ const fmtDate = (d: string) => format(new Date(d), "EEE d MMM yyyy", { locale: f
 
 const AdminWaitlist = () => {
   const qc = useQueryClient();
-
-  // ---------------------------------------------------------------- Réglages
-  const { data: settings } = useQuery({
-    queryKey: ["global_settings"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("global_settings").select("*").order("created_at").limit(1).maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-  });
-  const [enabled, setEnabled] = useState(true);
-  const [cutoff, setCutoff] = useState(12);
-  useEffect(() => {
-    if (settings) {
-      setEnabled(settings.waitlist_enabled);
-      setCutoff(settings.waitlist_cutoff_hours);
-    }
-  }, [settings]);
-
-  const saveSettings = async () => {
-    if (!settings) return;
-    const { error } = await supabase
-      .from("global_settings")
-      .update({ waitlist_enabled: enabled, waitlist_cutoff_hours: cutoff })
-      .eq("id", settings.id);
-    if (error) return toast.error(error.message);
-    toast.success("Réglages enregistrés");
-    qc.invalidateQueries({ queryKey: ["global_settings"] });
-  };
 
   // ---------------------------------------------------------------- Liste
   const [includePast, setIncludePast] = useState(false);
@@ -103,7 +79,9 @@ const AdminWaitlist = () => {
     qc.invalidateQueries({ queryKey: ["holiday_reservations"] });
   };
 
+  const [removing, setRemoving] = useState<WaitlistRow | null>(null);
   const remove = async (row: WaitlistRow) => {
+    setRemoving(null);
     const { error } = await supabase.rpc("leave_waitlist", { p_entry_id: row.id });
     if (error) return toast.error(error.message);
     toast.success(`${row.child_first_name} retiré(e) de la liste d'attente`);
@@ -201,38 +179,14 @@ const AdminWaitlist = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Liste d'attente</h1>
+      <PageHeader
+        icon={ListOrdered}
+        eyebrow="Administration"
+        title="Liste d'attente"
+        description="Inscriptions par date et par groupe, dans l'ordre d'arrivée. Les places libérées sont attribuées automatiquement."
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Fonctionnement</CardTitle>
-          <CardDescription>
-            Quand une place se libère (réservation supprimée ou annulée, capacité augmentée), le premier enfant inscrit
-            pour ce jour et ce groupe est réservé automatiquement. La famille reçoit une notification et un email (copie
-            au secrétariat). Les réservations automatiques s'arrêtent avant le jour J selon le délai ci-dessous.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col sm:flex-row sm:items-end gap-4">
-          <div className="flex items-center gap-2">
-            <Switch id="waitlist-enabled" checked={enabled} onCheckedChange={setEnabled} />
-            <Label htmlFor="waitlist-enabled">Réservation automatique activée</Label>
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="cutoff">Arrêt (heures avant le jour J, minuit)</Label>
-            <Input
-              id="cutoff"
-              type="number"
-              min={0}
-              max={336}
-              value={cutoff}
-              onChange={(e) => setCutoff(Number(e.target.value))}
-              className="w-32"
-            />
-            <p className="text-xs text-muted-foreground">12 = la veille à midi</p>
-          </div>
-          <Button onClick={saveSettings} disabled={!settings}>Enregistrer</Button>
-        </CardContent>
-      </Card>
+      <WaitlistSettingsCard />
 
       <Card>
         <CardHeader>
@@ -314,7 +268,7 @@ const AdminWaitlist = () => {
           <div className="flex flex-col sm:flex-row gap-3">
             <Input placeholder="Rechercher un enfant ou un parent" value={search} onChange={(e) => setSearch(e.target.value)} />
             <Select value={kindFilter} onValueChange={setKindFilter}>
-              <SelectTrigger className="sm:w-40"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="sm:w-48"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tous types</SelectItem>
                 <SelectItem value="wednesday">Mercredis</SelectItem>
@@ -358,7 +312,7 @@ const AdminWaitlist = () => {
                 <TableBody>
                   {filtered.map((r) => (
                     <TableRow key={r.id}>
-                      <TableCell className="whitespace-nowrap capitalize">{fmtDate(r.date)}</TableCell>
+                      <TableCell className="whitespace-nowrap capitalize-first">{fmtDate(r.date)}</TableCell>
                       <TableCell>{r.kind === "wednesday" ? "Mercredi" : `Vacances ${r.period_name ?? ""}`}</TableCell>
                       <TableCell>
                         {r.child_last_name} {r.child_first_name}
@@ -369,17 +323,17 @@ const AdminWaitlist = () => {
                       </TableCell>
                       <TableCell>{`${r.parent_last_name ?? ""} ${r.parent_first_name ?? ""}`.trim() || "-"}</TableCell>
                       <TableCell>{GROUP_LABELS[r.class_group] ?? r.class_group}</TableCell>
-                      <TableCell>{statusBadge(r)}</TableCell>
+                      <TableCell><WaitlistStatus row={r} /></TableCell>
                       <TableCell className="whitespace-nowrap text-sm">
                         {format(new Date(r.created_at), "dd/MM/yyyy HH:mm")}
                       </TableCell>
                       <TableCell className="text-right whitespace-nowrap">
                         {r.status === "waiting" && (
                           <>
-                            <Button variant="ghost" size="icon" title="Attribuer les places libres maintenant" onClick={() => processNow(r)}>
+                            <Button variant="ghost" size="icon" title="Attribuer les places libres maintenant" aria-label={`Attribuer les places libres du ${fmtDate(r.date)}`} onClick={() => processNow(r)}>
                               <Play className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon" title="Retirer de la liste" onClick={() => remove(r)}>
+                            <Button variant="ghost" size="icon" title="Retirer de la liste" aria-label={`Retirer ${r.child_first_name} de la liste d'attente`} onClick={() => setRemoving(r)}>
                               <X className="h-4 w-4" />
                             </Button>
                           </>
@@ -393,6 +347,20 @@ const AdminWaitlist = () => {
           )}
         </CardContent>
       </Card>
+      <AlertDialog open={!!removing} onOpenChange={(open) => !open && setRemoving(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Retirer de la liste d'attente ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {removing && `${removing.child_first_name} ${removing.child_last_name} perdra sa position pour le ${fmtDate(removing.date)}.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={() => removing && remove(removing)}>Retirer</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

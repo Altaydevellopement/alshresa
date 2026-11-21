@@ -77,11 +77,11 @@ export const PaginationControls = ({
   return (
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
       <div className="flex items-center gap-4">
-        <div className="text-sm text-gray-600">
+        <div className="text-sm text-muted-foreground">
           Affichage de {startIndex} à {endIndex} sur {totalItems} réservations
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-600">Afficher :</span>
+          <span className="text-sm text-muted-foreground">Afficher :</span>
           <Select
             value={itemsPerPage.toString()}
             onValueChange={(value) => onItemsPerPageChange(Number(value))}

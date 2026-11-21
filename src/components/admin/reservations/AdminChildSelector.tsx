@@ -71,7 +71,7 @@ export const AdminChildSelector = ({
               <SelectItem key={child.id} value={child.id}>
                 {child.first_name} {child.last_name} - {child.school_class}
                 {child.profile && (
-                  <span className="text-xs text-gray-500 ml-2">
+                  <span className="text-xs text-muted-foreground ml-2">
                     (Parent: {child.profile.first_name} {child.profile.last_name})
                   </span>
                 )}

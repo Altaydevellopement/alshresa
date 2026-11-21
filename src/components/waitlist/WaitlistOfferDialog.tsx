@@ -100,7 +100,7 @@ export const WaitlistOfferDialog = () => {
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-orange-500" />
+            <Clock className="h-5 w-5 text-warning" />
             {offer.partial ? "Certaines dates sont complètes" : "Plus de places disponibles"}
           </DialogTitle>
           <DialogDescription>
@@ -119,9 +119,9 @@ export const WaitlistOfferDialog = () => {
                 {done ? (
                   result ? (
                     ok ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0" />
+                      <CheckCircle2 className="h-5 w-5 text-success shrink-0" />
                     ) : (
-                      <AlertCircle className="h-5 w-5 text-orange-500 shrink-0" />
+                      <AlertCircle className="h-5 w-5 text-warning shrink-0" />
                     )
                   ) : (
                     <span className="h-5 w-5 shrink-0" />
@@ -134,7 +134,7 @@ export const WaitlistOfferDialog = () => {
                   />
                 )}
                 <label htmlFor={`waitlist-${index}`} className="text-sm leading-tight">
-                  <span className="font-medium capitalize">
+                  <span className="font-medium inline-block capitalize-first">
                     {format(item.date, "EEEE d MMMM yyyy", { locale: fr })}
                   </span>
                   <span className="text-muted-foreground">

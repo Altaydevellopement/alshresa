@@ -8,6 +8,12 @@ project_id = "VOTRE_NOUVEAU_PROJECT_ID"
 site_url = "https://VOTRE-PROJET.vercel.app"
 additional_redirect_urls = ["https://VOTRE-PROJET.vercel.app/**", "http://localhost:8080/**", "http://localhost:5173/**"]
 
+[auth.email]
+# Pas d'email de confirmation à l'inscription : seuls les emails présents dans
+# authorized_emails peuvent créer un compte. (Supabase > Authentication >
+# Sign In / Providers > Email > « Confirm email » désactivé.)
+enable_confirmations = false
+
 # Les fonctions exigent désormais un jeton valide (utilisateur connecté,
 # ou clé du projet pour la tâche planifiée).
 [functions.send-reservation-email]

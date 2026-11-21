@@ -7,7 +7,7 @@ import { RegistrationInfoSection } from "./RegistrationInfoSection";
 
 export const TermsContent = () => {
   return (
-    <div className="mb-12 border p-6 rounded-lg bg-gray-50" id="reglement-fonctionnement">
+    <div className="mb-12 border p-6 rounded-lg bg-surface-muted" id="reglement-fonctionnement">
       <TermsHeader />
       <LocationsTable />
       <TarificationSection />

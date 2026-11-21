@@ -13,7 +13,7 @@ export const WednesdaySpotsList = ({ wednesdaySpots }: WednesdaySpotsList) => {
   if (Object.keys(groupedWednesdays).length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-gray-600">Aucun mercredi disponible</p>
+        <p className="text-muted-foreground">Aucun mercredi disponible</p>
       </div>
     );
   }

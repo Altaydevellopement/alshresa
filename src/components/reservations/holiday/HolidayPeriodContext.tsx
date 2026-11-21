@@ -6,6 +6,8 @@ interface HolidayPeriodContextType {
   holidayPeriod: Tables<"available_holiday_periods"> | null;
   childInfo: { school_class: string } | null;
   isTeenClass: boolean;
+  childId?: string;
+  childName?: string;
 }
 
 const HolidayPeriodContext = createContext<HolidayPeriodContextType | undefined>(undefined);
@@ -15,9 +17,11 @@ export const HolidayPeriodProvider: React.FC<{
   holidayPeriod: Tables<"available_holiday_periods"> | null;
   childInfo: { school_class: string } | null;
   isTeenClass: boolean;
-}> = ({ children, holidayPeriod, childInfo, isTeenClass }) => {
+  childId?: string;
+  childName?: string;
+}> = ({ children, holidayPeriod, childInfo, isTeenClass, childId, childName }) => {
   return (
-    <HolidayPeriodContext.Provider value={{ holidayPeriod, childInfo, isTeenClass }}>
+    <HolidayPeriodContext.Provider value={{ holidayPeriod, childInfo, isTeenClass, childId, childName }}>
       {children}
     </HolidayPeriodContext.Provider>
   );

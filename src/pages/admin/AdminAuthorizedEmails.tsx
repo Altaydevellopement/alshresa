@@ -82,8 +82,8 @@ const AdminAuthorizedEmails = () => {
 
   if (isCheckingAdmin) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Gestion des emails autorisés</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des emails autorisés</h1>
         <div>Vérification des droits d'accès...</div>
       </div>
     );
@@ -91,8 +91,8 @@ const AdminAuthorizedEmails = () => {
 
   if (!isAdmin) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Accès non autorisé</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Accès non autorisé</h1>
         <div>Vous devez être administrateur pour accéder à cette page.</div>
       </div>
     );
@@ -100,9 +100,9 @@ const AdminAuthorizedEmails = () => {
 
   if (queryError) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Gestion des emails autorisés</h1>
-        <div className="text-red-500">
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des emails autorisés</h1>
+        <div className="text-destructive">
           Erreur lors du chargement des emails: {queryError.message}
         </div>
       </div>
@@ -111,17 +111,17 @@ const AdminAuthorizedEmails = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Gestion des emails autorisés</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des emails autorisés</h1>
         <div>Chargement...</div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="space-y-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Gestion des emails autorisés</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des emails autorisés</h1>
         <Button 
           onClick={handleExportPdf}
           variant="outline"

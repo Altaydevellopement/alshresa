@@ -56,7 +56,7 @@ export const RegisterForm = ({
           <PersonalInfoFields form={form} />
           <TermsFields form={form} />
 
-          <Button type="submit" disabled={isLoading} className="w-full bg-purple-300 hover:bg-purple-200 text-purple-800 font-semibold">
+          <Button type="submit" size="lg" loading={isLoading} className="w-full">
             {isLoading ? "Inscription en cours..." : "S'inscrire"}
           </Button>
         </form>

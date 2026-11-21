@@ -33,24 +33,24 @@ export const SuccessReservationDialog = ({
             </p>
             
             {excludedFullDates.length > 0 && (
-              <div className="p-4 bg-orange-50 border border-orange-200 rounded-md">
-                <p className="text-orange-800 font-medium mb-2">
+              <div className="p-4 bg-warning-soft border border-warning/25 rounded-md">
+                <p className="text-warning font-medium mb-2">
                   Dates non réservées (mercredis complets) :
                 </p>
-                <ul className="list-disc list-inside text-orange-700 text-sm space-y-1">
+                <ul className="list-disc list-inside text-warning text-sm space-y-1">
                   {excludedFullDates.map((date, index) => (
                     <li key={index}>
                       {format(date, "EEEE d MMMM yyyy", { locale: fr })}
                     </li>
                   ))}
                 </ul>
-                <p className="text-orange-800 text-sm mt-2">
+                <p className="text-warning text-sm mt-2">
                   Ces mercredis étaient complets. Si vous avez inscrit votre enfant sur liste d'attente, il sera réservé automatiquement dès qu'une place se libère et vous recevrez un email.
                 </p>
               </div>
             )}
             
-            <p className="text-[#ea384c] font-medium">
+            <p className="text-destructive font-medium">
               Merci de nous informer au plus tôt de toute absence de votre enfant afin d'attribuer la place à un enfant en liste d'attente.
             </p>
           </DialogDescription>

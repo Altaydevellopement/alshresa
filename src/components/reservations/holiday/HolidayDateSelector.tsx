@@ -63,7 +63,7 @@ export const HolidayDateSelector = ({
       
       const { data, error } = await supabase
         .from("children")
-        .select("school_class")
+        .select("school_class, first_name")
         .eq("id", selectedChild)
         .single();
       
@@ -160,6 +160,8 @@ export const HolidayDateSelector = ({
       holidayPeriod={holidayPeriod} 
       childInfo={childInfo} 
       isTeenClass={isTeenClassValue || isCM2SummerPeriod}
+      childId={selectedChild}
+      childName={childInfo.first_name}
     >
       {shouldUseTeenSelector ? (
         <TeenClassDateSelector

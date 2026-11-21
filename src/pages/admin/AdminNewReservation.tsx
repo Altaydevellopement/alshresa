@@ -40,8 +40,8 @@ const AdminNewReservation = () => {
   console.log("Rendering AdminNewReservation"); // Ajout d'un log pour debug
 
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-8">Nouvelle réservation</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl md:text-3xl font-extrabold">Nouvelle réservation</h1>
       <AdminReservationForm
         selectedChild={selectedChild}
         setSelectedChild={setSelectedChild}

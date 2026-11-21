@@ -10,7 +10,7 @@ export const WednesdayAvailability = ({
   isReserved
 }: WednesdayAvailabilityProps) => {
   if (isDisabled) {
-    return <span className="text-gray-600">
+    return <span className="text-muted-foreground">
         {isReserved ? "(Déjà réservé)" : "Complet"}
       </span>;
   }

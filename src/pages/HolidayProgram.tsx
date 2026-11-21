@@ -17,12 +17,12 @@ const HolidayProgram = () => {
 
         <Card className="max-w-2xl mx-auto">
           <CardContent className="pt-6">
-            <Alert className="border-blue-200 bg-blue-50">
-              <Info className="h-5 w-5 text-blue-600" />
-              <AlertTitle className="text-blue-800 font-semibold">
+            <Alert className="border-info/20 bg-info-soft">
+              <Info className="h-5 w-5 text-primary" />
+              <AlertTitle className="text-info font-semibold">
                 Programme disponible
               </AlertTitle>
-              <AlertDescription className="text-blue-700 mt-2">
+              <AlertDescription className="text-primary mt-2">
                 <p className="mb-3">
                   Le programme des vacances est disponible sur notre page Facebook.
                 </p>
@@ -30,7 +30,7 @@ const HolidayProgram = () => {
                   href="https://www.facebook.com/p/Espace-des-2-rives-100057280757151/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold underline"
+                  className="inline-flex items-center gap-2 text-primary hover:text-primary-hover font-semibold underline"
                 >
                   <Facebook className="h-5 w-5" />
                   Espace des 2 rives

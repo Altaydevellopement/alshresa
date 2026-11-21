@@ -89,7 +89,7 @@ export const HolidayReservationsDisplay = () => {
               <User className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">
+              <h3 className="font-medium text-foreground">
                 {child.first_name} {child.last_name}
               </h3>
               <p className="text-sm text-muted-foreground">{child.school_class}</p>
@@ -100,7 +100,7 @@ export const HolidayReservationsDisplay = () => {
           </div>
           <div className="space-y-2">
             {reservations.map((reservation) => (
-              <div key={reservation.id} className="bg-gray-50 p-3 rounded-lg">
+              <div key={reservation.id} className="bg-surface-muted p-3 rounded-lg">
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-medium">
@@ -113,12 +113,12 @@ export const HolidayReservationsDisplay = () => {
                     </p>
                     <div className="flex gap-2 mt-2">
                       {reservation.early_dropoff && (
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
+                        <span className="text-xs bg-info-soft text-info px-2 py-0.5 rounded">
                           Accueil avant 8h30
                         </span>
                       )}
                       {reservation.without_meal && (
-                        <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                        <span className="text-xs bg-warning-soft text-warning px-2 py-0.5 rounded">
                           Sans repas
                         </span>
                       )}

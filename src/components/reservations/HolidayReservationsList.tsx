@@ -21,9 +21,6 @@ export const HolidayReservationsList = () => {
   const isTeenPage = window.location.pathname === "/teenholiday-reservations";
   const { reservations, isError, error, refetch } = useHolidayReservations();
   const { isTeenClassSync } = useSchoolClassUtils();
-
-  console.log("1. Réservations reçues du hook:", reservations);
-  console.log("2. Est-ce une erreur ?", isError);
   if (error) console.log("3. Erreur détectée:", error);
 
   if (isError) {
@@ -57,11 +54,8 @@ export const HolidayReservationsList = () => {
   }
 
   if (!reservations || reservations.length === 0) {
-    console.log("4. Aucune réservation trouvée");
     return <EmptyReservations />;
   }
-
-  console.log("5. Nombre de réservations avant filtrage:", reservations.length);
 
   const filteredReservations = reservations
     .filter(reservation => {
@@ -76,17 +70,13 @@ export const HolidayReservationsList = () => {
 
       const keepReservation = isTeenPage ? (isTeenClass || isCm2) : !isTeenClass;
 
-      console.log(`Réservation ${reservation.id}, enfant ${reservation.children.first_name}, classe ${schoolClass}, ado: ${isTeenClass}, CM2: ${isCm2}, incluse: ${keepReservation}`);
-
       return keepReservation;
     });
-
-  console.log("11. Nombre de réservations après filtrage:", filteredReservations.length);
 
   if (filteredReservations.length === 0) {
     return (
       <div className="p-6 text-center">
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Aucune réservation trouvée pour {isTeenPage ? "les adolescents" : "les enfants de maternelle et primaire"}.
         </p>
       </div>
@@ -106,15 +96,13 @@ export const HolidayReservationsList = () => {
     return acc;
   }, {} as GroupedReservations);
 
-  console.log("12. Réservations groupées par enfant:", reservationsByChild);
-
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-2">
+        <h2 className="text-lg font-bold text-foreground mb-1">
           Vos {isTeenPage ? "activités Club Ado" : "vacances"} réservées (sous réserve de règlement)
         </h2>
-        <p className="text-sm text-red-600 mb-4">
+        <p className="text-sm text-muted-foreground mb-4">
           Pour toute modification de vos réservations (ajout ou suppression de journées), merci de contacter l'accueil.
         </p>
       </div>

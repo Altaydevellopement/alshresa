@@ -36,15 +36,15 @@ export const LoginForm = ({
           <Label htmlFor="password">Mot de passe</Label>
           <PasswordInput id="password" value={password} onChange={e => setPassword(e.target.value)} required />
         </div>
-        <Button type="submit" disabled={isLoading} className="w-full bg-fuchsia-300 hover:bg-fuchsia-200 text-violet-800 font-semibold text-xs">
+        <Button type="submit" size="lg" loading={isLoading} className="w-full">
           {isLoading ? "Connexion..." : "Se connecter"}
         </Button>
         <div className="text-center text-sm">
-          <Link to="/register" className="text-[#1F2937] hover:underline">
+          <Link to="/register" className="font-semibold text-primary hover:underline">
             Créer un compte
           </Link>
-          <span className="text-[#1F2937]"> • </span>
-          <Link to="/forgot-password" className="text-[#1F2937] hover:underline">
+          <span className="text-muted-foreground"> • </span>
+          <Link to="/forgot-password" className="font-semibold text-primary hover:underline">
             Mot de passe oublié
           </Link>
         </div>

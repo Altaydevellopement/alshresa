@@ -21,7 +21,7 @@ export const ReservationContent = () => {
   if (!children || children.length === 0) {
     return (
       <Card className="p-6">
-        <p className="text-center text-gray-500">
+        <p className="text-center text-muted-foreground">
           Vous devez d'abord ajouter un enfant dans votre profil.
         </p>
       </Card>

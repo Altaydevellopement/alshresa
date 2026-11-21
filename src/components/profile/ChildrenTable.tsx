@@ -43,7 +43,7 @@ export function ChildrenTable({
   
   return <Table>
       <TableHeader>
-        <TableRow className="hover:bg-transparent border-b border-gray-200 dark:border-gray-800">
+        <TableRow className="hover:bg-transparent border-b border-border dark:border-gray-800">
           <TableHead className="text-left">Nom</TableHead>
           <TableHead className="text-left">Prénom</TableHead>
           <TableHead className="text-left">Classe</TableHead>
@@ -51,7 +51,7 @@ export function ChildrenTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {children && children.length > 0 ? children.map(child => <TableRow key={child.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+        {children && children.length > 0 ? children.map(child => <TableRow key={child.id} className="hover:bg-surface-muted dark:hover:bg-gray-800/50 transition-colors">
               <TableCell className="text-left">{child.last_name}</TableCell>
               <TableCell className="text-left">{child.first_name}</TableCell>
               <TableCell className="text-left">{child.school_class}</TableCell>
@@ -76,14 +76,14 @@ export function ChildrenTable({
                         onClick={() => onDelete(child)} 
                         title="Supprimer"
                       >
-                        <Trash2 className="h-4 w-4 text-red-500" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     )}
                   </div>
                 </TableCell>
               )}
             </TableRow>) : <TableRow>
-            <TableCell colSpan={(onEdit || onDelete) ? 4 : 3} className={`text-center h-32 text-red-600 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-30'}`}>Aucun enfant enregistré</TableCell>
+            <TableCell colSpan={(onEdit || onDelete) ? 4 : 3} className={`text-center h-32 text-destructive transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-30'}`}>Aucun enfant enregistré</TableCell>
           </TableRow>}
       </TableBody>
     </Table>;

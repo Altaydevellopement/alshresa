@@ -122,13 +122,13 @@ const AdminHolidaySpots = () => {
   };
 
   const periodColors = [
-    "bg-green-50 border-green-200",
+    "bg-success-soft border-success/25",
     "bg-purple-50 border-purple-200",
-    "bg-orange-50 border-orange-200",
+    "bg-warning-soft border-warning/25",
     "bg-pink-50 border-pink-200",
-    "bg-yellow-50 border-yellow-200",
+    "bg-warning-soft border-warning/25",
     "bg-indigo-50 border-indigo-200",
-    "bg-red-50 border-red-200",
+    "bg-destructive-soft border-destructive/30",
     "bg-teal-50 border-teal-200"
   ];
 
@@ -181,12 +181,12 @@ const AdminHolidaySpots = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Places restantes - Vacances</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement des places disponibles...</p>
+            <p className="text-muted-foreground">Chargement des places disponibles...</p>
           </div>
         </div>
       </div>
@@ -195,12 +195,12 @@ const AdminHolidaySpots = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Places restantes - Vacances</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
-            <p className="text-red-600 mb-4">Erreur lors du chargement des données</p>
-            <p className="text-sm text-gray-600">{error.message}</p>
+            <p className="text-destructive mb-4">Erreur lors du chargement des données</p>
+            <p className="text-sm text-muted-foreground">{error.message}</p>
           </div>
         </div>
       </div>
@@ -208,11 +208,11 @@ const AdminHolidaySpots = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between gap-2 mb-4">
         <div className="flex items-center gap-2">
           <Palmtree className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Places restantes - Vacances</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
           <Badge variant="secondary" className="ml-auto text-xs">
             {Object.keys(groupedHolidaySpots || {}).length} périodes
           </Badge>
@@ -233,34 +233,34 @@ const AdminHolidaySpots = () => {
           sortPeriods(groupedHolidaySpots).map(([periodId, periodData], index) => (
             <Card key={periodId} className={`${periodColors[index % periodColors.length]} border`}>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-bold text-gray-800">
+                <CardTitle className="text-base font-bold text-foreground">
                   {periodData.period_name}
                 </CardTitle>
-                <p className="text-xs text-gray-600">{periodData.dates.length} jours disponibles</p>
+                <p className="text-xs text-muted-foreground">{periodData.dates.length} jours disponibles</p>
               </CardHeader>
               <CardContent className="pt-0">
                 <div className="space-y-2">
                   {sortDates(periodData.dates).map((spot) => (
                     <div key={`${spot.period_id}-${spot.reservation_date}`} className="bg-white p-2 rounded border shadow-sm">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                        <div className="font-medium text-gray-800 text-xs">
+                        <div className="font-medium text-foreground text-xs">
                           {format(new Date(spot.reservation_date), "EEEE dd MMMM yyyy", { locale: fr })}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                           <div className="text-center">
-                            <div className="text-xs text-gray-600 mb-0.5">Maternelle</div>
+                            <div className="text-xs text-muted-foreground mb-0.5">Maternelle</div>
                             <Badge variant={getSpotsBadgeVariant(spot.kindergarten_spots, spot.kindergarten_capacity)} className="text-xs px-1 py-0.5">
                               {spot.kindergarten_spots}/{spot.kindergarten_capacity}
                             </Badge>
                           </div>
                           <div className="text-center">
-                            <div className="text-xs text-gray-600 mb-0.5">Primaire</div>
+                            <div className="text-xs text-muted-foreground mb-0.5">Primaire</div>
                             <Badge variant={getSpotsBadgeVariant(spot.primary_spots, spot.primary_capacity)} className="text-xs px-1 py-0.5">
                               {spot.primary_spots}/{spot.primary_capacity}
                             </Badge>
                           </div>
                           <div className="text-center">
-                            <div className="text-xs text-gray-600 mb-0.5">Adolescent</div>
+                            <div className="text-xs text-muted-foreground mb-0.5">Adolescent</div>
                             <Badge variant={getSpotsBadgeVariant(spot.teen_spots, spot.teen_capacity)} className="text-xs px-1 py-0.5">
                               {spot.teen_spots}/{spot.teen_capacity}
                             </Badge>
@@ -275,7 +275,7 @@ const AdminHolidaySpots = () => {
           ))
         ) : (
           <div className="text-center py-8">
-            <p className="text-gray-600">Aucune période de vacances disponible</p>
+            <p className="text-muted-foreground">Aucune période de vacances disponible</p>
           </div>
         )}
       </div>

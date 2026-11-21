@@ -26,7 +26,7 @@ export const WednesdayCard = ({ wednesday, onDelete, onEdit }: WednesdayCardProp
           onClick={() => onEdit(wednesday)}
           title="Modifier ce mercredi"
         >
-          <Pencil className="h-3 w-3 text-blue-500" />
+          <Pencil className="h-3 w-3 text-primary" />
         </Button>
         <Button
           variant="ghost"
@@ -35,7 +35,7 @@ export const WednesdayCard = ({ wednesday, onDelete, onEdit }: WednesdayCardProp
           onClick={() => onDelete(wednesday.id)}
           title="Supprimer ce mercredi"
         >
-          <Trash2 className="h-3 w-3 text-red-500" />
+          <Trash2 className="h-3 w-3 text-destructive" />
         </Button>
       </div>
       
@@ -49,10 +49,10 @@ export const WednesdayCard = ({ wednesday, onDelete, onEdit }: WednesdayCardProp
           })}
         </p>
         <div className="mt-2 space-y-1">
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-muted-foreground">
             Maternelle: {wednesday.max_participants_kindergarten}
           </p>
-          <p className="text-xs text-gray-600">
+          <p className="text-xs text-muted-foreground">
             Primaire: {wednesday.max_participants_primary}
           </p>
         </div>
