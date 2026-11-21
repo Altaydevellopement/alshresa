@@ -166,7 +166,6 @@ const MyReservations = () => {
                             Accueil du matin
                           </span>
                         )}
-                        <span>N° {r.reservationNumber}</span>
                       </div>
                     </div>
                   </li>
