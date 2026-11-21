@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
-  Baby, Bell, Calendar, ChevronRight, Clock, Palmtree, Plus, Users, Info,
+  Baby, Bell, Calendar, ChevronRight, Clock, Palmtree, Users, Info,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,19 +75,11 @@ const Dashboard = () => {
         <div className="relative z-10 max-w-2xl">
           <p className="text-sm font-semibold text-primary">{format(new Date(), "EEEE d MMMM yyyy", { locale: fr })}</p>
           <h1 className="mt-1 text-2xl md:text-3xl font-extrabold">
-            {profile.isLoading ? "Bonjour" : firstName ? `Bonjour ${firstName} 👋` : "Bonjour 👋"}
+            {!profile.isLoading && firstName ? `Bonjour ${firstName}` : "Bonjour"}
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Retrouvez ici les réservations de vos enfants, vos inscriptions en liste d'attente et les informations du centre.
+            Retrouvez ici vos enfants, vos inscriptions en liste d'attente et les informations du centre.
           </p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            <Button asChild size="lg">
-              <Link to="/holiday-reservations">
-                <Plus aria-hidden="true" />
-                Réserver une journée
-              </Link>
-            </Button>
-          </div>
         </div>
         <svg className="pointer-events-none absolute -right-10 -bottom-10 h-56 w-56 text-coral/25" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="100" fill="currentColor" />
