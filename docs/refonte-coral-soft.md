@@ -41,11 +41,11 @@ src/
 ## 3. Plan
 
 - **Phase B** — Tokens Coral Soft (HSL), Plus Jakarta Sans, composants design, variantes boutons/cartes/badges, `prefers-reduced-motion`.
-- **Phase C** — `FamilyLayout` (barre latérale desktop, barre + tiroir mobile), tableau de bord, assistant 4 étapes (enfant → période → dates/options → récapitulatif) dans les 3 parcours, enfants, mes réservations, liste d'attente, notifications, compte, rendez-vous.
+- **Phase C** — `FamilyLayout` (barre latérale desktop, barre + tiroir mobile), tableau de bord, assistant guidé dans les 3 parcours (mercredis : enfant → dates → récapitulatif ; vacances et Club Ado : période → enfant → dates/options → récapitulatif, voir « Écarts assumés »), enfants, mes réservations, liste d'attente, notifications, compte, rendez-vous.
 - **Phase D** — `AdminLayout` (barre latérale groupée), tableau de bord avec indicateurs réels, harmonisation des écrans admin.
 - **Phase E** — build, lint, captures responsive avec Supabase simulé, corrections.
 
-Toutes les routes existantes sont conservées ; seules `/dashboard` et `/my-reservations` sont ajoutées.
+Toutes les routes existantes sont conservées ; seules `/dashboard`, `/my-reservations` et `/admin/settings` sont ajoutées.
 Aucune migration, fonction SQL ou politique RLS n'est modifiée.
 
 ## 4. Réalisé
