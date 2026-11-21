@@ -170,7 +170,7 @@ export const ChildSelector = ({
 
   if (variant === "cards") {
     return (
-      <div role="radiogroup" aria-label="Enfant" className="grid gap-3 sm:grid-cols-2">
+      <div role="group" aria-label="Enfant" className="grid gap-3 sm:grid-cols-2">
         {sortedChildren.map((child) => (
           <SelectableCard
             key={child.id}

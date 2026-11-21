@@ -23,6 +23,14 @@ React + Vite + Tailwind/shadcn, base de données **Supabase**, hébergement **Ve
 - Notifications sur le site (cloche), page « Liste d'attente » pour les familles,
   site plus léger (pages admin chargées à la demande).
 
+## Interface (design « Coral Soft »)
+
+- Espace familles : `/dashboard` (accueil après connexion), réservations guidées (mercredis, vacances, Club Ado),
+  Mes enfants, Mes réservations, Liste d'attente, Notifications, Rendez-vous, Mon compte.
+- Administration : `/admin` (tableau de bord), navigation latérale groupée, `/admin/settings`.
+- Design system : tokens dans `src/index.css`, composants communs dans `src/components/design`,
+  layouts dans `src/components/layout`. Détails et choix : `docs/refonte-coral-soft.md`.
+
 ## Lancer en local
 
 ```bash

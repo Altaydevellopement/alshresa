@@ -32,8 +32,9 @@ const CountBadge = ({ count }: { count?: number }) =>
     </span>
   ) : null;
 
-const isActivePath = (pathname: string, href: string) =>
-  href === "/admin" ? pathname === "/admin" : pathname === href || pathname.startsWith(`${href}/`);
+// Toutes les entrées pointent vers des pages finales : correspondance exacte
+// (évite que « /admin/reservations » soit actif sur « /admin/reservations/new »).
+const isActivePath = (pathname: string, href: string) => pathname.replace(/\/+$/, "") === href;
 
 const SideLink = ({ item, onNavigate, badge }: { item: NavLinkItem; onNavigate?: () => void; badge?: number }) => {
   const { pathname } = useLocation();

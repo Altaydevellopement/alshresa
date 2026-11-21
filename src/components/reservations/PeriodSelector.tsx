@@ -146,7 +146,7 @@ export const PeriodSelector = ({
       );
     }
     return (
-      <div role="radiogroup" aria-label="Période de vacances" className="grid gap-3 sm:grid-cols-2">
+      <div role="group" aria-label="Période de vacances" className="grid gap-3 sm:grid-cols-2">
         {filteredPeriods.map((period) => (
           <SelectableCard
             key={period.id}

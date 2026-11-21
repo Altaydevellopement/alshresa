@@ -12,12 +12,11 @@ interface SelectableCardProps {
   className?: string;
 }
 
-/** Carte cliquable à choix unique (enfant, période…). Utilisable au clavier. */
+/** Carte cliquable à choix unique (enfant, période…). Bouton à bascule (aria-pressed), utilisable au clavier. */
 export const SelectableCard = ({ selected, onSelect, title, subtitle, icon, disabled, className }: SelectableCardProps) => (
   <button
     type="button"
-    role="radio"
-    aria-checked={selected}
+    aria-pressed={selected}
     disabled={disabled}
     onClick={onSelect}
     className={cn(
