@@ -22,7 +22,7 @@ export const PersonalInfoFields = ({
             <FormControl>
               <Input {...field} />
             </FormControl>
-            <FormMessage className="text-red-700" />
+            <FormMessage className="text-destructive" />
           </FormItem>
         )} 
       />
@@ -36,7 +36,7 @@ export const PersonalInfoFields = ({
             <FormControl>
               <Input {...field} />
             </FormControl>
-            <FormMessage className="text-red-700" />
+            <FormMessage className="text-destructive" />
           </FormItem>
         )} 
       />
@@ -50,7 +50,7 @@ export const PersonalInfoFields = ({
             <FormControl>
               <Input type="email" {...field} />
             </FormControl>
-            <FormMessage className="text-red-700" />
+            <FormMessage className="text-destructive" />
           </FormItem>
         )} 
       />
@@ -64,7 +64,7 @@ export const PersonalInfoFields = ({
             <FormControl>
               <PasswordInput {...field} />
             </FormControl>
-            <FormMessage className="text-red-700" />
+            <FormMessage className="text-destructive" />
           </FormItem>
         )} 
       />

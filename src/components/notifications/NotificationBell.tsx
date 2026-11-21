@@ -17,7 +17,7 @@ export const NotificationBell = () => {
         <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications">
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-red-600 text-white text-[11px] leading-[18px] text-center">
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-white text-[11px] leading-[18px] text-center">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
@@ -30,7 +30,7 @@ export const NotificationBell = () => {
         ) : (
           <ul className="max-h-80 overflow-y-auto divide-y">
             {latest.map((n) => (
-              <li key={n.id} className={cn("px-4 py-3 text-sm", !n.read_at && "bg-blue-50/60")}>
+              <li key={n.id} className={cn("px-4 py-3 text-sm", !n.read_at && "bg-info-soft/60")}>
                 <p className="font-medium">{n.title}</p>
                 <p className="text-muted-foreground mt-0.5 line-clamp-3">{n.body}</p>
                 <p className="text-xs text-muted-foreground mt-1">

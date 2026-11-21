@@ -17,7 +17,7 @@ export const Layout = () => {
   }, [location]);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50" id="app-layout">
+    <div className="min-h-screen bg-background" id="app-layout">
       <Outlet />
     </div>
   );

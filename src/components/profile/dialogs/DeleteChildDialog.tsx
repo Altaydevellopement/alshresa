@@ -33,7 +33,7 @@ export function DeleteChildDialog({
           <AlertDialogAction 
             onClick={onDelete}
             disabled={isDeleting}
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-destructive hover:bg-red-700"
           >
             {isDeleting ? "Suppression..." : "Supprimer"}
           </AlertDialogAction>

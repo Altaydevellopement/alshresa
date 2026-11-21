@@ -1,7 +1,6 @@
 
 // src/components/reservations/HolidayReservationContent.tsx
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useHolidayReservation } from "@/hooks/useHolidayReservation";
 import { ChildSelector } from "./ChildSelector";
 import { PeriodSelector } from "./PeriodSelector";
@@ -9,20 +8,20 @@ import { HolidayDateSelector } from "./holiday/HolidayDateSelector";
 import { SuccessReservationDialog } from "./SuccessReservationDialog";
 import { NoSpotsDialog } from "./NoSpotsDialog";
 import { MinimumDaysDialog } from "./dialogs/MinimumDaysDialog";
-import { Loader2 } from "lucide-react";
 import { useChildrenData } from "@/hooks/useChildrenData";
 import { useLocation } from "react-router-dom";
 import { useCategoryFiltering } from "@/hooks/useCategoryFiltering";
 import { Tables } from "@/integrations/supabase/types";
 import { useExistingHolidayReservations } from "@/hooks/useExistingHolidayReservations";
-import { useReservationSubmission } from "@/hooks/useReservationSubmission";
 import { AdminChildSelector } from "@/components/admin/reservations/AdminChildSelector";
 import { useClosedPeriods } from "@/hooks/useClosedPeriods";
 import { validateMinimumDays } from "@/utils/reservationValidationUtils";
+import { HolidayWizard } from "./wizard/HolidayWizard";
 
 export interface HolidayReservationContentProps {
   filteredChildren?: Tables<"children">[] | null;
   filterTeenPeriods?: boolean;
+  /** Conservé pour compatibilité : l'assistant présente toujours la période avant l'enfant */
   invertSelectors?: boolean;
   enforceCM2Summer?: boolean;
   disableMinimumDaysRule?: boolean;
@@ -31,7 +30,6 @@ export interface HolidayReservationContentProps {
 export const HolidayReservationContent: React.FC<HolidayReservationContentProps> = ({
   filteredChildren,
   filterTeenPeriods = false,
-  invertSelectors = false,
   enforceCM2Summer = false,
   disableMinimumDaysRule = false,
 }) => {
@@ -115,35 +113,25 @@ export const HolidayReservationContent: React.FC<HolidayReservationContentProps>
     } catch {}
   }, [location.search, selectedPeriod, setSelectedPeriod]);
 
-  const validDatesCount = selectedDates.filter(
-    d => d.date instanceof Date && !isNaN(d.date.getTime())
-  ).length;
-
   // Get excluded dates for the selected period to adjust minimum validation
   const periodForValidation = holidayPeriods?.find(p => p.id === selectedPeriod);
   const excludedDatesForPeriod = periodForValidation
     ? getClosedDatesInRange(periodForValidation.start_date, periodForValidation.end_date)
     : [];
 
-  // Wrapper pour handleSubmit qui utilise disableMinimumDaysRule
-  const onSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    // Use full validation with excluded dates awareness
+  // Règle existante : minimum de jours par semaine (sauf si désactivée, ex. admin)
+  const validateDates = () => {
     if (!disableMinimumDaysRule && !validateMinimumDays(selectedDates, false, false, excludedDatesForPeriod)) {
       setMinimumDaysDialog({ isOpen: true });
-      return;
+      return false;
     }
-    
-    if (!isSubmitting) originalHandleSubmit();
+    return true;
   };
 
-  const isButtonDisabled = !selectedChild || 
-                          !selectedPeriod || 
-                          (!disableMinimumDaysRule && validDatesCount < 1) ||
-                          (disableMinimumDaysRule && validDatesCount < 1) ||
-                          isSubmitting;
+  const onConfirm = () => {
+    if (!validateDates()) return;
+    if (!isSubmitting) originalHandleSubmit();
+  };
 
   const renderChildSelector = () => {
     if (isAdminMode) {
@@ -159,6 +147,7 @@ export const HolidayReservationContent: React.FC<HolidayReservationContentProps>
     
     return (
       <ChildSelector
+        variant="cards"
         selectedChild={selectedChild}
         setSelectedChild={setSelectedChild}
         children={childrenToDisplay}
@@ -168,57 +157,50 @@ export const HolidayReservationContent: React.FC<HolidayReservationContentProps>
     );
   };
 
+  const selectedChildData = childrenToDisplay.find(child => child.id === selectedChild);
+  const childLabel = selectedChildData
+    ? `${selectedChildData.first_name} ${selectedChildData.last_name} (${selectedChildData.school_class})`
+    : undefined;
+
   return (
-    <div className="space-y-6">
-      {invertSelectors ? (
-        <>
+    <>
+      <HolidayWizard
+        activityLabel={filterTeenPeriods ? "Club Ado" : "Vacances scolaires"}
+        periodSelector={
           <PeriodSelector
+            variant="cards"
             selectedPeriod={selectedPeriod}
             setSelectedPeriod={setSelectedPeriod}
             holidayPeriods={holidayPeriods}
             filterTeenOnly={filterTeenPeriods}
           />
-          {renderChildSelector()}
-        </>
-      ) : (
-        <>
-          {renderChildSelector()}
-          <PeriodSelector
-            selectedPeriod={selectedPeriod}
-            setSelectedPeriod={setSelectedPeriod}
-            holidayPeriods={holidayPeriods}
-            filterTeenOnly={filterTeenPeriods}
-          />
-        </>
-      )}
-
-      {selectedPeriod && selectedChild && (
-        <HolidayDateSelector
-          selectedDates={selectedDates}
-          handleDateToggle={handleDateToggle}
-          handleOptionChange={handleOptionChange}
-          isDateAlreadyReserved={isDateAlreadyReserved}
-          periodId={selectedPeriod}
-          selectedChild={selectedChild}
-          setSelectedDates={setSelectedDates}
-          isTeenPage={filterTeenPeriods}
-        />
-      )}
-
-      <div className="flex justify-end mt-6">
-        <Button
-          onClick={onSubmitClick}
-          className="w-full md:w-auto"
-          disabled={isButtonDisabled}
-          type="button"
-        >
-          {isSubmitting ? (
-            <><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Réservation en cours...</>
-          ) : (
-            "Confirmer réservation"
-          )}
-        </Button>
-      </div>
+        }
+        childSelector={renderChildSelector()}
+        dateSelector={
+          selectedPeriod && selectedChild ? (
+            <HolidayDateSelector
+              selectedDates={selectedDates}
+              handleDateToggle={handleDateToggle}
+              handleOptionChange={handleOptionChange}
+              isDateAlreadyReserved={isDateAlreadyReserved}
+              periodId={selectedPeriod}
+              selectedChild={selectedChild}
+              setSelectedDates={setSelectedDates}
+              isTeenPage={filterTeenPeriods}
+            />
+          ) : null
+        }
+        selectedPeriod={selectedPeriod}
+        selectedChild={selectedChild}
+        selectedDates={selectedDates}
+        period={periodObj}
+        childLabel={childLabel}
+        validateDates={validateDates}
+        onConfirm={onConfirm}
+        isSubmitting={isSubmitting}
+        succeeded={showSuccessDialog}
+        datesHint={disableMinimumDaysRule ? "Sélectionnez les journées et leurs options." : "Sélectionnez au moins 3 jours par semaine, puis les options de chaque journée. Les journées complètes proposent une inscription en liste d'attente."}
+      />
 
       <SuccessReservationDialog
         open={showSuccessDialog}
@@ -234,6 +216,6 @@ export const HolidayReservationContent: React.FC<HolidayReservationContentProps>
         open={minimumDaysDialog.isOpen}
         onOpenChange={open => setMinimumDaysDialog({ isOpen: open })}
       />
-    </div>
+    </>
   );
 };

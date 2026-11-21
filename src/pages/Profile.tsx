@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileData, Child } from "@/types/profile";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Navbar } from "@/components/ui/navbar";
+import { Card } from "@/components/ui/card";
+import { UserCircle } from "lucide-react";
+import { EmptyState, ErrorState, LoadingState, PageHeader } from "@/components/design";
 
 const Profile = () => {
   // Pas de redirection automatique ici
@@ -25,11 +26,9 @@ const Profile = () => {
         .maybeSingle();
         
       if (error) {
-        console.error("Error fetching profile:", error);
         throw error;
       }
       if (!data) {
-        console.error("Profile not found");
         throw new Error("Profile not found");
       }
 
@@ -52,7 +51,6 @@ const Profile = () => {
         .eq("profile_id", user.id);
         
       if (error) {
-        console.error("Error fetching children:", error);
         throw error;
       }
       return data as Child[];
@@ -60,70 +58,58 @@ const Profile = () => {
     enabled: !!profile, // Only fetch children if profile exists
   });
 
+  const header = (
+    <PageHeader icon={UserCircle} title="Mon compte" description="Vos informations personnelles et vos préférences." />
+  );
+
   if (profileError || childrenError) {
     return (
-      <div className="container mx-auto p-4">
-        <Alert variant="destructive">
-          <AlertDescription>
-            Une erreur est survenue lors du chargement des données. Veuillez réessayer.
-          </AlertDescription>
-        </Alert>
-        <div className="mt-4 flex justify-center">
-          <Button asChild>
-            <Link to="/login">
-              Se connecter
-            </Link>
-          </Button>
-        </div>
+      <div className="space-y-6">
+        {header}
+        <Card>
+          <ErrorState
+            description="Une erreur est survenue lors du chargement des données. Veuillez réessayer."
+            onRetry={() => window.location.reload()}
+          />
+        </Card>
       </div>
     );
   }
 
   if (profileLoading || childrenLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-center text-muted-foreground">Chargement...</div>
+      <div className="space-y-6">
+        {header}
+        <LoadingState rows={3} />
       </div>
     );
   }
 
   if (!profile) {
     return (
-      <div className="container mx-auto p-4">
-        <Alert>
-          <AlertDescription>
-            Profil non trouvé. Veuillez vous connecter.
-          </AlertDescription>
-        </Alert>
-        <div className="mt-4 flex justify-center">
-          <Button asChild>
-            <Link to="/login">
-              Se connecter
-            </Link>
-          </Button>
-        </div>
+      <div className="space-y-6">
+        {header}
+        <Card>
+          <EmptyState
+            icon={UserCircle}
+            title="Profil introuvable"
+            description="Veuillez vous reconnecter."
+            action={
+              <Button asChild>
+                <Link to="/login">Se connecter</Link>
+              </Button>
+            }
+          />
+        </Card>
       </div>
     );
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="container mx-auto p-4">
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <Button asChild variant="default" className="flex-1">
-            <Link to="/holiday-reservations">Réservations Vacances</Link>
-          </Button>
-          <Button asChild variant="default" className="flex-1">
-            <Link to="/teenholiday-reservations">Réservations Club Ado</Link>
-          </Button>
-        </div>
-
-        <div className="grid gap-8">
-          <ProfileSection profile={profile} />
-          <ChildrenList children={children} />
-        </div>
-      </div>
+    <div className="space-y-8">
+      {header}
+      <ProfileSection profile={profile} />
+      <ChildrenList children={children} />
     </div>
   );
 };

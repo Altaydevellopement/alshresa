@@ -88,7 +88,7 @@ const AdminHolidays = () => {
     return (
       <div className="container mx-auto p-4">
         <div className="p-6 bg-white rounded-lg shadow">
-          <h1 className="text-2xl font-bold text-red-600">Accès refusé</h1>
+          <h1 className="text-2xl font-bold text-destructive">Accès refusé</h1>
           <p className="mt-2">Vous n'avez pas les droits nécessaires pour accéder à cette page.</p>
           <Button asChild className="mt-4">
             <Link to="/">Retour à l'accueil</Link>

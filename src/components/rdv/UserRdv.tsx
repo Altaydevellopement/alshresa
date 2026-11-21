@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Navbar } from "@/components/ui/navbar";
+import { PageHeader } from "@/components/design";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CalendarDays, Info } from "lucide-react";
 import { Rdv } from "@/types/rdv";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -56,17 +58,18 @@ export const UserRdv = ({
   };
 
   return <>
-      <Navbar />
-      <div className="container mx-auto py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Votre rendez-vous d'inscription(s)</h1>
-          <p className="text-gray-600">
-            Voici les détails de votre rendez-vous confirmé
-          </p>
-          <p className={`${isAnimating ? "text-red-600 animate-shake" : "text-gray-600"} mt-2 transition-colors duration-300`}>
-            Pour toute annulation ou modification merci de nous contacter au 02 32 68 32 10 ou par mail : accueil@e2rives.fr
-          </p>
-        </div>
+      <div className="space-y-6">
+        <PageHeader
+          icon={CalendarDays}
+          title="Votre rendez-vous d'inscription"
+          description="Voici les détails de votre rendez-vous confirmé."
+        />
+        <Alert variant="info">
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            Pour toute annulation ou modification, contactez-nous au 02 32 68 32 10 ou par email : accueil@e2rives.fr
+          </AlertDescription>
+        </Alert>
 
         <Card className="max-w-3xl mx-auto">
           <CardHeader>
@@ -89,7 +92,7 @@ export const UserRdv = ({
               </p>
             </div>
             
-            <div className="mt-6 p-4 bg-gray-50 rounded-md">
+            <div className="mt-6 p-4 bg-surface-muted rounded-xl">
               <h4 className="font-medium mb-2">Documents à apporter :</h4>
               <ul className="list-disc pl-5 space-y-1">
                 <li>Justificatif de domicile</li>

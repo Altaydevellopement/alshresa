@@ -1,4 +1,6 @@
-import { Navbar } from "@/components/ui/navbar";
+import { Card } from "@/components/ui/card";
+import { CalendarDays } from "lucide-react";
+import { EmptyState, PageHeader } from "@/components/design";
 import { LoadingState } from "@/components/rdv/LoadingState";
 import { UserRdv } from "@/components/rdv/UserRdv";
 import { RdvCalendar } from "@/components/rdv/RdvCalendar";
@@ -35,26 +37,23 @@ export default function RdvPage() {
     return <LoadingState />;
   }
   if (!rdvAccess) {
-    return <>
-        <Navbar />
-        <div className="container mx-auto py-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">Rendez-vous d'inscription</h1>
-            <p className="text-gray-600">La prise de rendez-vous pour les inscriptions de l'année 2026-2027 n'est pas encore ouverte. Vous serez informé dès que le service sera accessible.</p>
-          </div>
-        </div>
-      </>;
+    return <div className="space-y-6">
+        <PageHeader icon={CalendarDays} title="Rendez-vous d'inscription" />
+        <Card>
+          <EmptyState icon={CalendarDays} title="Prise de rendez-vous pas encore ouverte" description="La prise de rendez-vous pour les inscriptions de l'année 2026-2027 n'est pas encore ouverte. Vous serez informé dès que le service sera accessible." />
+        </Card>
+      </div>;
   }
   if (userRdv) {
     return <UserRdv userRdv={userRdv} />;
   }
   return <>
-      <Navbar />
-      <div className="container mx-auto py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Rendez-vous d'inscription année scolaire 2025-2026</h1>
-          <p className="text-gray-600">Une inscription avant chaque début d'année scolaire est obligatoire, merci de sélectionner une date pour voir les créneaux disponibles</p>
-        </div>
+      <div className="space-y-6">
+        <PageHeader
+          icon={CalendarDays}
+          title="Rendez-vous d'inscription année scolaire 2025-2026"
+          description="Une inscription avant chaque début d'année scolaire est obligatoire. Sélectionnez une date pour voir les créneaux disponibles."
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <RdvCalendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} rdvList={rdvList} summerRange={summerRange} />

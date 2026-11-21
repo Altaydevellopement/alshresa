@@ -28,8 +28,8 @@ const RdvItem: React.FC<RdvItemProps> = ({ rdv, onDeleteRdv }) => {
             {" "}
             <span className={`px-2 py-0.5 rounded text-xs ${
               rdv.status === 'disponible' 
-                ? 'bg-green-100 text-green-800' 
-                : 'bg-blue-100 text-blue-800'
+                ? 'bg-success-soft text-success' 
+                : 'bg-info-soft text-info'
             }`}>
               {rdv.status}
             </span>
@@ -60,7 +60,7 @@ const RdvItem: React.FC<RdvItemProps> = ({ rdv, onDeleteRdv }) => {
             strokeWidth="2" 
             strokeLinecap="round" 
             strokeLinejoin="round"
-            className="text-red-500"
+            className="text-destructive"
           >
             <path d="M3 6h18"></path>
             <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>

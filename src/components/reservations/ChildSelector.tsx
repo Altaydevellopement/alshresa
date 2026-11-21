@@ -3,7 +3,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tables } from "@/integrations/supabase/types";
 import { Label } from "../ui/label";
 import { Alert, AlertDescription } from "../ui/alert";
-import { Info } from "lucide-react";
+import { Baby, Info } from "lucide-react";
+import { Link } from "react-router-dom";
+import { EmptyState, InitialsAvatar, SelectableCard } from "@/components/design";
 import { useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useSchoolClassCategories } from "@/hooks/useSchoolClassCategories";
@@ -17,6 +19,8 @@ interface ChildSelectorProps {
   setSelectedDates?: (dates: any[]) => void;
   onCM2SummerPeriodCheck?: (isInSummerPeriod: boolean) => void;
   selectedPeriodId?: string;
+  /** "cards" : cartes sélectionnables (assistant de réservation) */
+  variant?: "select" | "cards";
 }
 
 export const ChildSelector = ({ 
@@ -25,7 +29,8 @@ export const ChildSelector = ({
   children,
   setSelectedDates,
   onCM2SummerPeriodCheck,
-  selectedPeriodId
+  selectedPeriodId,
+  variant = "select",
 }: ChildSelectorProps) => {
   const location = useLocation();
   const isHolidayReservation = location.pathname === "/holiday-reservations";
@@ -64,14 +69,11 @@ export const ChildSelector = ({
     return periodInfo?.name && cm2TeenSummerPeriods.includes(periodInfo.name);
   }, [periodInfo, cm2TeenSummerPeriods]);
 
-  console.log(`Période actuelle: ${periodInfo?.name}, Est période CM2 Teen: ${isCM2TeenPeriod}`);
-
   // Filtrer les enfants selon la catégorie configurée pour la période
   const filteredChildren = useMemo(() => {
     if (!children) return [];
 
     return isHolidayReservation ? children.filter(child => {
-      console.log(`Vérification de l'enfant ${child.first_name} ${child.last_name} - Classe: ${child.school_class}`);
         
       // Normalisation de la classe pour une comparaison cohérente
       const normalizedClass = child.school_class.trim().toUpperCase();
@@ -80,18 +82,15 @@ export const ChildSelector = ({
 
       // Masquer uniquement les classes explicitement exclues pour la période
       if (category === 'aucune') {
-        console.log(`${child.first_name} n'a aucune catégorie pour cette période - filtré`);
         return false;
       }
 
       // Vérification explicite pour les CM2 pendant les périodes spécifiques
       if (isCM2TeenPeriod && normalizedClass === "CM2") {
-        console.log(`${child.first_name} est en CM2 et période ${periodInfo?.name} - filtré (Teen summer)`);
         return false;
       }
 
       // Filtrer les adolescents dans tous les cas
-      console.log(`Catégorie pour ${child.first_name}: ${category}`);
       return category !== 'adolescent';
     }) : children;
   }, [children, isHolidayReservation, isCM2TeenPeriod, periodInfo?.name, getClassCategorySync, periodId]);
@@ -139,13 +138,26 @@ export const ChildSelector = ({
     if (selectedChild && sortedChildren) {
       const isChildInFilteredList = sortedChildren.some(child => child.id === selectedChild);
       if (!isChildInFilteredList) {
-        console.log(`L'enfant sélectionné n'est plus dans la liste filtrée - désélection`);
         setSelectedChild("");
       }
     }
   }, [sortedChildren, selectedChild, setSelectedChild]);
 
   if (!sortedChildren || sortedChildren.length === 0) {
+    if (variant === "cards") {
+      return (
+        <EmptyState
+          icon={Baby}
+          title="Aucun enfant éligible"
+          description={
+            <>
+              Aucun de vos enfants ne peut être inscrit sur ce parcours (classe non accueillie ou enfant non enregistré).{" "}
+              <Link to="/children" className="font-semibold text-primary underline-offset-4 hover:underline">Gérer mes enfants</Link>
+            </>
+          }
+        />
+      );
+    }
     return (
       <Alert>
         <Info className="h-4 w-4" />
@@ -153,6 +165,23 @@ export const ChildSelector = ({
           Aucun enfant trouvé. Veuillez ajouter un enfant depuis votre profil.
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (variant === "cards") {
+    return (
+      <div role="radiogroup" aria-label="Enfant" className="grid gap-3 sm:grid-cols-2">
+        {sortedChildren.map((child) => (
+          <SelectableCard
+            key={child.id}
+            selected={selectedChild === child.id}
+            onSelect={() => setSelectedChild(child.id)}
+            icon={<InitialsAvatar name={`${child.first_name} ${child.last_name}`} />}
+            title={`${child.first_name} ${child.last_name}`}
+            subtitle={`Classe : ${child.school_class}`}
+          />
+        ))}
+      </div>
     );
   }
 

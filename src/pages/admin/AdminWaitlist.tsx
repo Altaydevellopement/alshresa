@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AdminChildSelector } from "@/components/admin/reservations/AdminChildSelector";
 import { useAdminChildrenData } from "@/hooks/useAdminChildrenData";
-import { statusBadge, type WaitlistRow } from "@/pages/MyWaitlist";
+import { WaitlistStatus, type WaitlistRow } from "@/components/waitlist/WaitlistStatus";
 
 const GROUP_LABELS: Record<string, string> = {
   kindergarten: "Maternelle",
@@ -369,7 +369,7 @@ const AdminWaitlist = () => {
                       </TableCell>
                       <TableCell>{`${r.parent_last_name ?? ""} ${r.parent_first_name ?? ""}`.trim() || "-"}</TableCell>
                       <TableCell>{GROUP_LABELS[r.class_group] ?? r.class_group}</TableCell>
-                      <TableCell>{statusBadge(r)}</TableCell>
+                      <TableCell><WaitlistStatus row={r} /></TableCell>
                       <TableCell className="whitespace-nowrap text-sm">
                         {format(new Date(r.created_at), "dd/MM/yyyy HH:mm")}
                       </TableCell>

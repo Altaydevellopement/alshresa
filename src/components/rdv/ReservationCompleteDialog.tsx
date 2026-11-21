@@ -52,7 +52,7 @@ export const ReservationCompleteDialog = ({
                 <strong>Motif(s) :</strong> {selectedMotifs.join(", ")}
               </p>
               
-              <div className="mt-4 p-4 bg-gray-50 rounded-md">
+              <div className="mt-4 p-4 bg-surface-muted rounded-md">
                 <h4 className="font-medium mb-2">Documents à apporter :</h4>
                 <ul className="list-disc pl-5 space-y-1">
                   <li>Justificatif de domicile</li>

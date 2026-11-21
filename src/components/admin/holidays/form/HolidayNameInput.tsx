@@ -18,7 +18,7 @@ const HolidayNameInput = ({ name, currentYear, setName }: HolidayNameInputProps)
         onChange={(e) => setName(e.target.value)}
         placeholder="Exemple: vacances-hiver"
       />
-      <p className="text-sm text-gray-500 mt-1">
+      <p className="text-sm text-muted-foreground mt-1">
         Le nom final sera: {currentYear}-{name}
       </p>
     </div>

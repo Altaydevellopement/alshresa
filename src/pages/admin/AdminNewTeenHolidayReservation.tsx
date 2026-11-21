@@ -34,12 +34,12 @@ const AdminNewTeenHolidayReservation = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto p-4 md:p-6 space-y-6 max-w-7xl">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <CalendarDays className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            <h1 className="text-2xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
+            <h1 className="text-2xl md:text-4xl font-bold tracking-tight">
               Réservations Club Ado
             </h1>
           </div>

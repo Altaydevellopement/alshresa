@@ -16,7 +16,7 @@ const AdminDashboard = () => {
               <Calendar className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Paramétrage Mercredi</h2>
             </div>
-            <p className="text-gray-600">Gérer les mercredis disponibles et les classes autorisées</p>
+            <p className="text-muted-foreground">Gérer les mercredis disponibles et les classes autorisées</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/wednesdays">Gérer les mercredis</Link>
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
               <Palmtree className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Paramétrage Vacances</h2>
             </div>
-            <p className="text-gray-600">Gérer les périodes de vacances et les classes autorisées</p>
+            <p className="text-muted-foreground">Gérer les périodes de vacances et les classes autorisées</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/holidays">Gérer les vacances</Link>
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
               <ClipboardList className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Réservations Mercredis</h2>
             </div>
-            <p className="text-gray-600">Voir et gérer toutes les réservations de mercredis</p>
+            <p className="text-muted-foreground">Voir et gérer toutes les réservations de mercredis</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/wednesdayreservations">Gérer les mercredis</Link>
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
               <ClipboardList className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Réservations Vacances</h2>
             </div>
-            <p className="text-gray-600">Voir et gérer toutes les réservations de vacances</p>
+            <p className="text-muted-foreground">Voir et gérer toutes les réservations de vacances</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/holidayreservations">Gérer les vacances</Link>
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
               <Baby className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Gestion des enfants</h2>
             </div>
-            <p className="text-gray-600">Voir et gérer tous les enfants inscrits</p>
+            <p className="text-muted-foreground">Voir et gérer tous les enfants inscrits</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/children">Gérer les enfants</Link>
@@ -81,7 +81,7 @@ const AdminDashboard = () => {
               <Users className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Gestion des utilisateurs</h2>
             </div>
-            <p className="text-gray-600">Voir et gérer tous les utilisateurs inscrits</p>
+            <p className="text-muted-foreground">Voir et gérer tous les utilisateurs inscrits</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/profiles">Gérer les utilisateurs</Link>
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
               <Mail className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Gestion des emails</h2>
             </div>
-            <p className="text-gray-600">Gérer les emails autorisés à s'inscrire</p>
+            <p className="text-muted-foreground">Gérer les emails autorisés à s'inscrire</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/authorized-emails">Gérer les emails</Link>
@@ -107,7 +107,7 @@ const AdminDashboard = () => {
               <Calculator className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Places Mercredis</h2>
             </div>
-            <p className="text-gray-600">Consulter les places disponibles pour les mercredis</p>
+            <p className="text-muted-foreground">Consulter les places disponibles pour les mercredis</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/spots/wednesday">Voir les places</Link>
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
               <Calculator className="h-5 w-5 text-primary" />
               <h2 className="text-xl font-semibold">Places Vacances</h2>
             </div>
-            <p className="text-gray-600">Consulter les places disponibles pour les vacances</p>
+            <p className="text-muted-foreground">Consulter les places disponibles pour les vacances</p>
           </div>
           <Button asChild className="mt-4">
             <Link to="/admin/spots/holiday">Voir les places</Link>

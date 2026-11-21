@@ -20,7 +20,7 @@ export const ReservationList = ({
 }: ReservationListProps) => {
   if (!reservations || reservations.length === 0) {
     return (
-      <div className="text-center text-gray-500 mt-4">
+      <div className="text-center text-muted-foreground mt-4">
         Aucune réservation trouvée
       </div>
     );

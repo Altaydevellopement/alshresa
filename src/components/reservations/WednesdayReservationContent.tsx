@@ -1,17 +1,26 @@
-
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Info } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useReservations } from "@/hooks/useReservations";
+import { useChildrenData } from "@/hooks/useChildrenData";
+import { LoadingState } from "@/components/design";
 import { ChildSelector } from "./ChildSelector";
 import { WednesdayDateSelector } from "./WednesdayDateSelector";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { CalendarDays, Loader } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { SuccessReservationDialog } from "./SuccessReservationDialog";
-import { useChildrenData } from "@/hooks/useChildrenData";
-import { Progress } from "@/components/ui/progress";
-import { useEffect, useState } from "react";
+import { BookingWizard, StepPanel, WizardNav } from "./wizard/BookingWizard";
+import { BookingSummary } from "./wizard/BookingSummary";
 
+const STEPS = [
+  { id: "child", label: "Enfant" },
+  { id: "dates", label: "Mercredis" },
+  { id: "summary", label: "Récapitulatif" },
+];
+
+/**
+ * Réservation des mercredis — assistant en 3 étapes.
+ * Toute la logique (places, doublons, envoi via book_wednesday, liste d'attente)
+ * reste dans useReservations / useWednesdayReservationSubmission.
+ */
 export const WednesdayReservationContent = () => {
   const {
     selectedDates,
@@ -25,71 +34,85 @@ export const WednesdayReservationContent = () => {
     showSuccessDialog,
     setShowSuccessDialog,
     isSubmitting,
-    excludedFullDates
+    excludedFullDates,
   } = useReservations();
-  const {
-    wednesdayEligibleChildren,
-    isLoading
-  } = useChildrenData();
-  
-  // State for blinking animation
-  const [isBlinking, setIsBlinking] = useState(true);
-  
-  // Effect for controlling the 6-second blinking animation
+  const { wednesdayEligibleChildren, isLoading } = useChildrenData();
+  const [step, setStep] = useState(0);
+
+  // Après une réservation réussie, le formulaire est réinitialisé : retour à l'étape 1
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsBlinking(false);
-    }, 6000);
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  if (isLoading) {
-    return <div className="flex justify-center items-center p-6">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>;
-  }
+    if (showSuccessDialog) setStep(0);
+  }, [showSuccessDialog]);
 
-  // Logs pour déboguer
-  console.log("wednesdayEligibleChildren dans WednesdayReservationContent:", wednesdayEligibleChildren);
+  // Sans enfant sélectionné, on ne peut pas rester sur les étapes suivantes
+  useEffect(() => {
+    if (!selectedChild && step > 0) setStep(0);
+  }, [selectedChild, step]);
 
-  return <div className="space-y-6">
-      <Alert className={isBlinking ? "animate-blink border-2 border-red-500 bg-red-50 text-red-800" : ""}>
-        <CalendarDays className="h-4 w-4" />
-        <AlertDescription>Vous pouvez sélectionner plusieurs mercredis à la fois pour créer vos réservations. Pour vos enfants en petite section nous vous invitons à contacter l'accueil.</AlertDescription>
-      </Alert>
+  if (isLoading) return <LoadingState rows={4} label="Chargement de vos enfants…" />;
 
-      <Card className="p-6">
-        <div className="space-y-4">
-          <ChildSelector selectedChild={selectedChild} setSelectedChild={setSelectedChild} children={wednesdayEligibleChildren} setSelectedDates={setSelectedDates} />
+  const child = wednesdayEligibleChildren?.find((c) => c.id === selectedChild);
+  const count = selectedDates.length;
 
-          <ScrollArea className="h-[400px]">
-            <WednesdayDateSelector selectedDates={selectedDates} handleDateToggle={handleDateToggle} handleOptionChange={handleOptionChange} isDateAlreadyReserved={date => isDateReservedForChild(selectedChild, date)} selectedChild={selectedChild} />
-          </ScrollArea>
+  return (
+    <>
+      <BookingWizard steps={STEPS} current={step} onStepChange={setStep}>
+        <StepPanel active={step === 0} title="Quel enfant inscrire ?" description="Seuls les enfants accueillis le mercredi (maternelle et primaire) sont proposés.">
+          <ChildSelector
+            variant="cards"
+            selectedChild={selectedChild}
+            setSelectedChild={setSelectedChild}
+            children={wednesdayEligibleChildren}
+            setSelectedDates={setSelectedDates}
+          />
+          <Alert variant="info" className="mt-4">
+            <Info className="h-4 w-4" />
+            <AlertDescription>Pour les enfants en petite section, merci de contacter l'accueil.</AlertDescription>
+          </Alert>
+          <WizardNav onNext={() => setStep(1)} nextDisabled={!selectedChild} hint="Choisissez un enfant pour continuer." />
+        </StepPanel>
 
-          {isSubmitting ? (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">Réservation en cours...</span>
-                <span className="text-sm">{Math.floor(Math.random() * 31) + 70}%</span>
-              </div>
-              <Progress value={Math.floor(Math.random() * 31) + 70} className="h-2" />
-              <div className="flex justify-center mt-2">
-                <Loader className="h-4 w-4 animate-spin text-primary" />
-              </div>
-            </div>
-          ) : (
-            <Button onClick={handleSubmit} className="w-full" disabled={!selectedChild || selectedDates.length === 0}>
-              Confirmer {selectedDates.length > 1 ? 'les réservations' : 'la réservation'}
-            </Button>
-          )}
-        </div>
-      </Card>
+        <StepPanel
+          active={step === 1}
+          title="Choisissez les mercredis"
+          description="Vous pouvez sélectionner plusieurs mercredis à la fois, puis préciser les options pour chacun."
+        >
+          <WednesdayDateSelector
+            selectedDates={selectedDates}
+            handleDateToggle={handleDateToggle}
+            handleOptionChange={handleOptionChange}
+            isDateAlreadyReserved={(date) => isDateReservedForChild(selectedChild, date)}
+            selectedChild={selectedChild}
+          />
+          <WizardNav
+            onBack={() => setStep(0)}
+            onNext={() => setStep(2)}
+            nextDisabled={count === 0}
+            nextLabel={count > 0 ? `Vérifier (${count})` : "Vérifier"}
+            hint="Sélectionnez au moins un mercredi."
+          />
+        </StepPanel>
 
-      <SuccessReservationDialog 
-        open={showSuccessDialog} 
-        onOpenChange={setShowSuccessDialog} 
-        excludedFullDates={excludedFullDates}
-      />
-    </div>;
+        <StepPanel active={step === 2} title="Vérifiez et confirmez" description="Rien n'est enregistré tant que vous n'avez pas confirmé.">
+          <BookingSummary
+            childLabel={child ? `${child.first_name} ${child.last_name} (${child.school_class})` : "—"}
+            contextLabel="Activité"
+            contextDetail="Accueil du mercredi"
+            dates={selectedDates}
+          />
+          <WizardNav
+            onBack={() => setStep(1)}
+            onNext={handleSubmit}
+            nextIcon={false}
+            nextDisabled={!selectedChild || count === 0}
+            loading={isSubmitting}
+            nextLabel={isSubmitting ? "Réservation en cours…" : count > 1 ? `Confirmer les ${count} réservations` : "Confirmer la réservation"}
+          />
+          <p className="sr-only" aria-live="polite">{isSubmitting ? "Réservation en cours" : ""}</p>
+        </StepPanel>
+      </BookingWizard>
+
+      <SuccessReservationDialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog} excludedFullDates={excludedFullDates} />
+    </>
+  );
 };

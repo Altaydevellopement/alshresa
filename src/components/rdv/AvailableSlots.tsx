@@ -35,22 +35,22 @@ export const AvailableSlots = ({
       <CardContent>
         {!selectedDate ? (
           <div className="text-center py-4">
-            <p className="text-gray-500 text-sm">Veuillez sélectionner une date sur le calendrier</p>
+            <p className="text-muted-foreground text-sm">Veuillez sélectionner une date sur le calendrier</p>
           </div>
         ) : availableSlots.length === 0 ? (
           <div className="text-center py-4">
-            <p className="text-gray-500 text-sm">Aucun créneau disponible pour cette date</p>
+            <p className="text-muted-foreground text-sm">Aucun créneau disponible pour cette date</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-2">
             {availableSlots.map((rdv) => (
               <Card 
                 key={rdv.id} 
-                className="hover:shadow-md transition-shadow cursor-pointer border-gray-200"
+                className="hover:shadow-md transition-shadow cursor-pointer border-border"
                 onClick={() => onSelectSlot(rdv)}
               >
                 <CardContent className="p-3 flex justify-between items-center">
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {formatTime(rdv.heure_debut)} à {formatTime(rdv.heure_fin)}
                   </p>
                   <Button size="sm" className="h-7 text-xs px-2">

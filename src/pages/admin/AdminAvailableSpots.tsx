@@ -182,14 +182,14 @@ const AdminAvailableSpots = () => {
 
   // Couleurs pour les blocs de périodes
   const periodColors = [
-    "bg-blue-50 border-blue-200",
-    "bg-green-50 border-green-200", 
+    "bg-info-soft border-info/20",
+    "bg-success-soft border-success/25", 
     "bg-purple-50 border-purple-200",
-    "bg-orange-50 border-orange-200",
+    "bg-warning-soft border-warning/25",
     "bg-pink-50 border-pink-200",
-    "bg-yellow-50 border-yellow-200",
+    "bg-warning-soft border-warning/25",
     "bg-indigo-50 border-indigo-200",
-    "bg-red-50 border-red-200"
+    "bg-destructive-soft border-destructive/30"
   ];
 
   // Grouper les données de vacances par période
@@ -211,7 +211,7 @@ const AdminAvailableSpots = () => {
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement des places disponibles...</p>
+            <p className="text-muted-foreground">Chargement des places disponibles...</p>
           </div>
         </div>
       </div>
@@ -244,22 +244,22 @@ const AdminAvailableSpots = () => {
               const primaryAvailable = spot.max_participants_primary - spot.primary_reserved;
               
               return (
-                <Card key={spot.id} className="bg-blue-50 border-blue-200">
+                <Card key={spot.id} className="bg-info-soft border-info/20">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg text-blue-800">
+                    <CardTitle className="text-lg text-info">
                       {format(new Date(spot.date), "EEEE dd MMMM yyyy", { locale: fr })}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="bg-white p-3 rounded-lg border">
-                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">Maternelle</h4>
+                        <h4 className="font-semibold text-foreground mb-2 text-sm">Maternelle</h4>
                         <Badge variant={getSpotsBadgeVariant(kindergartenAvailable, spot.max_participants_kindergarten)} className="text-sm px-2 py-1">
                           {kindergartenAvailable}/{spot.max_participants_kindergarten} places
                         </Badge>
                       </div>
                       <div className="bg-white p-3 rounded-lg border">
-                        <h4 className="font-semibold text-gray-700 mb-2 text-sm">Primaire</h4>
+                        <h4 className="font-semibold text-foreground mb-2 text-sm">Primaire</h4>
                         <Badge variant={getSpotsBadgeVariant(primaryAvailable, spot.max_participants_primary)} className="text-sm px-2 py-1">
                           {primaryAvailable}/{spot.max_participants_primary} places
                         </Badge>
@@ -277,34 +277,34 @@ const AdminAvailableSpots = () => {
             {Object.entries(groupedHolidaySpots || {}).map(([periodId, periodData], index) => (
               <Card key={periodId} className={`${periodColors[index % periodColors.length]} border-2`}>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg font-bold text-gray-800">
+                  <CardTitle className="text-lg font-bold text-foreground">
                     {periodData.period_name}
                   </CardTitle>
-                  <p className="text-sm text-gray-600">{periodData.dates.length} jours disponibles</p>
+                  <p className="text-sm text-muted-foreground">{periodData.dates.length} jours disponibles</p>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="space-y-3">
                     {periodData.dates.map((spot) => (
                       <div key={`${spot.period_id}-${spot.reservation_date}`} className="bg-white p-3 rounded-lg border shadow-sm">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                          <div className="font-medium text-gray-800 text-sm">
+                          <div className="font-medium text-foreground text-sm">
                             {format(new Date(spot.reservation_date), "EEEE dd MMMM yyyy", { locale: fr })}
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <div className="text-center">
-                              <div className="text-xs text-gray-600 mb-1">Maternelle</div>
+                              <div className="text-xs text-muted-foreground mb-1">Maternelle</div>
                               <Badge variant={getSpotsBadgeVariant(spot.kindergarten_spots, spot.kindergarten_capacity)} className="text-xs">
                                 {spot.kindergarten_spots}/{spot.kindergarten_capacity}
                               </Badge>
                             </div>
                             <div className="text-center">
-                              <div className="text-xs text-gray-600 mb-1">Primaire</div>
+                              <div className="text-xs text-muted-foreground mb-1">Primaire</div>
                               <Badge variant={getSpotsBadgeVariant(spot.primary_spots, spot.primary_capacity)} className="text-xs">
                                 {spot.primary_spots}/{spot.primary_capacity}
                               </Badge>
                             </div>
                             <div className="text-center">
-                              <div className="text-xs text-gray-600 mb-1">Adolescent</div>
+                              <div className="text-xs text-muted-foreground mb-1">Adolescent</div>
                               <Badge variant={getSpotsBadgeVariant(spot.teen_spots, spot.teen_capacity)} className="text-xs">
                                 {spot.teen_spots}/{spot.teen_capacity}
                               </Badge>

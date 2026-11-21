@@ -29,10 +29,10 @@ class ErrorBoundaryClass extends Component<ErrorBoundaryProps, ErrorBoundaryStat
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center bg-surface-muted">
           <div className="text-center p-8 bg-white rounded-lg shadow-lg">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Oops!</h1>
-            <p className="text-gray-600 mb-4">
+            <h1 className="text-2xl font-bold text-foreground mb-4">Oops!</h1>
+            <p className="text-muted-foreground mb-4">
               {this.state.error?.message || "Une erreur est survenue dans l'application."}
             </p>
             <div className="space-x-4">

@@ -118,7 +118,7 @@ export function PriceSimulator() {
               e.preventDefault();
               scrollToInfoImportanteSection();
             }}
-            className="ml-1 text-blue-600 font-semibold underline hover:text-blue-800"
+            className="ml-1 text-primary font-semibold underline hover:text-primary-hover"
           >
             Voir détails
           </a>

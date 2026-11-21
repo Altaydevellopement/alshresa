@@ -94,7 +94,7 @@ export const ReservationForm = ({
           const isSelected = !!selectedDate;
 
           return (
-            <div key={date.toISOString()} className="flex items-start space-x-2 p-2 rounded-lg hover:bg-gray-50">
+            <div key={date.toISOString()} className="flex items-start space-x-2 p-2 rounded-lg hover:bg-surface-muted">
               <div className="flex-1 space-y-2">
                 <div className="flex items-center space-x-2">
                   <Checkbox
@@ -105,7 +105,7 @@ export const ReservationForm = ({
                   />
                   <Label 
                     htmlFor={date.toISOString()} 
-                    className="text-base text-gray-900"
+                    className="text-base text-foreground"
                   >
                     {format(date, "EEEE d MMMM", { locale: fr })}
                   </Label>
@@ -126,7 +126,7 @@ export const ReservationForm = ({
                       />
                       <Label 
                         htmlFor={`without-meal-${date.toISOString()}`}
-                        className="text-sm text-gray-600"
+                        className="text-sm text-muted-foreground"
                       >
                         Sans repas
                       </Label>
@@ -145,7 +145,7 @@ export const ReservationForm = ({
                       />
                       <Label 
                         htmlFor={`early-dropoff-${date.toISOString()}`}
-                        className="text-sm text-gray-600"
+                        className="text-sm text-muted-foreground"
                       >
                         Accueil avant 8h30
                       </Label>

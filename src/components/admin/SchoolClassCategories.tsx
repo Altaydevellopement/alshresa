@@ -130,7 +130,7 @@ const SchoolClassCategories = () => {
             >
               <div>
                 <span className="font-medium">{cat.name}</span>
-                <span className="ml-2 text-sm text-gray-600">({cat.category})</span>
+                <span className="ml-2 text-sm text-muted-foreground">({cat.category})</span>
               </div>
               <Button
                 variant="ghost"

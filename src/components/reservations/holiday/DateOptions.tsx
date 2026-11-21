@@ -43,7 +43,7 @@ export const DateOptions = ({
   
   return (
     <div 
-      className="ml-6 space-y-1 bg-white/50 p-2 rounded-md"
+      className="flex flex-wrap gap-x-6 gap-y-2 rounded-lg bg-surface-muted px-3 py-2"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center space-x-2">
@@ -55,12 +55,12 @@ export const DateOptions = ({
               isReadOnly ? null : onOptionChange('withoutMeal', checked as boolean)
             }
             disabled={isReadOnly}
-            className={`border-blue-200 pointer-events-auto ${isReadOnly ? 'opacity-70' : ''}`}
+            className={`pointer-events-auto ${isReadOnly ? 'opacity-70' : ''}`}
           />
         </div>
         <Label 
           htmlFor={generateId("without-meal")}
-          className={`text-sm text-blue-900 ${isReadOnly ? 'opacity-70' : ''}`}
+          className={`text-sm text-foreground ${isReadOnly ? 'opacity-70' : ''}`}
           onClick={handleLabelClick}
         >
           Sans repas
@@ -77,12 +77,12 @@ export const DateOptions = ({
               onCheckedChange={(checked) =>
                 onOptionChange('earlyDropoff', checked as boolean)
               }
-              className="border-blue-200 pointer-events-auto"
+              className="pointer-events-auto"
             />
           </div>
           <Label 
             htmlFor={generateId("early-dropoff")}
-            className="text-sm text-blue-900"
+            className="text-sm text-foreground"
             onClick={handleLabelClick}
           >
             Accueil avant 8h30

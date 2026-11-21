@@ -29,7 +29,7 @@ const AdminHolidayReservations = () => {
     return (
       <div className="container mx-auto p-8">
         <h1 className="text-3xl font-bold mb-8">Gestion des réservations - Vacances</h1>
-        <div className="text-red-500">
+        <div className="text-destructive">
           Erreur lors du chargement des réservations: {queryError.message}
         </div>
       </div>

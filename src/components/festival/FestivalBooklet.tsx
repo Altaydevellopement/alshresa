@@ -36,7 +36,7 @@ export const FestivalBooklet = ({ pages }: FestivalBookletProps) => {
     <div className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto px-4">
       {/* Page counter */}
       <div className="text-center">
-        <p className="text-lg font-semibold text-gray-700">
+        <p className="text-lg font-semibold text-foreground">
           Page {currentPage + 1} / {pages.length}
         </p>
       </div>

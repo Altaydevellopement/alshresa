@@ -66,7 +66,7 @@ const AdminWednesdays = () => {
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Chargement des mercredis...</p>
+            <p className="text-muted-foreground">Chargement des mercredis...</p>
           </div>
         </div>
       </div>
@@ -77,7 +77,7 @@ const AdminWednesdays = () => {
     return (
       <div className="container mx-auto p-8">
         <h1 className="text-3xl font-bold mb-8">Gestion des mercredis</h1>
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200 text-red-700">
+        <div className="bg-destructive-soft p-4 rounded-lg border border-destructive/30 text-destructive">
           Une erreur est survenue lors du chargement des mercredis.
         </div>
       </div>

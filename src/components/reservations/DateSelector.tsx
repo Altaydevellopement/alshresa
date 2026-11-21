@@ -60,7 +60,7 @@ export const DateSelector = ({
 
   if (!availableWednesdays || availableWednesdays.length === 0) {
     return (
-      <div className="text-center p-4 text-gray-500">
+      <div className="text-center p-4 text-muted-foreground">
         Aucun mercredi n'est disponible pour le moment.
       </div>
     );
@@ -69,7 +69,7 @@ export const DateSelector = ({
   return (
     <div className="space-y-4">
       <Label className="font-medium block">Sélectionner les dates</Label>
-      <div className="border rounded-lg p-4 bg-gray-50">
+      <div className="border rounded-lg p-4 bg-surface-muted">
         <div className="space-y-3 pl-4">
           {availableWednesdays.map((wednesday) => {
             const date = new Date(wednesday.date);
@@ -93,7 +93,7 @@ export const DateSelector = ({
                   <Label htmlFor={wednesday.date}>
                     {format(date, "EEEE d MMMM", { locale: fr })}
                     {isReserved && (
-                      <span className="ml-2 text-red-500 text-sm">
+                      <span className="ml-2 text-destructive text-sm">
                         (Déjà réservé)
                       </span>
                     )}
@@ -111,7 +111,7 @@ export const DateSelector = ({
                       />
                       <Label
                         htmlFor={`without-meal-${wednesday.date}`}
-                        className="text-sm text-gray-600"
+                        className="text-sm text-muted-foreground"
                       >
                         Sans repas
                       </Label>
@@ -126,7 +126,7 @@ export const DateSelector = ({
                       />
                       <Label
                         htmlFor={`early-dropoff-${wednesday.date}`}
-                        className="text-sm text-gray-600"
+                        className="text-sm text-muted-foreground"
                       >
                         Accueil avant 8h30
                       </Label>

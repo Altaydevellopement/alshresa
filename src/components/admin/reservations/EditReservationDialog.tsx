@@ -50,13 +50,13 @@ export const EditReservationDialog = ({
         <div className="space-y-6 py-4">
           <div>
             <p className="font-medium">{childName}</p>
-            <p className="text-sm text-gray-500">Date: {reservationDate}</p>
+            <p className="text-sm text-muted-foreground">Date: {reservationDate}</p>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="without-meal">Sans repas</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 L'enfant ne mangera pas sur place
               </p>
             </div>
@@ -70,7 +70,7 @@ export const EditReservationDialog = ({
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
               <Label htmlFor="early-dropoff">Garderie du matin</Label>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 L'enfant arrive plus tôt le matin
               </p>
             </div>

@@ -18,7 +18,7 @@ export const ReservationBadges = ({ withoutMeal, earlyDropoff }: ReservationBadg
         {withoutMeal && (
           <Tooltip>
             <TooltipTrigger>
-              <div className="inline-flex items-center rounded-full bg-red-100 p-2 text-red-700">
+              <div className="inline-flex items-center rounded-full bg-destructive-soft p-2 text-destructive">
                 <UtensilsCrossed className="h-4 w-4" />
               </div>
             </TooltipTrigger>
@@ -30,7 +30,7 @@ export const ReservationBadges = ({ withoutMeal, earlyDropoff }: ReservationBadg
         {earlyDropoff && (
           <Tooltip>
             <TooltipTrigger>
-              <div className="inline-flex items-center rounded-full bg-blue-100 p-2 text-blue-700">
+              <div className="inline-flex items-center rounded-full bg-info-soft p-2 text-primary">
                 <Clock className="h-4 w-4" />
               </div>
             </TooltipTrigger>

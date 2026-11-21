@@ -1,6 +1,5 @@
 
 // src/components/reservations/TeenHolidayReservationContent.tsx
-import { Button } from "@/components/ui/button";
 import { useHolidayReservation } from "@/hooks/useHolidayReservation";
 import { ChildSelector } from "./ChildSelector";
 import { PeriodSelector } from "./PeriodSelector";
@@ -8,7 +7,8 @@ import { HolidayDateSelector } from "./holiday/HolidayDateSelector";
 import { SuccessReservationDialog } from "./SuccessReservationDialog";
 import { NoSpotsDialog } from "./NoSpotsDialog";
 import { MinimumDaysDialog } from "./dialogs/MinimumDaysDialog";
-import { Loader2 } from "lucide-react";
+import { LoadingState } from "@/components/design";
+import { HolidayWizard } from "./wizard/HolidayWizard";
 import { useChildrenData } from "@/hooks/useChildrenData";
 import { useCategoryFiltering } from "@/hooks/useCategoryFiltering";
 import { useClosedPeriods } from "@/hooks/useClosedPeriods";
@@ -54,19 +54,7 @@ export const TeenHolidayReservationContent = () => {
 
   const { getClosedDatesInRange } = useClosedPeriods();
 
-  // If the reservations are not loaded yet, display a loader
-  if (loadingHolidayRes) {
-    return (
-      <div className="text-center py-8">
-        <Loader2 className="animate-spin mx-auto mb-2" />
-        Chargement des réservations existantes…
-      </div>
-    );
-  }
 
-  const validDatesCount = selectedDates.filter(
-    d => d.date instanceof Date && !isNaN(d.date.getTime())
-  ).length;
 
   // Get excluded dates for the selected period to adjust minimum validation
   const periodForValidation = holidayPeriods?.find(p => p.id === selectedPeriod);
@@ -74,63 +62,76 @@ export const TeenHolidayReservationContent = () => {
     ? getClosedDatesInRange(periodForValidation.start_date, periodForValidation.end_date)
     : [];
 
-  const onSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // Règle existante : minimum de jours par semaine
+  const validateDates = () => {
     if (!validateMinimumDays(selectedDates, false, false, excludedDatesForPeriod)) {
       setMinimumDaysDialog({ isOpen: true });
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const onConfirm = () => {
+    if (!validateDates()) return;
     if (!isSubmitting) handleSubmit();
   };
 
+  const selectedChildData = filteredChildren?.find(child => child.id === selectedChild);
+  const childLabel = selectedChildData
+    ? `${selectedChildData.first_name} ${selectedChildData.last_name} (${selectedChildData.school_class})`
+    : undefined;
+
   return (
-    <div className="space-y-6">
-      <PeriodSelector
+    <>
+      <HolidayWizard
+        activityLabel="Club Ado"
+        showOptions={false}
+        periodSelector={
+          <PeriodSelector
+            variant="cards"
+            selectedPeriod={selectedPeriod}
+            setSelectedPeriod={setSelectedPeriod}
+            holidayPeriods={holidayPeriods}
+            filterTeenOnly={true}
+          />
+        }
+        childSelector={
+          <ChildSelector
+            variant="cards"
+            selectedChild={selectedChild}
+            setSelectedChild={setSelectedChild}
+            children={filteredChildren}
+            setSelectedDates={setSelectedDates}
+          />
+        }
+        dateSelector={
+          loadingHolidayRes ? (
+            // Les réservations existantes doivent être connues avant d'afficher les dates
+            <LoadingState rows={4} label="Chargement des réservations existantes…" />
+          ) : selectedPeriod && selectedChild ? (
+            <HolidayDateSelector
+              selectedDates={selectedDates}
+              handleDateToggle={handleDateToggle}
+              handleOptionChange={handleOptionChange}
+              isDateAlreadyReserved={isDateAlreadyReserved}
+              periodId={selectedPeriod}
+              selectedChild={selectedChild}
+              setSelectedDates={setSelectedDates}
+              isTeenPage={true}
+            />
+          ) : null
+        }
         selectedPeriod={selectedPeriod}
-        setSelectedPeriod={setSelectedPeriod}
-        holidayPeriods={holidayPeriods}
-        filterTeenOnly={true}
-      />
-
-      <ChildSelector
         selectedChild={selectedChild}
-        setSelectedChild={setSelectedChild}
-        children={filteredChildren}
-        setSelectedDates={setSelectedDates}
+        selectedDates={selectedDates}
+        period={periodForValidation}
+        childLabel={childLabel}
+        validateDates={validateDates}
+        onConfirm={onConfirm}
+        isSubmitting={isSubmitting}
+        succeeded={showSuccessDialog}
+        datesHint="Sélectionnez au moins 3 jours par semaine. Les journées complètes proposent une inscription en liste d'attente."
       />
-
-      {selectedPeriod && selectedChild && (
-        <HolidayDateSelector
-          selectedDates={selectedDates}
-          handleDateToggle={handleDateToggle}
-          handleOptionChange={handleOptionChange}
-          // Pass the correct isDateAlreadyReserved function from our hook
-          isDateAlreadyReserved={isDateAlreadyReserved}
-          periodId={selectedPeriod}
-          selectedChild={selectedChild}
-          setSelectedDates={setSelectedDates}
-          isTeenPage={true}
-        />
-      )}
-
-      <div className="flex justify-end mt-6">
-        <Button
-          onClick={onSubmitClick}
-          className="w-full md:w-auto"
-          disabled={!selectedChild || !selectedPeriod || validDatesCount < 1 || isSubmitting}
-          type="button"
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Réservation en cours...
-            </>
-          ) : (
-            "Confirmer réservation"
-          )}
-        </Button>
-      </div>
 
       <SuccessReservationDialog 
         open={showSuccessDialog} 
@@ -146,6 +147,6 @@ export const TeenHolidayReservationContent = () => {
         open={minimumDaysDialog.isOpen}
         onOpenChange={open => setMinimumDaysDialog({ isOpen: open })}
       />
-    </div>
+    </>
   );
 };

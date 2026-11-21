@@ -214,7 +214,7 @@ export const AdminReservationForm = ({
             <div className="space-y-2">
               <Progress value={progress} className="w-full" />
               {progressMessage && (
-                <p className="text-sm text-gray-600 text-center">{progressMessage}</p>
+                <p className="text-sm text-muted-foreground text-center">{progressMessage}</p>
               )}
             </div>
           )}

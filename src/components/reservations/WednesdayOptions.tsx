@@ -16,7 +16,7 @@ export const WednesdayOptions = ({
   onOptionChange 
 }: WednesdayOptionsProps) => {
   return (
-    <div className="ml-6 space-y-1 bg-white/50 p-2 rounded-md">
+    <div className="flex flex-wrap gap-x-6 gap-y-2 rounded-lg bg-surface-muted px-3 py-2">
       <div className="flex items-center space-x-2">
         <Checkbox
           id={`without-meal-${date}`}
@@ -24,11 +24,11 @@ export const WednesdayOptions = ({
           onCheckedChange={(checked) =>
             onOptionChange(date, 'withoutMeal', checked as boolean)
           }
-          className="border-green-200"
+          
         />
         <Label 
           htmlFor={`without-meal-${date}`}
-          className="text-sm text-green-900"
+          className="text-sm text-foreground"
         >
           Sans repas
         </Label>
@@ -40,11 +40,11 @@ export const WednesdayOptions = ({
           onCheckedChange={(checked) =>
             onOptionChange(date, 'earlyDropoff', checked as boolean)
           }
-          className="border-green-200"
+          
         />
         <Label 
           htmlFor={`early-dropoff-${date}`}
-          className="text-sm text-green-900"
+          className="text-sm text-foreground"
         >
           Accueil avant 8h30
         </Label>

@@ -42,7 +42,7 @@ export const HolidayPeriodFilter = ({
 
   return (
     <div className="mb-4 flex items-center gap-2">
-      <Calendar className="h-5 w-5 text-gray-500" />
+      <Calendar className="h-5 w-5 text-muted-foreground" />
       <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
         <SelectTrigger className="w-[280px]">
           <SelectValue placeholder="Filtrer par période" />

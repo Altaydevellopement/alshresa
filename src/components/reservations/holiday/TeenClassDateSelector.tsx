@@ -1,5 +1,4 @@
 
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { DateItem } from "./DateItem";
 import { useHolidayPeriodContext } from "./HolidayPeriodContext";
 import { format, isWeekend } from "date-fns";
@@ -92,8 +91,8 @@ export const TeenClassDateSelector = ({
   );
 
   return (
-    <ScrollArea className="h-[300px] pr-3">
-      <div className="space-y-1">
+    <div>
+      <div className="space-y-2">
         {periodDates.map(date => {
           const dateStr = format(new Date(date), 'yyyy-MM-dd');
           const selectedDate = selectedDatesMap.get(dateStr) as DateOption | undefined;
@@ -104,8 +103,8 @@ export const TeenClassDateSelector = ({
           return (
             <div
               key={dateStr}
-              className={`flex items-center justify-between px-2 py-1 hover:bg-gray-50 rounded ${
-                isWeekendDay ? 'bg-gray-50' : ''
+              className={`flex items-start justify-between gap-3 rounded-xl border border-border/70 px-3 py-3 transition-colors hover:bg-peach-soft/40 ${
+                isWeekendDay ? 'bg-surface-muted' : 'bg-card'
               }`}
             >
               <div className="flex-1 flex items-center">
@@ -126,7 +125,7 @@ export const TeenClassDateSelector = ({
                 />
                 
                 {isWeekendDay && (
-                  <Badge variant="outline" className="ml-2 bg-orange-100 text-orange-800">
+                  <Badge variant="neutral" className="ml-2">
                     Week-end
                   </Badge>
                 )}
@@ -144,6 +143,6 @@ export const TeenClassDateSelector = ({
           );
         })}
       </div>
-    </ScrollArea>
+    </div>
   );
 };

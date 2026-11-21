@@ -41,7 +41,7 @@ const FestivalProgram = () => {
               Programme Festival
             </h1>
           </div>
-          <p className="text-gray-600 text-lg">
+          <p className="text-muted-foreground text-lg">
             Découvrez le programme complet de notre festival - Tournez les pages avec les flèches
           </p>
         </div>

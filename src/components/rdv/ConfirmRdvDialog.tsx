@@ -70,7 +70,7 @@ export const ConfirmRdvDialog = ({
           </div>
           
           {selectedMotifs.length === 0 && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-destructive text-sm mt-2">
               Veuillez sélectionner au moins un motif
             </p>
           )}

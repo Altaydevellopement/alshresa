@@ -4,6 +4,10 @@ import { fr } from "date-fns/locale";
 import { DateCheckbox } from "@/components/ui/date-checkbox";
 import { DateOptions } from "./DateOptions";
 import { useHolidaySpots } from "@/hooks/useHolidaySpots";
+import { Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { offerWaitlist } from "@/components/waitlist/waitlistOffer";
+import { useHolidayPeriodContext } from "./HolidayPeriodContext";
 
 interface DateItemProps {
   date: Date;
@@ -33,6 +37,7 @@ export const DateItem = ({
   isDisabled = false
 }: DateItemProps) => {
   const { availableSpots, isFull } = useHolidaySpots(periodId, date, childSchoolClass);
+  const { childId, childName } = useHolidayPeriodContext();
   
   // Disable the date if it's reserved, full, or explicitly disabled
   const shouldDisable = isDisabled || isReserved || (isFull && !isReserved);
@@ -46,23 +51,42 @@ export const DateItem = ({
           disabled={shouldDisable}
         />
         <div className="flex flex-col">
-          <span className={`text-sm font-medium ${shouldDisable ? 'text-gray-400' : ''}`}>
+          <span className={`text-sm font-semibold capitalize ${shouldDisable ? 'text-muted-foreground' : 'text-foreground'}`}>
             {format(date, "EEEE d MMMM yyyy", { locale: fr })}
           </span>
           {shouldDisable && !isReserved && (
-            <span className="text-xs text-red-500">
-              Journée complète ({availableSpots || 0} places disponibles)
+            <span className="text-xs font-medium text-destructive">
+              Journée complète
             </span>
           )}
           {isReserved && (
-            <span className="text-xs text-blue-600 font-medium">
+            <span className="text-xs font-medium text-info">
               Déjà réservé
             </span>
           )}
           {!shouldDisable && availableSpots !== null && availableSpots <= 5 && (
-            <span className="text-xs text-orange-600">
+            <span className="text-xs font-medium text-warning">
               Plus que {availableSpots} place{availableSpots > 1 ? 's' : ''}
             </span>
+          )}
+          {isFull && !isReserved && !isDisabled && childId && (
+            <Button
+              type="button"
+              variant="soft"
+              size="sm"
+              className="mt-2 h-8 w-fit"
+              onClick={() =>
+                offerWaitlist({
+                  childId,
+                  childName: childName || "votre enfant",
+                  items: [{ kind: "holiday", targetId: periodId, date, withoutMeal: false, earlyDropoff: false }],
+                  partial: false,
+                })
+              }
+            >
+              <Clock aria-hidden="true" />
+              Liste d'attente
+            </Button>
           )}
         </div>
       </div>

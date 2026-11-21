@@ -190,7 +190,7 @@ export function AddChildForm({
             validate: value => value.trim() !== "" || "Le prénom ne peut pas être vide"
           })} 
         />
-        {errors.first_name && <p className="text-sm text-red-700">{errors.first_name.message}</p>}
+        {errors.first_name && <p className="text-sm text-destructive">{errors.first_name.message}</p>}
       </div>
 
       <div className="space-y-2">
@@ -208,7 +208,7 @@ export function AddChildForm({
       <div className="space-y-2">
         <Label htmlFor="school_class">Classe</Label>
         {isLoadingClasses ? (
-          <p className="text-sm text-gray-500">Chargement des classes...</p>
+          <p className="text-sm text-muted-foreground">Chargement des classes...</p>
         ) : (
           <Select 
             value={selectedClass} 

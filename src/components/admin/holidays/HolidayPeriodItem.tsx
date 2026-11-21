@@ -41,8 +41,8 @@ const HolidayPeriodItem = ({
     <div className="p-4 bg-white rounded border shadow-sm">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="font-bold text-gray-800 text-base capitalize mb-1">{holiday.name}</h3>
-          <p className="text-xs text-gray-600 mb-2">
+          <h3 className="font-bold text-foreground text-base capitalize mb-1">{holiday.name}</h3>
+          <p className="text-xs text-muted-foreground mb-2">
             Du {format(startDate, "d MMMM yyyy", { locale: fr })} au{" "}
             {format(endDate, "d MMMM yyyy", { locale: fr })}
           </p>
@@ -55,7 +55,7 @@ const HolidayPeriodItem = ({
             {hasReservations ? (
               <Badge variant="secondary" className="text-xs">{reservationCount} réservation{reservationCount > 1 ? 's' : ''}</Badge>
             ) : (
-              <span className="text-gray-500 text-xs">Aucune réservation</span>
+              <span className="text-muted-foreground text-xs">Aucune réservation</span>
             )}
           </div>
         </div>

@@ -66,7 +66,7 @@ export const ReservationCalendar = ({
             <div
               key={wednesday.date}
               className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                isReserved ? 'opacity-50 bg-gray-100' : 'hover:bg-secondary/50'
+                isReserved ? 'opacity-50 bg-muted' : 'hover:bg-secondary/50'
               }`}
             >
               <Checkbox
@@ -78,12 +78,12 @@ export const ReservationCalendar = ({
               <Label
                 htmlFor={wednesday.date}
                 className={`flex-1 cursor-pointer font-medium ${
-                  isReserved ? 'text-gray-500' : ''
+                  isReserved ? 'text-muted-foreground' : ''
                 }`}
               >
                 {format(date, "EEEE d MMMM yyyy", { locale: fr })}
                 {isReserved && (
-                  <span className="ml-2 text-sm text-gray-500">
+                  <span className="ml-2 text-sm text-muted-foreground">
                     (Déjà réservé)
                   </span>
                 )}
