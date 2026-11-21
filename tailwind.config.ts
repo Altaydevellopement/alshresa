@@ -13,7 +13,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: { DEFAULT: "1rem", md: "1.5rem", lg: "2rem" },
       screens: {
         "2xl": "1400px",
       },
@@ -27,8 +27,32 @@ export default {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
+          hover: "hsl(var(--primary-hover))",
           foreground: "hsl(var(--primary-foreground))",
           glow: "hsl(var(--primary-glow))",
+        },
+        coral: {
+          DEFAULT: "hsl(var(--coral))",
+          dark: "hsl(var(--coral-dark))",
+        },
+        peach: {
+          DEFAULT: "hsl(var(--peach))",
+          soft: "hsl(var(--peach-soft))",
+        },
+        sage: {
+          DEFAULT: "hsl(var(--sage))",
+          soft: "hsl(var(--sage-soft))",
+          foreground: "hsl(var(--sage-foreground))",
+        },
+        surface: {
+          muted: "hsl(var(--surface-muted))",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -36,7 +60,17 @@ export default {
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
+          soft: "hsl(var(--destructive-soft))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          soft: "hsl(var(--warning-soft))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
+        info: {
+          DEFAULT: "hsl(var(--info))",
+          soft: "hsl(var(--info-soft))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -48,6 +82,7 @@ export default {
         },
         success: {
           DEFAULT: "hsl(var(--success))",
+          soft: "hsl(var(--success-soft))",
           foreground: "hsl(var(--success-foreground))",
         },
         popover: {
@@ -60,12 +95,20 @@ export default {
         },
       },
       borderRadius: {
-        lg: "1rem",
-        md: "0.75rem",
+        "2xl": "1.25rem",   /* 20 px : grandes cartes */
+        xl: "1rem",         /* 16 px : cartes */
+        lg: "0.875rem",     /* 14 px : boutons, champs */
+        md: "0.625rem",
         sm: "0.5rem",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ['"Plus Jakarta Sans Variable"', '"Plus Jakarta Sans"', "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+      },
+      boxShadow: {
+        xs: "var(--shadow-xs)",
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
       },
       keyframes: {
         "accordion-down": {
@@ -75,6 +118,10 @@ export default {
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(4px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
         shake: {
           "0%, 100%": { transform: "translateX(0)" },
@@ -86,6 +133,7 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "shake": "shake 0.5s ease-in-out",
+        "fade-in": "fade-in 0.25s ease-out",
       },
     },
   },

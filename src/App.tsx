@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { WaitlistOfferDialog } from "@/components/waitlist/WaitlistOfferDialog";
+import { FullPageLoader } from "@/components/design";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -24,6 +25,10 @@ const HolidayProgram = lazy(() => import("./pages/HolidayProgram"));
 const FestivalProgram = lazy(() => import("./pages/FestivalProgram"));
 const Prices = lazy(() => import("./pages/Prices"));
 const MyWaitlist = lazy(() => import("./pages/MyWaitlist"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const MyReservations = lazy(() => import("./pages/MyReservations"));
+const FamilyLayout = lazy(() => import("./components/layout/FamilyLayout"));
+const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -57,9 +62,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center text-muted-foreground">Chargement…</div>
-);
+const PageLoader = () => <FullPageLoader />;
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -82,71 +85,25 @@ const App = () => (
             {/* <Route path="/festival-program" element={<FestivalProgram />} /> */}
             <Route path="/prices" element={<Prices />} />
             
-            {/* Protected routes */}
+            {/* Espace familles : toutes les pages partagent le même layout */}
             <Route
-              path="/profile"
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <FamilyLayout />
                 </ProtectedRoute>
               }
-            />
-            <Route
-              path="/children"
-              element={
-                <ProtectedRoute>
-                  <Children />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/wednesday-reservations"
-              element={
-                <ProtectedRoute>
-                  <WednesdayReservations />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/holiday-reservations"
-              element={
-                <ProtectedRoute>
-                  <HolidayReservations />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/teenholiday-reservations"
-              element={
-                <ProtectedRoute>
-                  <TeenHolidayReservations />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/waitlist"
-              element={
-                <ProtectedRoute>
-                  <MyWaitlist />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/notifications"
-              element={
-                <ProtectedRoute>
-                  <Notifications />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/rdv"
-              element={
-                <ProtectedRoute>
-                  <Rdv />
-                </ProtectedRoute>
-              }
-            />
+            >
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/children" element={<Children />} />
+              <Route path="/my-reservations" element={<MyReservations />} />
+              <Route path="/wednesday-reservations" element={<WednesdayReservations />} />
+              <Route path="/holiday-reservations" element={<HolidayReservations />} />
+              <Route path="/teenholiday-reservations" element={<TeenHolidayReservations />} />
+              <Route path="/waitlist" element={<MyWaitlist />} />
+              <Route path="/notifications" element={<Notifications />} />
+              <Route path="/rdv" element={<Rdv />} />
+            </Route>
 
             {/* Admin routes */}
             <Route path="/admin-login" element={<AdminLoginPage />} />
@@ -175,6 +132,7 @@ const App = () => (
               <Route path="spots/wednesday" element={<AdminWednesdaySpots />} />
               <Route path="spots/holiday" element={<AdminHolidaySpots />} />
               <Route path="listeattente" element={<AdminWaitlist />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
           </Routes>
           </Suspense>
