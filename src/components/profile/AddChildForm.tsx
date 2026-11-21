@@ -202,13 +202,17 @@ export function AddChildForm({
             validate: value => value.trim() !== "" || "Le nom ne peut pas être vide"
           })} 
         />
-        {errors.last_name && <p className="text-sm text-destructive-foreground">{errors.last_name.message}</p>}
+        {errors.last_name && <p className="text-sm text-destructive">{errors.last_name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="school_class">Classe</Label>
         {isLoadingClasses ? (
           <p className="text-sm text-muted-foreground">Chargement des classes...</p>
+        ) : schoolClasses.length === 0 ? (
+          <p className="rounded-lg bg-warning-soft px-3 py-2 text-sm text-warning" role="alert">
+            Aucune classe n'est encore configurée. Merci de contacter le secrétariat.
+          </p>
         ) : (
           <Select 
             value={selectedClass} 
@@ -226,7 +230,7 @@ export function AddChildForm({
             </SelectContent>
           </Select>
         )}
-        {!selectedClass && <p className="text-sm text-destructive-foreground">La classe est requise</p>}
+        {!selectedClass && <p className="text-sm text-destructive">La classe est requise</p>}
       </div>
 
       <Button type="submit" disabled={isSubmitting || !selectedClass}>
