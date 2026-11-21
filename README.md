@@ -26,7 +26,7 @@ React + Vite + Tailwind/shadcn, base de données **Supabase**, hébergement **Ve
 ## Interface (design « Coral Soft »)
 
 - Espace familles : `/dashboard` (accueil après connexion), réservations guidées (mercredis, vacances, Club Ado),
-  Mes enfants, Mes réservations, Liste d'attente, Notifications, Rendez-vous, Mon compte.
+  Mes enfants, Liste d'attente, Notifications, Rendez-vous, Mon compte.
 - Administration : `/admin` (tableau de bord), navigation latérale groupée, `/admin/settings`.
 - Design system : tokens dans `src/index.css`, composants communs dans `src/components/design`,
   layouts dans `src/components/layout`. Détails et choix : `docs/refonte-coral-soft.md`.

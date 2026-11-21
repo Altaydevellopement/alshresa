@@ -91,9 +91,6 @@ const Dashboard = () => {
                 Réserver une journée
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link to="/my-reservations">Mes réservations</Link>
-            </Button>
           </div>
         </div>
         <svg className="pointer-events-none absolute -right-10 -bottom-10 h-56 w-56 text-coral/25" viewBox="0 0 200 200" aria-hidden="true">
@@ -130,15 +127,15 @@ const Dashboard = () => {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Prochaines réservations */}
         <Card className="lg:col-span-2">
-          <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">
             <CardTitle className="flex items-center gap-2">
               <CalendarCheck className="h-5 w-5 text-primary" aria-hidden="true" />
               Prochaines réservations
             </CardTitle>
             {upcomingTotal > 0 && (
-              <Button asChild variant="link" size="sm" className="px-0">
-                <Link to="/my-reservations">Tout voir ({upcomingTotal})</Link>
-              </Button>
+              <span className="text-sm font-semibold text-muted-foreground">
+                {upcomingTotal} journée{upcomingTotal > 1 ? "s" : ""} à venir
+              </span>
             )}
           </CardHeader>
           <CardContent>
@@ -177,7 +174,7 @@ const Dashboard = () => {
 
         {/* Enfants */}
         <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">
             <CardTitle className="flex items-center gap-2">
               <Baby className="h-5 w-5 text-primary" aria-hidden="true" />
               Mes enfants
@@ -221,7 +218,7 @@ const Dashboard = () => {
 
         {/* Liste d'attente */}
         <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" aria-hidden="true" />
               Liste d'attente
@@ -260,7 +257,7 @@ const Dashboard = () => {
 
         {/* Notifications */}
         <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">
             <CardTitle className="flex items-center gap-2">
               <Bell className="h-5 w-5 text-primary" aria-hidden="true" />
               Notifications

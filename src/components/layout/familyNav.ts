@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, CalendarPlus, Calendar, Palmtree, Users, Baby, ClipboardList,
+  LayoutDashboard, CalendarPlus, Calendar, Palmtree, Users, Baby,
   Clock, Bell, CalendarDays, UserCircle, FileText, Euro, BookOpen, type LucideIcon,
 } from "lucide-react";
 
@@ -32,7 +32,6 @@ export const FAMILY_NAV: NavGroup[] = [
   {
     items: [
       { label: "Mes enfants", href: "/children", icon: Baby },
-      { label: "Mes réservations", href: "/my-reservations", icon: ClipboardList },
       { label: "Liste d'attente", href: "/waitlist", icon: Clock },
       { label: "Notifications", href: "/notifications", icon: Bell, badge: "notifications" },
       { label: "Rendez-vous", href: "/rdv", icon: CalendarDays, requires: "rdv" },
@@ -52,6 +51,5 @@ export const INFO_LINKS: NavLinkItem[] = [
 export const MOBILE_TABS: NavLinkItem[] = [
   { label: "Accueil", href: "/dashboard", icon: LayoutDashboard },
   { label: "Réserver", href: "/holiday-reservations", icon: CalendarPlus },
-  { label: "Réservations", href: "/my-reservations", icon: ClipboardList },
   { label: "Alertes", href: "/notifications", icon: Bell, badge: "notifications" },
 ];

@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Suspense } from "react";
 import { lazyWithReload as lazy } from "@/lib/lazyWithReload";
 import { WaitlistOfferDialog } from "@/components/waitlist/WaitlistOfferDialog";
@@ -27,7 +27,6 @@ const FestivalProgram = lazy(() => import("./pages/FestivalProgram"));
 const Prices = lazy(() => import("./pages/Prices"));
 const MyWaitlist = lazy(() => import("./pages/MyWaitlist"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const MyReservations = lazy(() => import("./pages/MyReservations"));
 const FamilyLayout = lazy(() => import("./components/layout/FamilyLayout"));
 const AdminSettings = lazy(() => import("./pages/admin/AdminSettings"));
 const Notifications = lazy(() => import("./pages/Notifications"));
@@ -97,7 +96,8 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/children" element={<Children />} />
-              <Route path="/my-reservations" element={<MyReservations />} />
+              {/* Ancienne page « Mes réservations » supprimée : redirection pour les anciens liens */}
+              <Route path="/my-reservations" element={<Navigate to="/dashboard" replace />} />
               <Route path="/wednesday-reservations" element={<WednesdayReservations />} />
               <Route path="/holiday-reservations" element={<HolidayReservations />} />
               <Route path="/teenholiday-reservations" element={<TeenHolidayReservations />} />
