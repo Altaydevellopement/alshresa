@@ -16,6 +16,12 @@ const queryClient = new QueryClient({
 
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
+// Fichier introuvable après une mise à jour du site : recharger pour obtenir la nouvelle version
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault()
+  window.location.reload()
+})
+
 // Sans configuration Supabase, l'application ne peut pas fonctionner :
 // on affiche un message explicite au lieu d'une page blanche.
 const missing = ['VITE_SUPABASE_URL', 'VITE_SUPABASE_PUBLISHABLE_KEY'].filter(
@@ -41,7 +47,10 @@ if (missing.length > 0) {
     </main>,
   )
 } else {
-  import('./App').then(({ default: App }) => {
+  import('./App').catch(() => {
+    window.location.reload()
+    return new Promise<never>(() => {})
+  }).then(({ default: App }) => {
     root.render(
       <React.StrictMode>
         <QueryClientProvider client={queryClient}>
