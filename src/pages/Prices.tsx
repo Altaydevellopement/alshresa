@@ -95,7 +95,7 @@ const Prices = () => {
             <ul className="list-disc pl-5 mt-2 space-y-1">
               <li><span className="font-bold text-primary">Garderie du matin :</span> 0.15% du QF</li>
               <li><span className="font-bold text-success">Périscolaire du soir :</span> 0.20% du QF</li>
-              <li><span className="font-bold text-purple-600">Accueil de loisirs du mercredi (avec repas) :</span> 0.70% du QF</li>
+              <li><span className="font-bold text-primary">Accueil de loisirs du mercredi (avec repas) :</span> 0.70% du QF</li>
               <li><span className="font-bold text-indigo-600">Accueil de loisirs du mercredi (sans repas) :</span> 0.50% du QF</li>
               <li><span className="font-bold text-warning">Accueil de loisirs vacances (avec repas) :</span> 0.80% du QF</li>
               <li><span className="font-bold text-warning">Accueil de loisirs vacances (sans repas) :</span> 0.50% du QF</li>

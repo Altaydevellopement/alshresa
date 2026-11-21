@@ -51,7 +51,7 @@ export const DateItem = ({
           disabled={shouldDisable}
         />
         <div className="flex flex-col">
-          <span className={`text-sm font-semibold capitalize ${shouldDisable ? 'text-muted-foreground' : 'text-foreground'}`}>
+          <span className={`text-sm font-semibold capitalize-first ${shouldDisable ? 'text-muted-foreground' : 'text-foreground'}`}>
             {format(date, "EEEE d MMMM yyyy", { locale: fr })}
           </span>
           {shouldDisable && !isReserved && (

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Baby, CalendarDays, Coffee, Mail, UtensilsCrossed } from "lucide-react";
+import { Baby, CalendarDays, Coffee, Mail, Utensils, UtensilsCrossed } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface SummaryDate {
@@ -50,11 +50,15 @@ export const BookingSummary = ({ childLabel, contextLabel, contextDetail, dates,
         <ul className="divide-y divide-border rounded-xl border border-border">
           {valid.map((d) => (
             <li key={d.date.toISOString()} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
-              <span className="font-semibold capitalize">{format(d.date, "EEEE d MMMM yyyy", { locale: fr })}</span>
+              <span className="font-semibold inline-block capitalize-first">{format(d.date, "EEEE d MMMM yyyy", { locale: fr })}</span>
               {showOptions && (
                 <span className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
-                    <UtensilsCrossed className="h-3.5 w-3.5" aria-hidden="true" />
+                    {d.withoutMeal ? (
+                      <UtensilsCrossed className="h-3.5 w-3.5" aria-hidden="true" />
+                    ) : (
+                      <Utensils className="h-3.5 w-3.5" aria-hidden="true" />
+                    )}
                     {d.withoutMeal ? "Sans repas" : "Avec repas"}
                   </span>
                   {d.earlyDropoff && (

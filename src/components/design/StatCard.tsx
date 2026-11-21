@@ -27,25 +27,25 @@ interface StatCardProps {
 /** Indicateur chiffré provenant de données réelles. Affiche « — » en cas d'erreur. */
 export const StatCard = ({ label, value, scope, icon: Icon, tone = "coral", loading, error, href }: StatCardProps) => {
   const content = (
-    <div className="flex items-start gap-4">
-      <span className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl", toneClasses[tone])} aria-hidden="true">
-        <Icon className="h-5 w-5" />
-      </span>
-      <div className="min-w-0">
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
-        {loading ? (
-          <Skeleton className="mt-1 h-8 w-16" />
-        ) : (
-          <p className="mt-0.5 text-3xl font-extrabold tabular-nums text-foreground">
-            {error || value === null || value === undefined ? "—" : value}
-          </p>
-        )}
-        <p className="mt-1 text-xs text-muted-foreground">{error ? "Donnée indisponible" : scope}</p>
+    <div>
+      <div className="flex items-center gap-3">
+        <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", toneClasses[tone])} aria-hidden="true">
+          <Icon className="h-5 w-5" />
+        </span>
+        <p className="text-sm font-semibold text-muted-foreground leading-tight">{label}</p>
       </div>
+      {loading ? (
+        <Skeleton className="mt-3 h-9 w-20" />
+      ) : (
+        <p className="mt-3 text-3xl font-extrabold tabular-nums text-foreground">
+          {error || value === null || value === undefined ? "—" : value}
+        </p>
+      )}
+      <p className="mt-1 text-xs text-muted-foreground">{error ? "Donnée indisponible" : scope}</p>
     </div>
   );
 
-  const className = "block rounded-xl border border-border/80 bg-card p-5 shadow-sm";
+  const className = "block rounded-xl border border-border/80 bg-card p-4 md:p-5 shadow-sm";
   return href ? (
     <Link to={href} className={cn(className, "transition-colors hover:border-primary/40 hover:bg-peach-soft/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring")}>
       {content}

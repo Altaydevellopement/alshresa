@@ -136,7 +136,7 @@ export const WednesdayDateSelector = ({
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <Label
                     htmlFor={checkboxId}
-                    className={cn("cursor-pointer font-semibold capitalize", isDisabled ? "text-muted-foreground" : "text-foreground")}
+                    className={cn("inline-block cursor-pointer font-semibold capitalize-first", isDisabled ? "text-muted-foreground" : "text-foreground")}
                   >
                     {format(date, "EEEE d MMMM yyyy", { locale: fr })}
                   </Label>

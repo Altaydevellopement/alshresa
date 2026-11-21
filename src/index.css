@@ -130,6 +130,8 @@
 }
 
 @layer utilities {
+  /* Majuscule sur la première lettre seulement (dates en français) */
+  .capitalize-first::first-letter { text-transform: uppercase; }
   .bg-gradient-coral { background-image: var(--gradient-coral); }
   .bg-gradient-warm { background-image: var(--gradient-warm); }
   .shadow-soft { box-shadow: var(--shadow-md); }

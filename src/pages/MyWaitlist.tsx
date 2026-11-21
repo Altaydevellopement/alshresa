@@ -82,7 +82,7 @@ const MyWaitlist = () => {
                     <p className="font-bold">
                       {row.child_first_name}
                       <span className="font-normal text-muted-foreground"> — </span>
-                      <span className="capitalize">{format(parseDay(row.date), "EEEE d MMMM yyyy", { locale: fr })}</span>
+                      <span className="inline-block capitalize-first">{format(parseDay(row.date), "EEEE d MMMM yyyy", { locale: fr })}</span>
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {row.kind === "wednesday" ? "Mercredi" : `Vacances${row.period_name ? ` · ${row.period_name}` : ""}`}

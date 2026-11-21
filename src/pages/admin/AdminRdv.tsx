@@ -9,7 +9,7 @@ const AdminRdv = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-center py-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
@@ -22,16 +22,16 @@ const AdminRdv = () => {
 
   if (!isAdmin) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Accès non autorisé</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Accès non autorisé</h1>
         <p>Vous devez être administrateur pour accéder à cette page.</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Gestion des rendez-vous</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des rendez-vous</h1>
 
       <div className="grid grid-cols-1 gap-4">
         {/* Add RDV Form */}

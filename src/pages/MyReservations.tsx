@@ -67,7 +67,7 @@ const MyReservations = () => {
       </Alert>
 
       <Card>
-        <CardContent className="grid gap-4 pt-5 md:pt-6 sm:grid-cols-2 lg:grid-cols-4">
+        <CardContent className="grid grid-cols-2 gap-3 pt-5 md:gap-4 md:pt-6 lg:grid-cols-4">
           <div className="space-y-1.5">
             <Label htmlFor="f-when">Période</Label>
             <Select value={when} onValueChange={(v) => setWhen(v as When)}>
@@ -135,7 +135,7 @@ const MyReservations = () => {
           </p>
           {byMonth.map(([month, rows]) => (
             <section key={month} aria-labelledby={`m-${month}`} className="space-y-3">
-              <h2 id={`m-${month}`} className="text-sm font-bold uppercase tracking-wider text-muted-foreground capitalize">
+              <h2 id={`m-${month}`} className="text-sm font-bold uppercase tracking-wider text-muted-foreground capitalize-first">
                 {format(parseDay(`${month}-01`), "MMMM yyyy", { locale: fr })}
               </h2>
               <ul className="grid gap-3 md:grid-cols-2">

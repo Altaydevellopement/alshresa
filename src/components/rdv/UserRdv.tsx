@@ -6,7 +6,6 @@ import { CalendarDays, Info } from "lucide-react";
 import { Rdv } from "@/types/rdv";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useState } from "react";
 
 interface UserRdvProps {
   userRdv: Rdv;
@@ -15,15 +14,6 @@ interface UserRdvProps {
 export const UserRdv = ({
   userRdv
 }: UserRdvProps) => {
-  const [isAnimating, setIsAnimating] = useState(true);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsAnimating(false);
-    }, 3000);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);

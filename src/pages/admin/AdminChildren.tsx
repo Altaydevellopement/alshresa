@@ -75,9 +75,9 @@ const AdminChildren = () => {
 
   return (
     <div>
-      <div className="container mx-auto p-8">
+      <div className="space-y-6">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Gestion des enfants</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des enfants</h1>
           <div className="flex gap-2">
             <Button 
               onClick={handleExportPdf}
@@ -101,7 +101,7 @@ const AdminChildren = () => {
         <Card className="mb-6">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-lg font-medium">
-              <Users className="w-5 h-5 text-purple-600" />
+              <Users className="w-5 h-5 text-primary" />
               <span>
                 {filteredChildren?.length || 0} enfant{(filteredChildren?.length || 0) > 1 ? 's' : ''} 
                 {(searchQuery || selectedClass !== "all" || selectedGroup !== "all") && 

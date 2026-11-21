@@ -134,7 +134,7 @@ export const WaitlistOfferDialog = () => {
                   />
                 )}
                 <label htmlFor={`waitlist-${index}`} className="text-sm leading-tight">
-                  <span className="font-medium capitalize">
+                  <span className="font-medium inline-block capitalize-first">
                     {format(item.date, "EEEE d MMMM yyyy", { locale: fr })}
                   </span>
                   <span className="text-muted-foreground">

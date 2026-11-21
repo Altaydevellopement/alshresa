@@ -86,9 +86,9 @@ const AdminHolidays = () => {
 
   if (isAdmin === false) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="space-y-6">
         <div className="p-6 bg-white rounded-lg shadow">
-          <h1 className="text-2xl font-bold text-destructive">Accès refusé</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-destructive">Accès refusé</h1>
           <p className="mt-2">Vous n'avez pas les droits nécessaires pour accéder à cette page.</p>
           <Button asChild className="mt-4">
             <Link to="/">Retour à l'accueil</Link>
@@ -99,7 +99,7 @@ const AdminHolidays = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="space-y-6">
       <div className="flex items-center gap-2 mb-4">
         <Button asChild variant="outline" size="sm">
           <Link to="/admin">
@@ -107,7 +107,7 @@ const AdminHolidays = () => {
             Retour à l'administration
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold">Gestion des vacances</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des vacances</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">

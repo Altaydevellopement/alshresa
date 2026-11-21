@@ -206,8 +206,8 @@ const AdminAvailableSpots = () => {
 
   if (loadingWednesdays || loadingHolidays) {
     return (
-      <div className="container mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-6">Places restantes</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes</h1>
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
@@ -219,10 +219,10 @@ const AdminAvailableSpots = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="space-y-6">
       <div className="flex items-center gap-3 mb-6">
         <Users className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold">Places restantes</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes</h1>
       </div>
 
       <Tabs defaultValue="wednesdays" className="w-full">

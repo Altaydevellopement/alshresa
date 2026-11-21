@@ -162,7 +162,7 @@ const Dashboard = () => {
                       <span className="text-[10px] font-bold uppercase">{format(parseDay(r.date), "MMM", { locale: fr })}</span>
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold capitalize truncate">{fmtDay(r.date)}</p>
+                      <p className="font-semibold capitalize-first truncate">{fmtDay(r.date)}</p>
                       <p className="text-sm text-muted-foreground truncate">
                         {r.childName} · {r.kind === "wednesday" ? "Mercredi" : `Vacances${r.periodName ? ` ${r.periodName}` : ""}`}
                       </p>
@@ -248,7 +248,7 @@ const Dashboard = () => {
                   <li key={w.id} className="flex items-center justify-between gap-2 text-sm">
                     <span className="min-w-0">
                       <span className="block font-semibold truncate">{w.child_first_name}</span>
-                      <span className="block text-muted-foreground capitalize">{fmtDay(w.date)}</span>
+                      <span className="block text-muted-foreground capitalize-first">{fmtDay(w.date)}</span>
                     </span>
                     <StatusBadge status="waiting" label={`Position ${w.position}`} />
                   </li>

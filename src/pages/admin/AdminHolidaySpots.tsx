@@ -181,8 +181,8 @@ const AdminHolidaySpots = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Places restantes - Vacances</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
@@ -195,8 +195,8 @@ const AdminHolidaySpots = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Places restantes - Vacances</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
         <div className="flex items-center justify-center min-h-[200px]">
           <div className="text-center">
             <p className="text-destructive mb-4">Erreur lors du chargement des données</p>
@@ -208,11 +208,11 @@ const AdminHolidaySpots = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="space-y-6">
       <div className="flex items-center justify-between gap-2 mb-4">
         <div className="flex items-center gap-2">
           <Palmtree className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Places restantes - Vacances</h1>
+          <h1 className="text-2xl md:text-3xl font-extrabold">Places restantes - Vacances</h1>
           <Badge variant="secondary" className="ml-auto text-xs">
             {Object.keys(groupedHolidaySpots || {}).length} périodes
           </Badge>

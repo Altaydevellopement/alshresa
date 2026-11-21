@@ -18,8 +18,8 @@ const AdminNewTeenHolidayReservation = () => {
 
   if (!isAdmin) {
     return (
-      <div className="container mx-auto p-8">
-        <h1 className="text-3xl font-bold mb-8">Accès non autorisé</h1>
+      <div className="space-y-6">
+        <h1 className="text-2xl md:text-3xl font-extrabold">Accès non autorisé</h1>
         <div>Vous devez être administrateur pour accéder à cette page.</div>
       </div>
     );
@@ -27,7 +27,7 @@ const AdminNewTeenHolidayReservation = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-8">
+      <div className="space-y-6">
         <div>Chargement des enfants...</div>
       </div>
     );
@@ -35,11 +35,11 @@ const AdminNewTeenHolidayReservation = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-4 md:p-6 space-y-6 max-w-7xl">
+      <div className="space-y-6">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
             <CalendarDays className="h-6 w-6 md:h-8 md:w-8 text-primary" />
-            <h1 className="text-2xl md:text-4xl font-bold tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-extrabold">
               Réservations Club Ado
             </h1>
           </div>
