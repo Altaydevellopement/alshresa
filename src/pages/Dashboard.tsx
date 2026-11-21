@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, formatDistanceToNow } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
-  Baby, Bell, Calendar, CalendarCheck, ChevronRight, Clock, Palmtree, Plus, Users, Info,
+  Baby, Bell, Calendar, ChevronRight, Clock, Palmtree, Plus, Users, Info,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +13,7 @@ import { EmptyState, ErrorState, InitialsAvatar, LoadingState, StatusBadge } fro
 import { useFamilyProfile } from "@/components/layout/useFamilyProfile";
 import { useNotifications } from "@/hooks/notifications/useNotifications";
 import {
-  parseDay, todayKey, useFamilyChildren, useFamilyReservations, useUpcomingPeriods,
+  parseDay, useFamilyChildren, useUpcomingPeriods,
 } from "@/hooks/family/useFamilyReservations";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +51,6 @@ const QuickAction = ({
 const Dashboard = () => {
   const profile = useFamilyProfile();
   const children = useFamilyChildren();
-  const reservations = useFamilyReservations();
   const periods = useUpcomingPeriods();
   const { notifications, unreadCount, isLoading: notifLoading } = useNotifications(true);
   const waitlist = useQuery({
@@ -63,9 +62,6 @@ const Dashboard = () => {
     },
   });
 
-  const today = todayKey();
-  const upcoming = (reservations.data ?? []).filter((r) => r.date >= today && r.status === "confirmed").slice(0, 5);
-  const upcomingTotal = (reservations.data ?? []).filter((r) => r.date >= today && r.status === "confirmed").length;
   const waiting = (waitlist.data ?? []).filter((w) => w.status === "waiting");
   const firstName = profile.data?.first_name;
   const canWednesday = !profile.data?.hide_wednesday_access;
@@ -124,54 +120,7 @@ const Dashboard = () => {
         </div>
       </section>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Prochaines réservations */}
-        <Card className="lg:col-span-2">
-          <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">
-            <CardTitle className="flex items-center gap-2">
-              <CalendarCheck className="h-5 w-5 text-primary" aria-hidden="true" />
-              Prochaines réservations
-            </CardTitle>
-            {upcomingTotal > 0 && (
-              <span className="text-sm font-semibold text-muted-foreground">
-                {upcomingTotal} journée{upcomingTotal > 1 ? "s" : ""} à venir
-              </span>
-            )}
-          </CardHeader>
-          <CardContent>
-            {reservations.isLoading ? (
-              <LoadingState rows={3} />
-            ) : reservations.isError ? (
-              <ErrorState onRetry={() => reservations.refetch()} />
-            ) : upcoming.length === 0 ? (
-              <EmptyState
-                compact
-                icon={CalendarCheck}
-                title="Aucune réservation à venir"
-                description="Choisissez un parcours ci-dessus pour réserver une journée."
-              />
-            ) : (
-              <ul className="divide-y divide-border">
-                {upcoming.map((r) => (
-                  <li key={`${r.kind}-${r.id}`} className="flex items-center gap-3 py-3">
-                    <span className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-peach-soft text-secondary-foreground">
-                      <span className="text-lg font-extrabold leading-none">{format(parseDay(r.date), "d")}</span>
-                      <span className="text-[10px] font-bold uppercase">{format(parseDay(r.date), "MMM", { locale: fr })}</span>
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold capitalize-first truncate">{fmtDay(r.date)}</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {r.childName} · {r.kind === "wednesday" ? "Mercredi" : `Vacances${r.periodName ? ` ${r.periodName}` : ""}`}
-                      </p>
-                    </div>
-                    <StatusBadge status="confirmed" />
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Enfants */}
         <Card>
           <CardHeader className="flex-row flex-wrap items-center justify-between gap-x-3 gap-y-1 space-y-0">

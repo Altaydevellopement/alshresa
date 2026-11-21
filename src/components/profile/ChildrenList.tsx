@@ -78,7 +78,7 @@ export function ChildrenList({ children, showHeader = true }: ChildrenListProps)
               <p className="mt-4 inline-flex w-fit rounded-full bg-sage-soft px-3 py-1 text-xs font-semibold text-sage-foreground">
                 Classe : {child.school_class}
               </p>
-              <div className="mt-4 flex gap-2 border-t border-border pt-4">
+              <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">
                 <Button
                   variant="outline"
                   size="sm"

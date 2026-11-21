@@ -90,7 +90,7 @@ const MyWaitlist = () => {
                       {row.early_dropoff ? " · accueil du matin" : ""}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <WaitlistStatus row={row} />
                     {row.status === "waiting" && (
                       <Button variant="outline" size="sm" onClick={() => setLeaving(row)}>
