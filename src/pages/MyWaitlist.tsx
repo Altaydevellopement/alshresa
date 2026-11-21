@@ -56,8 +56,8 @@ const MyWaitlist = () => {
       <Alert variant="info">
         <Info className="h-4 w-4" />
         <AlertDescription>
-          Dès qu'une place se libère, le premier enfant de la liste est <strong>réservé automatiquement</strong> : vous
-          recevez un email et une notification. Pour annuler une place obtenue, prévenez le secrétariat par email.
+          Dès qu'une place se libère, le premier enfant de la liste est <strong>réservé automatiquement</strong> : le secrétariat vous en
+          informe et une notification apparaît ici. Pour annuler une place obtenue, prévenez le secrétariat par email.
           Les réservations automatiques s'arrêtent la veille du jour concerné.
         </AlertDescription>
       </Alert>

@@ -24,7 +24,7 @@ const Notifications = () => {
           {isLoading ? (
             <LoadingState rows={3} />
           ) : notifications.length === 0 ? (
-            <EmptyState icon={Bell} title="Aucune notification" description="Vous serez prévenu(e) ici, et par email, si une place se libère pour votre enfant." />
+            <EmptyState icon={Bell} title="Aucune notification" description="Vous serez prévenu(e) ici si une place se libère pour votre enfant." />
           ) : (
             <ul className="space-y-3">
               {notifications.map((n) => (

@@ -106,7 +106,7 @@ export const WaitlistOfferDialog = () => {
           <DialogDescription>
             {done
               ? "Voici le résultat de l'inscription sur liste d'attente."
-              : `Vous pouvez inscrire ${offer.childName} sur la liste d'attente. Si une place se libère, ${offer.childName} sera inscrit(e) automatiquement (par ordre d'arrivée) et vous recevrez un email.`}
+              : `Vous pouvez inscrire ${offer.childName} sur la liste d'attente. Si une place se libère, ${offer.childName} sera inscrit(e) automatiquement (par ordre d'arrivée) et le secrétariat vous en informera.`}
           </DialogDescription>
         </DialogHeader>
 

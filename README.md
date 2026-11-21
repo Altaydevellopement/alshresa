@@ -7,8 +7,8 @@ React + Vite + Tailwind/shadcn, base de données **Supabase**, hébergement **Ve
 
 - **Liste d'attente** (mercredis et vacances) : quand un jour est complet, la famille
   peut inscrire son enfant. Dès qu'une place se libère, le premier inscrit est
-  **réservé automatiquement**, reçoit une notification sur le site et un email
-  (copie au secrétariat). Pour annuler, la famille écrit au secrétariat.
+  **réservé automatiquement** et une notification apparaît dans son espace.
+  L'accueil reçoit un email pour prévenir la famille. Pour annuler, la famille écrit au secrétariat.
   Les réservations automatiques s'arrêtent la veille à midi (réglable dans
   *Admin → Liste d'attente*).
 - **Plus de surréservation** : la vérification des places et la réservation se
@@ -90,7 +90,8 @@ Puis *Integrations → Cron → Create job* :
 - nom `send-notifications`, planification `* * * * *` (chaque minute)
 - type **Supabase Edge Function**, fonction `send-notifications`, méthode POST
 
-Cette tâche envoie les emails « place obtenue » et clôture les listes d'attente
+Cette tâche prévient l'accueil par email quand une place est attribuée depuis la liste
+d'attente (aucun email n'est envoyé aux familles) et clôture les listes d'attente
 des jours passés.
 
 ### 4. Vercel

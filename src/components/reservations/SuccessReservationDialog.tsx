@@ -45,7 +45,7 @@ export const SuccessReservationDialog = ({
                   ))}
                 </ul>
                 <p className="text-warning text-sm mt-2">
-                  Ces mercredis étaient complets. Si vous avez inscrit votre enfant sur liste d'attente, il sera réservé automatiquement dès qu'une place se libère et vous recevrez un email.
+                  Ces mercredis étaient complets. Si vous avez inscrit votre enfant sur liste d'attente, il sera réservé automatiquement dès qu'une place se libère et le secrétariat vous en informera.
                 </p>
               </div>
             )}

@@ -55,8 +55,8 @@ export const WaitlistSettingsCard = () => {
         <CardTitle>Liste d'attente</CardTitle>
         <CardDescription>
           Quand une place se libère (réservation supprimée ou annulée, capacité augmentée), le premier enfant inscrit pour
-          ce jour et ce groupe est réservé automatiquement. La famille reçoit une notification et un email (copie au
-          secrétariat). Les réservations automatiques s'arrêtent avant le jour J selon le délai ci-dessous.
+          ce jour et ce groupe est réservé automatiquement. L'accueil reçoit un email pour prévenir la famille (une notification
+          apparaît aussi dans son espace). Les réservations automatiques s'arrêtent avant le jour J selon le délai ci-dessous.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-end">
