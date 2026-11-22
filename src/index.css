@@ -46,6 +46,7 @@
     --button: 257 48% 55%;
     --button-hover: 257 48% 48%;
     --button-foreground: 0 0% 100%;
+    --button-soft: 257 70% 96%;           /* fond lavande très clair (boutons à contour) */
     --secondary: 15 100% 94%;           /* pêche claire */
     --secondary-foreground: 6 45% 32%;
     --accent: 162 38% 75%;              /* sauge */

@@ -35,6 +35,7 @@ export default {
           DEFAULT: "hsl(var(--button))",
           hover: "hsl(var(--button-hover))",
           foreground: "hsl(var(--button-foreground))",
+          soft: "hsl(var(--button-soft))",
         },
         coral: {
           DEFAULT: "hsl(var(--coral))",

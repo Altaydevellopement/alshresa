@@ -56,11 +56,11 @@ const AdminHolidayReservations = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => navigate('/admin/reservations/new-holiday')} className="h-9 rounded-md border-primary/40 bg-peach-soft px-3.5 text-[13px] font-semibold text-primary hover:bg-peach hover:text-primary">
+          <Button variant="outline" onClick={() => navigate('/admin/reservations/new-holiday')} className="h-9 rounded-md border-button/40 bg-button-soft px-3.5 text-[13px] font-semibold text-button hover:bg-button/10 hover:text-button-hover">
             <CalendarPlus className="!size-4" aria-hidden="true" />
             Réserver des vacances
           </Button>
-          <Button onClick={() => navigate('/admin/reservations/new-teen-holiday')} className="h-9 rounded-md bg-primary px-3.5 text-[13px] font-semibold text-primary-foreground hover:bg-primary-hover">
+          <Button onClick={() => navigate('/admin/reservations/new-teen-holiday')} className="h-9 rounded-md bg-button px-3.5 text-[13px] font-semibold text-button-foreground hover:bg-button-hover">
             <Users className="!size-4" aria-hidden="true" />
             Réserver Club Ado
           </Button>

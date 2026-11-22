@@ -170,7 +170,7 @@ export const CompactReservationTable = <T extends Reservation>({
           <Button
             onClick={onDeleteSelected}
             disabled={selectedInFilter === 0 || isDeletingMultiple}
-            className="h-9 rounded-md bg-primary px-3 text-[13px] font-semibold text-primary-foreground hover:bg-primary-hover disabled:opacity-45"
+            className="h-9 rounded-md bg-button px-3 text-[13px] font-semibold text-button-foreground hover:bg-button-hover disabled:opacity-45"
           >
             <Trash2 className="!size-4" aria-hidden="true" />
             {isDeletingMultiple ? "Suppression…" : selectedInFilter > 0 ? `Supprimer la sélection (${selectedInFilter})` : "Supprimer la sélection"}

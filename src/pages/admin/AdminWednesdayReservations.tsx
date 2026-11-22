@@ -56,7 +56,7 @@ const AdminWednesdayReservations = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button onClick={() => navigate('/admin/reservations/new')} className="h-9 rounded-md bg-primary px-3.5 text-[13px] font-semibold text-primary-foreground hover:bg-primary-hover">
+          <Button onClick={() => navigate('/admin/reservations/new')} className="h-9 rounded-md bg-button px-3.5 text-[13px] font-semibold text-button-foreground hover:bg-button-hover">
             <CalendarPlus className="!size-4" aria-hidden="true" />
             Réserver des mercredis
           </Button>
