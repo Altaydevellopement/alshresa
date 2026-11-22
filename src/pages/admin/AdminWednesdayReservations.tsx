@@ -37,12 +37,15 @@ const AdminWednesdayReservations = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des réservations - Mercredis</h1>
-        <div className="flex gap-4">
-          <Button onClick={() => navigate('/admin/reservations/new')}>
-            <CalendarPlus className="mr-2 h-4 w-4" />
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h1 className="text-xl font-extrabold leading-tight">Réservations — Mercredis</h1>
+          <p className="text-[13px] text-muted-foreground">Gestion des réservations des mercredis</p>
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          <Button onClick={() => navigate('/admin/reservations/new')} className="h-8 rounded-md px-3 text-xs">
+            <CalendarPlus className="!size-3.5" aria-hidden="true" />
             Réserver des mercredis
           </Button>
         </div>

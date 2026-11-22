@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,9 +12,11 @@ import { formatDate } from "./utils";
 
 interface ExcelFilterDialogProps {
   exportData: ExportData;
+  /** Bouton d'ouverture personnalisé (par défaut : bouton « Export Excel Filtré ») */
+  trigger?: ReactNode;
 }
 
-export const ExcelFilterDialog = ({ exportData }: ExcelFilterDialogProps) => {
+export const ExcelFilterDialog = ({ exportData, trigger }: ExcelFilterDialogProps) => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [filters, setFilters] = useState({
     withMeal: false, // AR
@@ -81,10 +83,12 @@ export const ExcelFilterDialog = ({ exportData }: ExcelFilterDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <FileSpreadsheet className="h-4 w-4" />
-          Export Excel Filtré
-        </Button>
+        {trigger ?? (
+          <Button variant="outline" className="flex items-center gap-2">
+            <FileSpreadsheet className="h-4 w-4" />
+            Export Excel Filtré
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

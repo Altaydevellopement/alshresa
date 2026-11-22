@@ -37,22 +37,19 @@ const AdminHolidayReservations = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl md:text-3xl font-extrabold">Gestion des réservations - Vacances</h1>
-        <div className="flex gap-4">
-          <Button 
-            variant="secondary" 
-            onClick={() => navigate('/admin/reservations/new-holiday')}
-          >
-            <CalendarPlus className="mr-2 h-4 w-4" />
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h1 className="text-xl font-extrabold leading-tight">Réservations — Vacances</h1>
+          <p className="text-[13px] text-muted-foreground">Gestion des réservations des vacances et du Club Ado</p>
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          <Button variant="outline" onClick={() => navigate('/admin/reservations/new-holiday')} className="h-8 rounded-md px-3 text-xs">
+            <CalendarPlus className="!size-3.5" aria-hidden="true" />
             Réserver des vacances
           </Button>
-          <Button 
-            variant="default"
-            onClick={() => navigate('/admin/reservations/new-teen-holiday')}
-          >
-            <Users className="mr-2 h-4 w-4" />
+          <Button onClick={() => navigate('/admin/reservations/new-teen-holiday')} className="h-8 rounded-md px-3 text-xs">
+            <Users className="!size-3.5" aria-hidden="true" />
             Réserver Club Ado
           </Button>
         </div>

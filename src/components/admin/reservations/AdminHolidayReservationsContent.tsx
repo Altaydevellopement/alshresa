@@ -1,5 +1,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
+import { LoadingState } from "@/components/design";
+import { CompactExportButtons, CompactFilterBar } from "./compact/CompactFilterBar";
+import { CompactReservationTable } from "./compact/CompactReservationTable";
 import { EditReservationDialog } from "./EditReservationDialog";
 import { DeleteReservationDialog } from "./DeleteReservationDialog";
 import { useState } from "react";
@@ -9,9 +12,6 @@ import { toast } from "sonner";
 import { useHolidayPeriods } from "@/hooks/useHolidayPeriods";
 import { HolidayReservationWithChild } from "@/types/reservations";
 import { useFilteredHolidayReservations } from "./hooks/useFilteredHolidayReservations";
-import { ReservationToolbar } from "./components/ReservationToolbar";
-import { SelectionActions } from "./components/SelectionActions";
-import { HolidayTabContent } from "./components/HolidayTabContent";
 
 interface AdminHolidayReservationsContentProps {
   holidayReservations: HolidayReservationWithChild[] | null;
@@ -145,11 +145,6 @@ export const AdminHolidayReservationsContent = ({
     }
   };
 
-  const activeReservations = holidayPagination.paginatedData;
-  const reservationCount = holidayPagination.totalItems;
-  const selectedCount = activeReservations 
-    ? activeReservations.filter(res => selectedReservations.includes(res.id)).length 
-    : 0;
 
   // Combine the period lists from reservations and all available periods
   const availablePeriods = [...holidayPeriods];
@@ -166,19 +161,12 @@ export const AdminHolidayReservationsContent = ({
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des réservations...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState rows={6} label="Chargement des réservations…" />;
   }
 
   return (
-    <div className="space-y-6">
-      <ReservationToolbar
+    <div className="space-y-3">
+      <CompactFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         startDate={startDate}
@@ -189,29 +177,28 @@ export const AdminHolidayReservationsContent = ({
         setSelectedClass={setSelectedClass}
         selectedGroup={selectedGroup}
         setSelectedGroup={setSelectedGroup}
-        wednesdayReservations={null}
-        holidayReservations={filteredHolidayReservations}
+        period={{ selected: selectedPeriod, onChange: setSelectedPeriod, options: availablePeriods }}
       />
 
-      <SelectionActions
-        selectedCount={selectedCount}
-        reservationCount={reservationCount}
+      <CompactReservationTable
+        filtered={filteredHolidayReservations}
+        pagination={holidayPagination}
+        selectedReservations={selectedReservations}
+        onSelectionChange={handleSelectionChange}
         onSelectAll={handleSelectAll}
         onDeleteSelected={handleDeleteSelected}
         isDeletingMultiple={isDeletingMultiple}
-        activeReservations={activeReservations}
-      />
-
-      <HolidayTabContent
-        reservations={filteredHolidayReservations}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
-        selectedReservations={selectedReservations}
-        onSelectionChange={handleSelectionChange}
-        selectedPeriod={selectedPeriod}
-        setSelectedPeriod={setSelectedPeriod}
-        availablePeriods={availablePeriods}
-        pagination={holidayPagination}
+        toolbar={
+          <CompactExportButtons
+            wednesdayReservations={null}
+            holidayReservations={filteredHolidayReservations}
+            startDate={startDate}
+            endDate={endDate}
+            selectedGroup={selectedGroup}
+          />
+        }
       />
 
       <DeleteReservationDialog

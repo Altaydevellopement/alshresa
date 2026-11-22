@@ -1,5 +1,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
+import { LoadingState } from "@/components/design";
+import { CompactExportButtons, CompactFilterBar } from "./compact/CompactFilterBar";
+import { CompactReservationTable } from "./compact/CompactReservationTable";
 import { EditReservationDialog } from "./EditReservationDialog";
 import { DeleteReservationDialog } from "./DeleteReservationDialog";
 import { useState } from "react";
@@ -8,9 +11,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { WednesdayReservationWithChild } from "@/types/reservations";
 import { useFilteredWednesdayReservations } from "./hooks/useFilteredWednesdayReservations";
-import { ReservationToolbar } from "./components/ReservationToolbar";
-import { SelectionActions } from "./components/SelectionActions";
-import { WednesdayTabContent } from "./components/WednesdayTabContent";
 
 interface AdminWednesdayReservationsContentProps {
   wednesdayReservations: WednesdayReservationWithChild[] | null;
@@ -139,26 +139,14 @@ export const AdminWednesdayReservationsContent = ({
     }
   };
 
-  const activeReservations = wednesdayPagination.paginatedData;
-  const reservationCount = wednesdayPagination.totalItems;
-  const selectedCount = activeReservations 
-    ? activeReservations.filter(res => selectedReservations.includes(res.id)).length 
-    : 0;
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des réservations...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState rows={6} label="Chargement des réservations…" />;
   }
 
   return (
-    <div className="space-y-6">
-      <ReservationToolbar
+    <div className="space-y-3">
+      <CompactFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         startDate={startDate}
@@ -169,26 +157,27 @@ export const AdminWednesdayReservationsContent = ({
         setSelectedClass={setSelectedClass}
         selectedGroup={selectedGroup}
         setSelectedGroup={setSelectedGroup}
-        wednesdayReservations={filteredWednesdayReservations}
-        holidayReservations={null}
       />
 
-      <SelectionActions
-        selectedCount={selectedCount}
-        reservationCount={reservationCount}
+      <CompactReservationTable
+        filtered={filteredWednesdayReservations}
+        pagination={wednesdayPagination}
+        selectedReservations={selectedReservations}
+        onSelectionChange={handleSelectionChange}
         onSelectAll={handleSelectAll}
         onDeleteSelected={handleDeleteSelected}
         isDeletingMultiple={isDeletingMultiple}
-        activeReservations={activeReservations}
-      />
-
-      <WednesdayTabContent
-        reservations={filteredWednesdayReservations}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
-        selectedReservations={selectedReservations}
-        onSelectionChange={handleSelectionChange}
-        pagination={wednesdayPagination}
+        toolbar={
+          <CompactExportButtons
+            wednesdayReservations={filteredWednesdayReservations}
+            holidayReservations={null}
+            startDate={startDate}
+            endDate={endDate}
+            selectedGroup={selectedGroup}
+          />
+        }
       />
 
       <DeleteReservationDialog
