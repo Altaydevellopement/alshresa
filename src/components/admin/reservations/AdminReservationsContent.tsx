@@ -9,9 +9,12 @@ import { toast } from "sonner";
 import { useHolidayPeriods } from "@/hooks/useHolidayPeriods";
 import { WednesdayReservationWithChild, HolidayReservationWithChild } from "@/types/reservations";
 import { useFilteredReservations } from "./hooks/useFilteredReservations";
-import { ReservationToolbar } from "./components/ReservationToolbar";
-import { SelectionActions } from "./components/SelectionActions";
-import { ReservationTabsContainer } from "./components/ReservationTabsContainer";
+import { LoadingState } from "@/components/design";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { CompactFilterBar } from "./compact/CompactFilterBar";
+import { CompactReservationTable } from "./compact/CompactReservationTable";
+import { sortPeriods } from "./compact/periods";
 
 interface AdminReservationsContentProps {
   wednesdayReservations: WednesdayReservationWithChild[] | null;
@@ -163,19 +166,6 @@ export const AdminReservationsContent = ({
     }
   };
 
-  // Calculate the current reservation count based on active tab and pagination
-  const activeReservations = activeTab === "wednesday" 
-    ? wednesdayPagination.paginatedData 
-    : holidayPagination.paginatedData;
-  
-  const reservationCount = activeTab === "wednesday" 
-    ? wednesdayPagination.totalItems 
-    : holidayPagination.totalItems;
-    
-  const selectedCount = activeReservations 
-    ? activeReservations.filter(res => selectedReservations.includes(res.id)).length 
-    : 0;
-
   // Combine the period lists from reservations and all available periods
   const availablePeriods = [...holidayPeriods];
   
@@ -192,19 +182,67 @@ export const AdminReservationsContent = ({
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Chargement des réservations...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState rows={6} label="Chargement des réservations…" />;
   }
 
+  const isWednesday = activeTab === "wednesday";
+
+  // Sélecteur d'onglet compact (remplace les onglets en cartes)
+  const tabSwitch = (
+    <div role="tablist" aria-label="Type de réservation" className="inline-flex h-9 items-center rounded-[4px] border border-border bg-card p-0.5">
+      {[
+        { id: "wednesday", label: "Mercredis", count: wednesdayPagination.totalItems },
+        { id: "holiday", label: "Vacances", count: holidayPagination.totalItems },
+      ].map((tab) => (
+        <button
+          key={tab.id}
+          type="button"
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          onClick={() => setActiveTab(tab.id)}
+          className={cn(
+            "inline-flex h-full items-center gap-1.5 rounded-[3px] px-3 text-[13px] font-semibold transition-colors",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            activeTab === tab.id ? "bg-peach text-secondary-foreground" : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {tab.label}
+          <span className="tabular-nums opacity-80">({tab.count})</span>
+        </button>
+      ))}
+    </div>
+  );
+
+  const periodFilter = (
+    <div className="flex items-center gap-2">
+      <label htmlFor="f-period" className="text-[13px] text-muted-foreground">Période</label>
+      <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+        <SelectTrigger id="f-period" className="h-9 w-[200px] rounded-md bg-card px-3 text-[13px]">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Toutes les périodes</SelectItem>
+          {sortPeriods(availablePeriods).map((p) => (
+            <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+
+  const tableProps = {
+    selectedReservations,
+    onSelectionChange: handleSelectionChange,
+    onSelectAll: handleSelectAll,
+    onDeleteSelected: handleDeleteSelected,
+    isDeletingMultiple,
+    onEdit: handleEditClick,
+    onDelete: handleDeleteClick,
+  };
+
   return (
-    <div className="space-y-6">
-      <ReservationToolbar
+    <div className="space-y-4">
+      <CompactFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         startDate={startDate}
@@ -217,32 +255,27 @@ export const AdminReservationsContent = ({
         setSelectedGroup={setSelectedGroup}
         wednesdayReservations={filteredWednesdayReservations}
         holidayReservations={filteredHolidayReservations}
+        resetPeriod={() => setSelectedPeriod("all")}
+        periodActive={selectedPeriod !== "all"}
       />
 
-      <SelectionActions
-        selectedCount={selectedCount}
-        reservationCount={reservationCount}
-        onSelectAll={handleSelectAll}
-        onDeleteSelected={handleDeleteSelected}
-        isDeletingMultiple={isDeletingMultiple}
-        activeReservations={activeReservations}
-      />
-
-      <ReservationTabsContainer
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        wednesdayReservations={filteredWednesdayReservations}
-        holidayReservations={filteredHolidayReservations}
-        onEdit={handleEditClick}
-        onDelete={handleDeleteClick}
-        selectedReservations={selectedReservations}
-        onSelectionChange={handleSelectionChange}
-        selectedPeriod={selectedPeriod}
-        setSelectedPeriod={setSelectedPeriod}
-        availablePeriods={availablePeriods}
-        wednesdayPagination={wednesdayPagination}
-        holidayPagination={holidayPagination}
-      />
+      {isWednesday ? (
+        <CompactReservationTable
+          key="wednesday"
+          filtered={filteredWednesdayReservations}
+          pagination={wednesdayPagination}
+          extraFilter={tabSwitch}
+          {...tableProps}
+        />
+      ) : (
+        <CompactReservationTable
+          key="holiday"
+          filtered={filteredHolidayReservations}
+          pagination={holidayPagination}
+          extraFilter={<>{tabSwitch}{periodFilter}</>}
+          {...tableProps}
+        />
+      )}
 
       <DeleteReservationDialog
         isOpen={!!reservationToDelete}
