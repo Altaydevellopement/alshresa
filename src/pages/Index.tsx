@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, Users, Trees, ArrowRight, Clock, Palmtree } from "lucide-react";
+import { Calendar, Users, Trees, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/ui/navbar";
+import { useNavbarData } from "@/components/ui/nav/hooks/useNavbarData";
 
 const FEATURES = [
   {
@@ -23,71 +24,85 @@ const FEATURES = [
 ];
 
 const Index = () => {
-  const [imageOk, setImageOk] = useState(true);
+  const { isAuthenticated } = useNavbarData();
+  // Logo officiel (public/images/Logolong.png) s'il est présent, sinon titre texte
+  const [logoOk, setLogoOk] = useState(true);
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <section className="relative overflow-hidden bg-gradient-warm">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 md:px-8 lg:grid-cols-2 lg:py-20">
-          <div className="relative z-10 space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full bg-card px-3 py-1 text-xs font-semibold text-primary shadow-xs">
-              <Palmtree className="h-3.5 w-3.5" aria-hidden="true" />
-              Accueil de loisirs · Pîtres et Le Manoir-sur-Seine
-            </p>
-            <h1 className="text-4xl font-extrabold leading-tight md:text-5xl">
-              Réservez les journées de loisirs de vos enfants, <span className="text-primary">en toute simplicité.</span>
-            </h1>
-            <p className="max-w-xl text-lg text-muted-foreground">
-              Bienvenue sur la plateforme de réservation du centre social de Pîtres et du Manoir-Sur-Seine, votre
-              partenaire de confiance pour l'épanouissement de vos enfants.
-            </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link to="/login">
-                  Se connecter
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <Link to="/register">Créer un compte</Link>
-              </Button>
-            </div>
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-muted-foreground">
-              <li className="inline-flex items-center gap-2"><Calendar className="h-4 w-4 text-primary" aria-hidden="true" />Mercredis</li>
-              <li className="inline-flex items-center gap-2"><Palmtree className="h-4 w-4 text-primary" aria-hidden="true" />Vacances scolaires</li>
-              <li className="inline-flex items-center gap-2"><Clock className="h-4 w-4 text-primary" aria-hidden="true" />Liste d'attente automatique</li>
-            </ul>
-          </div>
+      {/* Accueil : aquarelle du bâtiment en plein écran, comme l'ancienne version */}
+      <section className="relative isolate flex h-[calc(100svh-4rem)] min-h-[560px] max-h-[900px] flex-col overflow-hidden">
+        <picture>
+          <source srcSet="/images/accueil-aquarelle.webp" type="image/webp" />
+          <img
+            src="/images/accueil-aquarelle.jpg"
+            alt="Aquarelle du bâtiment de l'Espace des 2 Rives"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-[10%_center] md:object-center"
+            fetchPriority="high"
+          />
+        </picture>
+        {/* Voiles pour garder le logo et les boutons lisibles sur l'image */}
+        <div className="absolute inset-x-0 top-0 -z-10 h-1/3 bg-gradient-to-b from-white/70 to-transparent" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-1/3 bg-gradient-to-t from-black/35 to-transparent" aria-hidden="true" />
 
-          <div className="relative">
-            <span className="absolute -left-6 -top-6 h-28 w-28 rounded-full bg-sage/60" aria-hidden="true" />
-            <span className="absolute -bottom-8 -right-4 h-40 w-40 rounded-full bg-coral/30" aria-hidden="true" />
-            <div className="relative overflow-hidden rounded-[2rem] border-4 border-card bg-peach shadow-lg aspect-[4/3]">
-              {imageOk ? (
-                <img
-                  src="/images/Newfront.jpg"
-                  alt="Enfants pendant une activité à l'Espace des 2 Rives"
-                  className="h-full w-full object-cover"
-                  onError={() => setImageOk(false)}
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-coral" aria-hidden="true">
-                  <Palmtree className="h-24 w-24 text-white/80" />
-                </div>
-              )}
+        <div className="mx-auto w-full max-w-6xl px-4 pt-8 md:px-8 md:pt-12">
+          {logoOk ? (
+            <img
+              src="/images/Logolong.png"
+              alt="Espace des 2 Rives — Centre social intercommunal Pîtres - Le Manoir-sur-Seine"
+              className="mx-auto h-20 w-auto md:h-28"
+              onError={() => setLogoOk(false)}
+            />
+          ) : (
+            <div className="text-center">
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm md:text-6xl">
+                Espace des 2 Rives
+              </h1>
+              <p className="mt-2 text-base font-semibold text-foreground/80 md:text-lg">
+                <span className="block sm:inline">Centre social intercommunal</span>
+                <span className="hidden sm:inline"> · </span>
+                <span className="block sm:inline">Pîtres – Le Manoir-sur-Seine</span>
+              </p>
             </div>
-          </div>
+          )}
+        </div>
+
+        <div className="mt-auto mx-auto w-full max-w-xl px-4 pb-8 md:pb-12">
+          {isAuthenticated ? (
+            <Button asChild size="xl" className="w-full shadow-lg">
+              <Link to="/dashboard">
+                <LayoutDashboard aria-hidden="true" />
+                Accéder à mon espace
+              </Link>
+            </Button>
+          ) : (
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="xl" className="w-full shadow-lg sm:flex-1">
+                <Link to="/login">Connexion</Link>
+              </Button>
+              <Button asChild size="xl" className="w-full shadow-lg sm:flex-1">
+                <Link to="/register">Inscription</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-14 md:px-8" aria-labelledby="features-title">
+      <section className="mx-auto max-w-4xl px-4 py-10 text-center md:px-8">
+        <p className="text-lg text-muted-foreground">
+          Bienvenue sur la plateforme de réservation du centre social de Pîtres et du Manoir-sur-Seine, votre partenaire
+          de confiance pour l'épanouissement de vos enfants.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pb-14 md:px-8" aria-labelledby="features-title">
         <h2 id="features-title" className="sr-only">Pourquoi l'Espace des 2 Rives</h2>
         <div className="grid gap-6 md:grid-cols-3">
           {FEATURES.map(({ icon: Icon, title, text }) => (
-            <article key={title} className="rounded-2xl border border-border/80 bg-card p-6 shadow-sm">
-              <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-peach text-primary" aria-hidden="true">
+            <article key={title} className="rounded-2xl border border-border/80 bg-card p-6 text-center shadow-sm">
+              <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-peach text-primary" aria-hidden="true">
                 <Icon className="h-6 w-6" />
               </span>
               <h3 className="text-lg font-bold">{title}</h3>
