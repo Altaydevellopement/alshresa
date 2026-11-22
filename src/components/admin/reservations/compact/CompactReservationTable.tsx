@@ -79,7 +79,7 @@ const RowAction = ({
         onClick={onClick}
         aria-label={label}
         className={cn(
-          "inline-flex h-[30px] w-[30px] items-center justify-center rounded-[6px] border bg-card transition-colors",
+          "inline-flex h-[30px] w-[30px] items-center justify-center rounded-[4px] border bg-card transition-colors",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
           tone === "danger"
             ? "border-destructive/40 text-destructive hover:bg-destructive-soft"

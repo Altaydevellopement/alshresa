@@ -42,11 +42,11 @@
     --primary: 6 49% 47%;               /* corail action #B4493E */
     --primary-hover: 6 49% 41%;
     --primary-foreground: 0 0% 100%;
-    /* Boutons pleins : lavande #7656C4 (blanc dessus : 5.4:1, AA) */
-    --button: 257 48% 55%;
-    --button-hover: 257 48% 48%;
-    --button-foreground: 0 0% 100%;
-    --button-soft: 257 70% 96%;           /* fond lavande très clair (boutons à contour) */
+    /* Boutons pleins : corail pastel #F6BDB6, texte brun corail #632821 (6.9:1, AA) */
+    --button: 6 78% 84%;
+    --button-hover: 6 72% 77%;            /* #EFA39A, texte 5.6:1 */
+    --button-foreground: 6 50% 26%;
+    --button-soft: 6 80% 95%;
     --secondary: 15 100% 94%;           /* pêche claire */
     --secondary-foreground: 6 45% 32%;
     --accent: 162 38% 75%;              /* sauge */
