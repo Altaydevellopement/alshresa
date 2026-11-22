@@ -31,6 +31,11 @@ export default {
           foreground: "hsl(var(--primary-foreground))",
           glow: "hsl(var(--primary-glow))",
         },
+        button: {
+          DEFAULT: "hsl(var(--button))",
+          hover: "hsl(var(--button-hover))",
+          foreground: "hsl(var(--button-foreground))",
+        },
         coral: {
           DEFAULT: "hsl(var(--coral))",
           dark: "hsl(var(--coral-dark))",
