@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Calendar, Users, Trees, LayoutDashboard } from "lucide-react";
+import { ArrowRight, Calendar, Users, Trees, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/ui/navbar";
 import { useNavbarData } from "@/components/ui/nav/hooks/useNavbarData";
@@ -80,10 +80,13 @@ const Index = () => {
           ) : (
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button asChild size="xl" className="w-full shadow-lg sm:flex-1">
-                <Link to="/login">Connexion</Link>
+                <Link to="/login">
+                  Se connecter
+                  <ArrowRight aria-hidden="true" />
+                </Link>
               </Button>
               <Button asChild size="xl" className="w-full shadow-lg sm:flex-1">
-                <Link to="/register">Inscription</Link>
+                <Link to="/register">Créer un compte</Link>
               </Button>
             </div>
           )}
