@@ -1,7 +1,9 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { LoadingState } from "@/components/design";
-import { CompactExportButtons, CompactFilterBar } from "./compact/CompactFilterBar";
+import { CompactFilterBar } from "./compact/CompactFilterBar";
+import { sortPeriods } from "./compact/periods";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CompactReservationTable } from "./compact/CompactReservationTable";
 import { EditReservationDialog } from "./EditReservationDialog";
 import { DeleteReservationDialog } from "./DeleteReservationDialog";
@@ -165,7 +167,7 @@ export const AdminHolidayReservationsContent = ({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <CompactFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -177,7 +179,10 @@ export const AdminHolidayReservationsContent = ({
         setSelectedClass={setSelectedClass}
         selectedGroup={selectedGroup}
         setSelectedGroup={setSelectedGroup}
-        period={{ selected: selectedPeriod, onChange: setSelectedPeriod, options: availablePeriods }}
+        wednesdayReservations={null}
+        holidayReservations={filteredHolidayReservations}
+        resetPeriod={() => setSelectedPeriod("all")}
+        periodActive={selectedPeriod !== "all"}
       />
 
       <CompactReservationTable
@@ -190,14 +195,21 @@ export const AdminHolidayReservationsContent = ({
         isDeletingMultiple={isDeletingMultiple}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
-        toolbar={
-          <CompactExportButtons
-            wednesdayReservations={null}
-            holidayReservations={filteredHolidayReservations}
-            startDate={startDate}
-            endDate={endDate}
-            selectedGroup={selectedGroup}
-          />
+        extraFilter={
+          <div className="flex items-center gap-2">
+            <label htmlFor="f-period" className="text-[13px] text-muted-foreground">Période</label>
+            <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+              <SelectTrigger id="f-period" className="h-9 w-[200px] rounded-md bg-card px-3 text-[13px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Toutes les périodes</SelectItem>
+                {sortPeriods(availablePeriods).map((p) => (
+                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         }
       />
 

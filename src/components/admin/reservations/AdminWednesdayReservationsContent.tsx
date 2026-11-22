@@ -1,7 +1,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { LoadingState } from "@/components/design";
-import { CompactExportButtons, CompactFilterBar } from "./compact/CompactFilterBar";
+import { CompactFilterBar } from "./compact/CompactFilterBar";
 import { CompactReservationTable } from "./compact/CompactReservationTable";
 import { EditReservationDialog } from "./EditReservationDialog";
 import { DeleteReservationDialog } from "./DeleteReservationDialog";
@@ -145,7 +145,7 @@ export const AdminWednesdayReservationsContent = ({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <CompactFilterBar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -157,6 +157,8 @@ export const AdminWednesdayReservationsContent = ({
         setSelectedClass={setSelectedClass}
         selectedGroup={selectedGroup}
         setSelectedGroup={setSelectedGroup}
+        wednesdayReservations={filteredWednesdayReservations}
+        holidayReservations={null}
       />
 
       <CompactReservationTable
@@ -169,15 +171,6 @@ export const AdminWednesdayReservationsContent = ({
         isDeletingMultiple={isDeletingMultiple}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
-        toolbar={
-          <CompactExportButtons
-            wednesdayReservations={filteredWednesdayReservations}
-            holidayReservations={null}
-            startDate={startDate}
-            endDate={endDate}
-            selectedGroup={selectedGroup}
-          />
-        }
       />
 
       <DeleteReservationDialog

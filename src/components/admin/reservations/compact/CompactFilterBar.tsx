@@ -17,23 +17,8 @@ const GROUPS = [
   { value: "adolescent", label: "Adolescent" },
 ];
 
-interface Period {
-  id: string;
-  name: string;
-}
-
-// Même tri que HolidayPeriodFilter : ETE-xx d'abord, dans l'ordre, puis alphabétique
-const sortPeriods = (periods: Period[]) =>
-  [...periods].sort((a, b) => {
-    const aMatch = a.name?.match(/^(ETE)-(\d+)$/);
-    const bMatch = b.name?.match(/^(ETE)-(\d+)$/);
-    if (aMatch && bMatch) return parseInt(aMatch[2]) - parseInt(bMatch[2]);
-    if (aMatch) return -1;
-    if (bMatch) return 1;
-    return a.name.localeCompare(b.name);
-  });
-
-const control = "h-8 rounded-md text-[13px]";
+const control = "h-9 rounded-md text-[13px] bg-card";
+const label = "mb-1 block text-xs font-medium text-muted-foreground";
 
 interface CompactFilterBarProps {
   searchQuery: string;
@@ -46,18 +31,22 @@ interface CompactFilterBarProps {
   setSelectedClass: (v: string) => void;
   selectedGroup: string;
   setSelectedGroup: (v: string) => void;
-  /** Filtre des périodes (vacances uniquement) */
-  period?: { selected: string; onChange: (v: string) => void; options: Period[] };
+  wednesdayReservations: WednesdayReservationWithChild[] | null;
+  holidayReservations: HolidayReservationWithChild[] | null;
+  /** Réinitialise aussi la période (vacances) */
+  resetPeriod?: () => void;
+  periodActive?: boolean;
 }
 
-/** Barre horizontale compacte des filtres. */
+/** Carte de filtres : recherche, dates, classe, groupe, puis exports à droite. */
 export const CompactFilterBar = ({
   searchQuery, setSearchQuery, startDate, setStartDate, endDate, setEndDate,
-  selectedClass, setSelectedClass, selectedGroup, setSelectedGroup, period,
+  selectedClass, setSelectedClass, selectedGroup, setSelectedGroup,
+  wednesdayReservations, holidayReservations, resetPeriod, periodActive,
 }: CompactFilterBarProps) => {
+  const exportData = prepareExportData(wednesdayReservations, holidayReservations);
   const hasFilters =
-    !!searchQuery || !!startDate || !!endDate || selectedClass !== "all" || selectedGroup !== "all" ||
-    (period ? period.selected !== "all" : false);
+    !!searchQuery || !!startDate || !!endDate || selectedClass !== "all" || selectedGroup !== "all" || !!periodActive;
 
   const reset = () => {
     setSearchQuery("");
@@ -65,107 +54,89 @@ export const CompactFilterBar = ({
     setEndDate("");
     setSelectedClass("all");
     setSelectedGroup("all");
-    period?.onChange("all");
+    resetPeriod?.();
   };
 
+  const exportBtn = "h-9 rounded-md px-3 text-[13px] font-semibold";
+
   return (
-    <div className="rounded-md border border-border/80 bg-card p-2">
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative w-full sm:w-44">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-          <Input
-            aria-label="Rechercher par nom"
-            placeholder="Rechercher…"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={cn(control, "pl-8")}
-          />
+    <div className="flex flex-col gap-3 rounded-lg border border-border/80 bg-card p-3 shadow-xs xl:flex-row xl:items-end">
+      <div className="flex flex-1 flex-wrap items-end gap-2.5">
+        <div className="w-full sm:w-auto sm:min-w-[180px] sm:flex-1 xl:max-w-[240px]">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input
+              aria-label="Rechercher un nom"
+              placeholder="Rechercher un nom…"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={cn(control, "pl-9")}
+            />
+          </div>
         </div>
 
-        <div className="flex items-center gap-1.5">
-          <label htmlFor="f-start" className="text-xs text-muted-foreground">Du</label>
-          <Input id="f-start" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={cn(control, "w-[136px] px-2")} />
-          <label htmlFor="f-end" className="text-xs text-muted-foreground">au</label>
-          <Input id="f-end" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={cn(control, "w-[136px] px-2")} />
+        <div>
+          <label htmlFor="f-start" className={label}>Du</label>
+          <Input id="f-start" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={cn(control, "w-[140px] px-2")} />
+        </div>
+        <div>
+          <label htmlFor="f-end" className={label}>Au</label>
+          <Input id="f-end" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={cn(control, "w-[140px] px-2")} />
         </div>
 
-        <Select value={selectedClass} onValueChange={setSelectedClass}>
-          <SelectTrigger aria-label="Classe" className={cn(control, "w-[136px] px-2.5", selectedClass !== "all" && "border-primary/50 bg-peach-soft")}>
-            <SelectValue placeholder="Classe" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Toutes classes</SelectItem>
-            {CLASSES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-          </SelectContent>
-        </Select>
-
-        <Select value={selectedGroup} onValueChange={setSelectedGroup}>
-          <SelectTrigger aria-label="Groupe" className={cn(control, "w-[136px] px-2.5", selectedGroup !== "all" && "border-primary/50 bg-peach-soft")}>
-            <SelectValue placeholder="Groupe" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Tous groupes</SelectItem>
-            {GROUPS.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
-          </SelectContent>
-        </Select>
-
-        {period && (
-          <Select value={period.selected} onValueChange={period.onChange}>
-            <SelectTrigger aria-label="Période" className={cn(control, "w-[148px] px-2.5", period.selected !== "all" && "border-primary/50 bg-peach-soft")}>
-              <SelectValue placeholder="Période" />
+        <div>
+          <label htmlFor="f-class" className={label}>Classe</label>
+          <Select value={selectedClass} onValueChange={setSelectedClass}>
+            <SelectTrigger id="f-class" className={cn(control, "w-[112px] px-3", selectedClass !== "all" && "border-primary/50 bg-peach-soft")}>
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Toutes périodes</SelectItem>
-              {sortPeriods(period.options).map((p) => <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>)}
+              <SelectItem value="all">Toutes</SelectItem>
+              {CLASSES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
             </SelectContent>
           </Select>
-        )}
+        </div>
+
+        <div>
+          <label htmlFor="f-group" className={label}>Groupe</label>
+          <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+            <SelectTrigger id="f-group" className={cn(control, "w-[120px] px-3", selectedGroup !== "all" && "border-primary/50 bg-peach-soft")}>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tous</SelectItem>
+              {GROUPS.map((g) => <SelectItem key={g.value} value={g.value}>{g.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
 
         {hasFilters && (
-          <Button variant="ghost" onClick={reset} className="h-8 rounded-md px-2 text-xs text-muted-foreground">
+          <Button variant="ghost" onClick={reset} className="h-9 rounded-md px-2 text-xs text-muted-foreground">
             <X className="!size-3.5" aria-hidden="true" />
             Réinitialiser
           </Button>
         )}
       </div>
 
-    </div>
-  );
-};
-
-interface CompactExportButtonsProps {
-  wednesdayReservations: WednesdayReservationWithChild[] | null;
-  holidayReservations: HolidayReservationWithChild[] | null;
-  startDate: string;
-  endDate: string;
-  selectedGroup: string;
-}
-
-/** Exports PDF / Excel / Excel filtré (mêmes fonctions que ExportButtons), format compact. */
-export const CompactExportButtons = ({
-  wednesdayReservations, holidayReservations, startDate, endDate, selectedGroup,
-}: CompactExportButtonsProps) => {
-  const exportData = prepareExportData(wednesdayReservations, holidayReservations);
-  const btn = "h-7 rounded-[5px] px-2 text-xs";
-  return (
-    <div className="flex items-center gap-1">
-      <Button variant="outline" onClick={() => exportToPdf(exportData, startDate, endDate, selectedGroup)} className={btn}>
-        <FileText className="!size-3.5" aria-hidden="true" />
-        PDF
-      </Button>
-      <Button variant="outline" onClick={() => exportToExcel(exportData)} className={btn}>
-        <FileSpreadsheet className="!size-3.5" aria-hidden="true" />
-        Excel
-      </Button>
-      <ExcelFilterDialog
-        exportData={exportData}
-        trigger={
-          <Button variant="outline" className={btn}>
-            <Filter className="!size-3.5" aria-hidden="true" />
-            Excel filtré
-          </Button>
-        }
-      />
+      <div className="flex flex-wrap items-end gap-2 border-t border-border/70 pt-3 xl:border-l xl:border-t-0 xl:pl-3 xl:pt-0">
+        <Button variant="outline" onClick={() => exportToPdf(exportData, startDate, endDate, selectedGroup)} className={exportBtn}>
+          <FileText className="!size-4" aria-hidden="true" />
+          PDF
+        </Button>
+        <Button variant="outline" onClick={() => exportToExcel(exportData)} className={exportBtn}>
+          <FileSpreadsheet className="!size-4 text-success" aria-hidden="true" />
+          Excel
+        </Button>
+        <ExcelFilterDialog
+          exportData={exportData}
+          trigger={
+            <Button variant="outline" className={exportBtn}>
+              <Filter className="!size-4" aria-hidden="true" />
+              Excel filtré
+            </Button>
+          }
+        />
+      </div>
     </div>
   );
 };
